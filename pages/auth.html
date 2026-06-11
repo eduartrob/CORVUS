@@ -347,9 +347,15 @@
         });
 
         // Google Login Handler for Waitlist
-        document.getElementById('google-login-btn').addEventListener('click', async function() {
+        document.getElementById('google-login-btn').addEventListener('click', async function(event) {
             const emailError = document.getElementById('email-error');
+            const googleBtn = event.currentTarget;
+            const originalGoogleHTML = googleBtn.innerHTML;
+            
             emailError.classList.add('hidden');
+            googleBtn.disabled = true;
+            googleBtn.classList.add('opacity-70', 'cursor-not-allowed');
+            googleBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">autorenew</span> Conectando...';
             
             if (window.loginWithGoogle) {
                 try {
@@ -366,6 +372,9 @@
                     
                     if (!isValidDomain) {
                         emailError.classList.remove('hidden');
+                        googleBtn.disabled = false;
+                        googleBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                        googleBtn.innerHTML = originalGoogleHTML;
                     } else {
                         // Save to Firebase waitlist collection
                         if (window.saveToFirebase) {
@@ -376,13 +385,19 @@
                     }
                 } catch (error) {
                     console.error("Google sign in error: ", error);
-                    if (error !== 'popup-closed') {
-                        emailError.innerText = "Ocurrió un error al conectar con Google.";
+                    if (error !== 'popup-closed' && error !== 'cancelled-popup') {
+                        emailError.innerText = "Ocurrió un error al conectar con Google. Por favor, intenta de nuevo.";
                         emailError.classList.remove('hidden');
                     }
+                    googleBtn.disabled = false;
+                    googleBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    googleBtn.innerHTML = originalGoogleHTML;
                 }
             } else {
                 alert("Simulación: Se abriría el popup de Google. (Firebase bloqueado por CORS)");
+                googleBtn.disabled = false;
+                googleBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                googleBtn.innerHTML = originalGoogleHTML;
             }
         });
     </script>
@@ -411,6 +426,9 @@
             } catch (error) {
                 if (error.code === 'auth/popup-closed-by-user') {
                     throw 'popup-closed';
+                }
+                if (error.code === 'auth/cancelled-popup-request') {
+                    throw 'cancelled-popup';
                 }
                 throw error;
             }
