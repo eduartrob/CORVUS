@@ -126,7 +126,7 @@
                 </button>
             </div>
 
-            <form class="space-y-5" onsubmit="window.location.href='early-access.html'; return false;">
+            <form class="space-y-5" onsubmit="validateAndSubmit(event)">
                 <!-- Full Name -->
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Nombre Completo</label>
@@ -141,8 +141,11 @@
                     <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Email Universitario</label>
                     <div class="relative group">
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">alternate_email</span>
-                        <input class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="julian@uni.edu" type="email" required>
+                        <input id="email-input" class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="221214@ids.upchiapas.edu.mx" type="email" required>
                     </div>
+                    <p id="email-error" class="hidden text-red-500 dark:text-red-400 text-xs px-1 mt-1">
+                        Por ahora, el acceso es exclusivo para correos de la Universidad Politécnica de Chiapas (@upchiapas.edu.mx o @ids.upchiapas.edu.mx).
+                    </p>
                 </div>
 
                 <!-- Password -->
@@ -234,6 +237,26 @@
                 
                 studentBtn.classList.remove(...activeClasses);
                 studentBtn.classList.add(...inactiveClasses);
+            }
+        }
+
+        // Form Validation Setup
+        function validateAndSubmit(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('email-input');
+            const emailError = document.getElementById('email-error');
+            const email = emailInput.value.trim().toLowerCase();
+            
+            // Validate domain: @upchiapas.edu.mx or @ids.upchiapas.edu.mx
+            if (email.endsWith('@upchiapas.edu.mx') || email.endsWith('@ids.upchiapas.edu.mx')) {
+                emailError.classList.add('hidden');
+                // Valid, redirect to Early Access
+                window.location.href = 'early-access.html';
+            } else {
+                // Invalid domain
+                emailError.classList.remove('hidden');
+                emailInput.focus();
             }
         }
     </script>
