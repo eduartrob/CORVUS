@@ -132,7 +132,7 @@
                     <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Email Universitario</label>
                     <div class="relative group">
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">alternate_email</span>
-                        <input id="email-input" class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="221214@ids.upchiapas.edu.mx" type="email" required>
+                        <input id="email-input" class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="matricula@ids.upchiapas.edu.mx" type="email" required>
                     </div>
                     <p id="email-error" class="hidden text-red-500 dark:text-red-400 text-xs px-1 mt-1">
                         Por ahora, el acceso es exclusivo para correos de la Universidad Politécnica de Chiapas (@upchiapas.edu.mx o @ids.upchiapas.edu.mx).
@@ -244,7 +244,7 @@
                     formSubtitle.innerText = "Valida tus proyectos antes de la defensa.";
                     
                     // Update placeholder
-                    document.getElementById('email-input').placeholder = "221214@ids.upchiapas.edu.mx";
+                    document.getElementById('email-input').placeholder = "matricula@ids.upchiapas.edu.mx";
                 } else {
                     teacherBtn.classList.add(...activeClasses);
                     teacherBtn.classList.remove(...inactiveClasses);
@@ -258,7 +258,7 @@
                     formSubtitle.innerText = "Evalúa con respaldo de inteligencia artificial.";
                     
                     // Update placeholder
-                    document.getElementById('email-input').placeholder = "correo@upchiapas.edu.mx";
+                    document.getElementById('email-input').placeholder = "nombre@upchiapas.edu.mx";
                 }
                 
                 heroTitle.style.transition = 'opacity 0.4s ease';
