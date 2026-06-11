@@ -327,7 +327,12 @@
                 // Si el módulo de Firebase cargó bien, usamos la función real. Si no, usamos simulación local.
                 if (window.saveToFirebase) {
                     try {
-                        await window.saveToFirebase(email, window.currentRole);
+                        const result = await window.saveToFirebase(email, window.currentRole);
+                        
+                        if (result === 'duplicate') {
+                            console.log("Email already registered. Redirecting.");
+                        }
+                        
                         localStorage.setItem('waitlist_joined', 'true');
                         window.location.href = 'early-access.html';
                     } catch (error) {
@@ -358,15 +363,34 @@
     </script>
     <script type="module">
         // Import Firebase modules
-        import { auth, db, googleProvider, signInWithPopup, collection, addDoc, serverTimestamp } from './firebase.js';
+        import { auth, db, googleProvider, signInWithPopup, collection, addDoc, getDocs, query, where, serverTimestamp } from './firebase.js';
 
         // Expose Firebase function globally so the UI script can call it
+        // Returns: 'saved' | 'duplicate'
         window.saveToFirebase = async function(email, role) {
+            // 1. Check if email already exists in waitlist (cross-device protection)
+            // Note: If Firestore rules have 'allow read: if false', this will throw an error.
+            // We catch it and proceed to save anyway to avoid breaking the signup flow.
+            try {
+                const q = query(collection(db, "waitlist"), where("email", "==", email));
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    // Email already registered — set localStorage so future visits redirect too
+                    localStorage.setItem('waitlist_joined', 'true');
+                    return 'duplicate';
+                }
+            } catch (error) {
+                console.warn("Could not check for duplicates (likely Firestore security rules). Proceeding with save.");
+            }
+
+            // 2. Save new entry
             await addDoc(collection(db, "waitlist"), {
                 email: email,
                 role: role,
                 timestamp: serverTimestamp()
             });
+            return 'saved';
         };
         
         window.loginWithGoogle = async function() {
