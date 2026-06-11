@@ -1,0 +1,286 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Análisis de Océano Azul - AcadeRAG</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#f0dbff",
+                        "secondary-container": "#6f00be",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-dim": "#0b1326",
+                        "on-tertiary": "#003731",
+                        "inverse-on-surface": "#283044",
+                        "secondary-fixed-dim": "#ddb7ff",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#2c0051",
+                        "error-container": "#93000a",
+                        "on-surface": "#dae2fd",
+                        "surface-container": "#171f33",
+                        "on-surface-variant": "#c7c4d7",
+                        "surface-bright": "#31394d",
+                        "on-secondary-container": "#d6a9ff",
+                        "outline": "#908fa0",
+                        "surface-container-high": "#222a3d",
+                        "on-secondary-fixed-variant": "#6900b3",
+                        "on-tertiary-fixed": "#00201c",
+                        "tertiary-container": "#00a392",
+                        "surface-variant": "#2d3449",
+                        "on-background": "#dae2fd",
+                        "surface-container-highest": "#2d3449",
+                        "on-secondary": "#490080",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#71f8e4",
+                        "inverse-surface": "#dae2fd",
+                        "secondary": "#ddb7ff",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "surface-container-lowest": "#060e20",
+                        "on-primary-container": "#0d0096",
+                        "outline-variant": "#464554",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "primary-container": "#8083ff",
+                        "on-primary": "#1000a9",
+                        "on-primary-fixed": "#07006c",
+                        "surface-tint": "#c0c1ff",
+                        "primary": "#c0c1ff",
+                        "background": "#0b1326",
+                        "inverse-primary": "#494bd6",
+                        "surface-container-low": "#131b2e",
+                        "error": "#ffb4ab",
+                        "tertiary": "#4fdbc8",
+                        "on-tertiary-container": "#00302a",
+                        "surface": "#0b1326"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "1rem",
+                        "container-max": "1280px",
+                        "xl": "3rem",
+                        "margin": "2rem",
+                        "gutter": "1.5rem",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "md": "1.5rem",
+                        "base": "4px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-sm": ["Geist", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "display": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "label-md": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(30, 41, 59, 0.7); /* Slate-800 at 70% opacity approx */
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(51, 65, 85, 0.5); /* Slate-700/50 */
+        }
+        .ai-border-glow {
+            position: relative;
+        }
+        .ai-border-glow::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(45deg, #8083ff, #ddb7ff);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col pt-20 pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface-container/70 dark:bg-surface-container/70 backdrop-blur-xl fixed top-0 w-full z-50 border-b border-outline-variant/50 shadow-sm flex items-center justify-between px-md py-xs">
+<div class="flex items-center gap-sm">
+<button class="hover:bg-surface-variant/50 transition-colors active:scale-95 duration-200 p-2 rounded-full text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-primary">AcadeRAG</span>
+</div>
+<div class="flex items-center gap-sm">
+<button class="hover:bg-surface-variant/50 transition-colors active:scale-95 duration-200 p-2 rounded-full text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<main class="flex-1 max-w-[container-max] w-full mx-auto px-margin md:px-lg mt-lg flex flex-col gap-lg">
+<!-- Header Section -->
+<section class="flex flex-col gap-sm">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary-container/20 text-primary-container px-2 py-1 rounded-full font-label-sm text-label-sm border border-primary-container/30">Oportunidad de Investigación</span>
+<span class="bg-secondary-container/20 text-secondary-container px-2 py-1 rounded-full font-label-sm text-label-sm border border-secondary-container/30 flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">auto_awesome</span> AI Generado
+                </span>
+</div>
+<h1 class="font-display text-display md:text-[48px] text-[32px] text-on-background">Análisis de Océano Azul</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
+                Evaluación estratégica de viabilidad y originalidad para un potencial tema de tesis o proyecto de investigación en la región sureste de México.
+            </p>
+</section>
+<!-- Main Content Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Left Column: Core Insight -->
+<div class="md:col-span-2 flex flex-col gap-md">
+<!-- Insight Card -->
+<article class="glass-panel rounded-2xl p-lg ai-border-glow shadow-[0_0_15px_rgba(128,131,255,0.1)]">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/20 flex items-center justify-center shrink-0 border border-secondary-container/30">
+<span class="material-symbols-outlined text-secondary-fixed text-2xl" style="font-variation-settings: 'FILL' 1;">insights</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Hallazgo Principal</h2>
+<p class="font-body-md text-body-md text-on-surface-variant bg-surface-container-low p-md rounded-xl border border-outline-variant/30 text-lg leading-relaxed">
+<strong class="text-secondary-fixed font-semibold">"Nadie ha tocado este tema en Chiapas desde 2023"</strong><br><br>
+                                Nuestros modelos de análisis bibliográfico indican un vacío sustancial en la literatura académica reciente respecto a esta intersección específica de variables en la región de Chiapas. Los últimos estudios relevantes datan de principios de 2023 y presentan limitaciones metodológicas que tu investigación podría superar.
+                            </p>
+</div>
+</div>
+</article>
+<!-- Sugerencias de Abordaje -->
+<div class="glass-panel rounded-2xl p-lg">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">route</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Sugerencias de Abordaje Metodológico</h3>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Path 1 -->
+<div class="p-4 rounded-xl bg-surface-variant/40 border border-outline-variant/30 hover:border-primary/50 transition-colors group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-body-md text-body-md font-semibold text-primary-fixed">Enfoque Mixto Secuencial</h4>
+<span class="bg-surface-container px-2 py-0.5 rounded text-xs text-on-surface-variant font-label-sm">Recomendado</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant/80 text-sm">
+                                Iniciar con recolección de datos cuantitativos macro-económicos, seguido de entrevistas a profundidad con actores clave locales para triangular los resultados en un contexto post-2023.
+                            </p>
+</div>
+<!-- Path 2 -->
+<div class="p-4 rounded-xl bg-surface-variant/40 border border-outline-variant/30 hover:border-primary/50 transition-colors group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-body-md text-body-md font-semibold text-primary-fixed">Estudio de Caso Comparativo</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant/80 text-sm">
+                                Contrastar la situación de dos municipios específicos en Chiapas con condiciones socioeconómicas divergentes para aislar las variables críticas que no han sido documentadas recientemente.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Meta & Actions -->
+<div class="flex flex-col gap-md">
+<!-- Action Card -->
+<div class="glass-panel rounded-2xl p-md flex flex-col gap-6 sticky top-24">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Métricas de Viabilidad</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-label-sm text-label-sm text-on-surface">Originalidad</span>
+<span class="font-label-sm text-label-sm text-secondary-fixed">94%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container rounded-full" style="width: 94%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-label-sm text-label-sm text-on-surface">Disponibilidad de Datos</span>
+<span class="font-label-sm text-label-sm text-primary">78%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-label-sm text-label-sm text-on-surface">Relevancia Académica</span>
+<span class="font-label-sm text-label-sm text-tertiary">88%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 88%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<button class="w-full py-3 px-4 bg-gradient-to-r from-secondary-container to-primary-container hover:from-primary-container hover:to-secondary-container text-white font-label-md text-label-md rounded-xl shadow-[0_0_15px_rgba(111,0,190,0.4)] transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">rocket_launch</span>
+                            Usar esta idea
+                        </button>
+<button class="w-full mt-3 py-3 px-4 bg-transparent border border-outline-variant hover:bg-surface-variant/50 text-on-surface font-label-md text-label-md rounded-xl transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">bookmark_add</span>
+                            Guardar para después
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-low/70 dark:bg-surface-container-low/70 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant/30 shadow-lg flex justify-around items-center h-16 px-sm pb-safe">
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-sm py-1 shadow-[0_0_15px_rgba(99,102,241,0.3)] hover:text-primary transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="font-label-sm text-label-sm mt-0.5">Inspiration</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-sm text-label-sm mt-0.5">My Project</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm mt-0.5">Teams</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-0.5">Profile</span>
+</button>
+</nav>
+<script>
+  // Permite scroll interno controlado desde el padre via postMessage
+  // Funciona desde file:// sin restricciones CORS
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'corvus-scroll') {
+      window.scrollTo({ top: e.data.y, behavior: 'smooth' });
+    }
+    if (e.data && e.data.type === 'corvus-reset') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  });
+</script>
+</body></html>

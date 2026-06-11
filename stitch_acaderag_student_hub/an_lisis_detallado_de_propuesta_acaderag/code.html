@@ -1,0 +1,322 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AcadeRAG - Resultados de Análisis</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#908fa0",
+                      "on-tertiary-fixed": "#00201c",
+                      "error-container": "#93000a",
+                      "primary-container": "#8083ff",
+                      "on-secondary-container": "#d6a9ff",
+                      "background": "#0b1326",
+                      "on-secondary-fixed": "#2c0051",
+                      "on-background": "#dae2fd",
+                      "primary-fixed": "#e1e0ff",
+                      "surface-container-highest": "#2d3449",
+                      "secondary": "#ddb7ff",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "primary": "#c0c1ff",
+                      "on-tertiary-container": "#00302a",
+                      "on-secondary-fixed-variant": "#6900b3",
+                      "tertiary-container": "#00a392",
+                      "on-surface-variant": "#c7c4d7",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "on-secondary": "#490080",
+                      "on-primary-container": "#0d0096",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "on-primary": "#1000a9",
+                      "inverse-primary": "#494bd6",
+                      "on-error": "#690005",
+                      "on-tertiary": "#003731",
+                      "tertiary-fixed": "#71f8e4",
+                      "tertiary": "#4fdbc8",
+                      "inverse-surface": "#dae2fd",
+                      "secondary-container": "#6f00be",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "error": "#ffb4ab",
+                      "surface-bright": "#31394d",
+                      "on-primary-fixed": "#07006c",
+                      "surface-dim": "#0b1326",
+                      "surface-container-high": "#222a3d",
+                      "surface-container-lowest": "#060e20",
+                      "on-surface": "#dae2fd",
+                      "inverse-on-surface": "#283044",
+                      "surface-tint": "#c0c1ff",
+                      "surface": "#0b1326",
+                      "surface-variant": "#2d3449",
+                      "surface-container-low": "#131b2e",
+                      "secondary-fixed": "#f0dbff",
+                      "outline-variant": "#464554",
+                      "secondary-fixed-dim": "#ddb7ff",
+                      "surface-container": "#171f33",
+                      "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "2rem",
+                      "base": "4px",
+                      "gutter": "1.5rem",
+                      "sm": "1rem",
+                      "xs": "0.5rem",
+                      "xl": "3rem",
+                      "container-max": "1280px",
+                      "margin": "2rem",
+                      "md": "1.5rem"
+              },
+              "fontFamily": {
+                      "label-sm": ["Geist"],
+                      "headline-lg-mobile": ["Inter"],
+                      "display": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Geist"],
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom Keyframes for Entrance Animations */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        
+        /* Glass Card Base */
+        .glass-card {
+            background: rgba(34, 42, 61, 0.7); /* surface-container-high with opacity */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(70, 69, 84, 0.5); /* outline-variant with opacity */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        
+        /* AI Glow Effect */
+        .ai-glow {
+            box-shadow: 0 0 20px rgba(153, 102, 255, 0.15), inset 0 0 15px rgba(153, 102, 255, 0.1);
+        }
+        
+        /* Hide scrollbar for bento sections */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-primary selection:text-on-primary min-h-screen flex flex-col">
+<!-- JSON: TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/70 dark:bg-background/70 backdrop-blur-xl border-b border-white/10 shadow-sm transition-all duration-300" id="top-nav">
+<div class="flex justify-between items-center px-gutter w-full h-16 max-w-container-max mx-auto">
+<!-- Leading Avatar -->
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:opacity-80 transition-opacity cursor-pointer">
+<img alt="User profile photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYG2nL16CvHPmNN5IQBYhkJ8didqxP0M_2qgBl3QCls_CxOwKeTPGGdakJS4Mzm5ilQ1NfTnSEfVj4P1KyVwP6mNEgBC-iv9c4n4Ipo4Hoh1DOxD8Uqe6N4Lt6WLgvDWBW8xU6GrEBEzaeOMmfq7srFqZw4gODXbtQ3OMdGt5PGMkz6YBToXmbnfYdfl4NacWEAm_RyuviJ6cvDpojxc9BiIod3kIGMuhAz-i5zcP-6JAOYH-rwa4UWsyUjPvErR7Q9ExEyc7M-S4">
+</div>
+<!-- Headline / Brand -->
+<h1 class="font-display text-headline-md bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight">
+                AcadeRAG
+            </h1>
+<!-- Trailing Icon -->
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow mt-24 mb-24 px-gutter max-w-container-max mx-auto w-full">
+<!-- Page Context Header -->
+<div class="mb-8 opacity-0 animate-fade-in-up">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-sm">analytics</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Documento Procesado</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Análisis Detallado</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                La IA ha evaluado tu manuscrito. Revisa las métricas clave y las recomendaciones para elevar la calidad de tu proyecto antes de la entrega final.
+            </p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Hero: Índice de Innovación -->
+<div class="md:col-span-4 glass-card rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden ai-glow opacity-0 animate-fade-in-up delay-100">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-secondary opacity-50">auto_awesome</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 text-center w-full">Índice de Innovación</h3>
+<!-- Circular Gauge -->
+<div class="relative w-40 h-40 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<!-- Track -->
+<circle class="stroke-surface-container-highest" cx="50" cy="50" fill="none" r="45" stroke-width="8"></circle>
+<!-- Progress -->
+<circle class="transition-all duration-1000 ease-out" cx="50" cy="50" fill="none" r="45" stroke="url(#gradient)" stroke-dasharray="282.7" stroke-dashoffset="22.6" stroke-linecap="round" stroke-width="8"></circle>
+<defs>
+<linearGradient id="gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#c0c1ff"></stop> <!-- primary -->
+<stop offset="100%" stop-color="#ddb7ff"></stop> <!-- secondary -->
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display text-[40px] font-bold text-on-surface leading-none">92<span class="text-xl text-on-surface-variant">%</span></span>
+<span class="font-label-sm text-label-sm text-secondary mt-1">Excepcional</span>
+</div>
+</div>
+</div>
+<!-- Métricas de Calidad -->
+<div class="md:col-span-8 glass-card rounded-2xl p-6 opacity-0 animate-fade-in-up delay-100">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Métricas de Calidad</h3>
+</div>
+<div class="space-y-6">
+<!-- Progress Bar 1 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Rigor Académico</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">88%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[88%] shadow-[0_0_10px_rgba(192,193,255,0.5)]"></div>
+</div>
+</div>
+<!-- Progress Bar 2 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Relevancia Técnica</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">95%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full w-[95%] shadow-[0_0_10px_rgba(221,183,255,0.5)]"></div>
+</div>
+</div>
+<!-- Progress Bar 3 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Claridad Estructural</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">82%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full w-[82%] shadow-[0_0_10px_rgba(79,219,200,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detección de Riesgos -->
+<div class="md:col-span-5 glass-card rounded-2xl p-6 border-error/20 bg-gradient-to-br from-surface-container-high/70 to-error-container/10 opacity-0 animate-fade-in-up delay-200">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-error-container/30 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-error mb-2">Riesgo de Colisión Semántica</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">
+                            Se detectó una alta similitud conceptual en la sección de "Arquitectura Base" con el Proyecto ID-4092 de la generación anterior.
+                        </p>
+<button class="px-4 py-2 rounded-lg border border-error/50 text-error hover:bg-error/10 font-label-md text-label-md transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+                            Ver Comparativa
+                        </button>
+</div>
+</div>
+</div>
+<!-- Recomendaciones de la IA -->
+<div class="md:col-span-7 glass-card rounded-2xl p-6 opacity-0 animate-fade-in-up delay-300 ai-glow relative">
+<div class="absolute inset-0 bg-gradient-to-tr from-primary-container/5 to-transparent pointer-events-none rounded-2xl"></div>
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Recomendaciones de la IA</h3>
+</div>
+<span class="px-3 py-1 bg-surface-container rounded-full border border-outline-variant/30 font-label-sm text-label-sm text-secondary">3 Acciones</span>
+</div>
+<ul class="space-y-4">
+<li class="flex gap-4 p-3 rounded-xl hover:bg-surface-container-highest/50 transition-colors border border-transparent hover:border-outline-variant/20 group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">tips_and_updates</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Fortalecer la sección de metodología</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">La descripción técnica carece de profundidad en la selección del modelo LLM.</p>
+</div>
+</li>
+<li class="flex gap-4 p-3 rounded-xl hover:bg-surface-container-highest/50 transition-colors border border-transparent hover:border-outline-variant/20 group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">library_books</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Incluir más citas recientes (Post 2023)</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">El marco teórico se apoya fuertemente en papers de 2021. Actualizar estado del arte.</p>
+</div>
+</li>
+<li class="flex gap-4 p-3 rounded-xl hover:bg-surface-container-highest/50 transition-colors border border-transparent hover:border-outline-variant/20 group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">account_tree</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Estructurar diagrama de flujo de datos</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Se recomienda añadir un gráfico visual para explicar el proceso de ingesta RAG.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- JSON: BottomNavBar (Visible mainly on mobile, but serves as global student nav in this context) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface-container/70 dark:bg-surface-container/70 backdrop-blur-2xl border-t border-white/10 shadow-xl z-50 rounded-t-xl" id="bottom-nav">
+<!-- Tab 1: Inspiración -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary/80 scale-90 duration-200 group">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-1 transition-transform">lightbulb</span>
+<span class="font-label-sm text-[10px]">Inspiración</span>
+</button>
+<!-- Tab 2: Proyecto (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-primary-container/30 text-primary rounded-xl px-4 py-1 shadow-[0_0_15px_rgba(99,102,241,0.3)] scale-90 duration-200">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">assignment</span>
+<span class="font-label-sm text-[10px] font-bold">Proyecto</span>
+</button>
+<!-- Tab 3: Equipos -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary/80 scale-90 duration-200 group">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-1 transition-transform">groups</span>
+<span class="font-label-sm text-[10px]">Equipos</span>
+</button>
+<!-- Tab 4: Perfil -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary/80 scale-90 duration-200 group">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-1 transition-transform">person</span>
+<span class="font-label-sm text-[10px]">Perfil</span>
+</button>
+</nav>
+<!-- Subtle background effects -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-secondary/5 blur-[150px]"></div>
+</div>
+</body></html>
