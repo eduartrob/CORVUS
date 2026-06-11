@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Corvus | Sistema de Gestión de Memoria Académica</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet"/>
+    <!-- Font Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
     <!-- Animation Libraries -->
@@ -18,8 +18,8 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Google Sans"', '"DM Sans"', 'sans-serif'],
-                        display: ['"Google Sans"', '"DM Sans"', 'sans-serif'],
+                        sans: ['"Google Sans"', 'sans-serif'],
+                        display: ['"Google Sans"', 'sans-serif'],
                     },
                     colors: {
                         brand: {
@@ -48,6 +48,26 @@
         }
     </script>
     <style>
+        /* ── OFFICIAL GOOGLE SANS FONT ── */
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UaGrENHsxJlGDuGo1OIlL3Owp5eKRo.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 500;
+            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLU94YtzCwZ-Qw.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLV154tzCwZ-Qw.woff2') format('woff2');
+        }
+
         body { 
             background-color: #030712; 
             color: #f9fafb; 
