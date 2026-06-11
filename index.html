@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
     <!-- Libraries -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
@@ -362,17 +361,6 @@
     </main>
 
     <script>
-        // ── 1. SETUP LENIS (Ultra Smooth Scroll) ──
-        const lenis = new Lenis({
-            lerp: 0.1,
-            smoothWheel: true
-        });
-
-        // Sync Lenis with GSAP ScrollTrigger
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0);
-
         // ── 2. CUSTOM CURSOR ──
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
@@ -461,11 +449,12 @@
 
         // Navbar Hide/Show on Scroll
         let lastScrollY = window.scrollY;
-        lenis.on('scroll', (e) => {
+        window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (e.animatedScroll > 100 && e.animatedScroll > lastScrollY) { nav.style.transform = 'translateY(-100%)'; } 
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > 100 && currentScrollY > lastScrollY) { nav.style.transform = 'translateY(-100%)'; } 
             else { nav.style.transform = 'translateY(0)'; }
-            lastScrollY = e.animatedScroll;
+            lastScrollY = currentScrollY;
         });
 
         // Scene 1: Hero Parallax Out (Scrubbed)
