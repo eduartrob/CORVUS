@@ -1,933 +1,290 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Corvus | Sistema de Gestión de Memoria Académica</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    
-    <!-- Animation Libraries -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Google Sans"', 'sans-serif'],
-                        display: ['"Google Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            400: '#3f75f5', // AMS Blue style
-                            500: '#2b5ce0',
-                            600: '#1e48ba',
-                            900: '#0a1d5c',
-                        },
-                        dark: {
-                            900: '#030712', // Background
-                            800: '#111827', // Surface
-                            700: '#1f2937', // Border
-                        }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                          '0%, 100%': { transform: 'translateY(0)' },
-                          '50%': { transform: 'translateY(-15px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* ── OFFICIAL GOOGLE SANS FONT ── */
-        @font-face {
-            font-family: 'Google Sans';
-            font-style: normal;
-            font-weight: 400;
-            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UaGrENHsxJlGDuGo1OIlL3Owp5eKRo.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Google Sans';
-            font-style: normal;
-            font-weight: 500;
-            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLU94YtzCwZ-Qw.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Google Sans';
-            font-style: normal;
-            font-weight: 700;
-            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLV154tzCwZ-Qw.woff2') format('woff2');
-        }
-
-        body { 
-            background-color: #030712; 
-            color: #f9fafb; 
-            overflow-x: hidden; 
-        }
-        
-        /* 1. Exact AMS Custom Cursor CSS */
-        * { cursor: none !important; }
-        .cursor-dot, .cursor-outline {
-            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
-            border-radius: 50%; z-index: 10001; pointer-events: none;
-        }
-        .cursor-dot { width: 8px; height: 8px; background-color: #3f75f5; }
-        .cursor-outline {
-            width: 40px; height: 40px; border: 1px solid #3f75f5;
-            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
-            display: flex; justify-content: center; align-items: center; text-align: center; color: transparent;
-        }
-        .cursor-outline.hover-active { width: 60px; height: 60px; background-color: rgba(63, 117, 245, 0.08); }
-        .cursor-outline.project-hover {
-            width: 100px; height: 100px; background-color: #3f75f5; color: #fff; font-size: 0.65rem; letter-spacing: 2px;
-            border-color: transparent;
-        }
-        .cursor-outline.project-hover::after { content: "VER"; }
-        
-        /* 2. Exact AMS Blur Reveal CSS */
-        .blur-reveal { 
-            opacity: 0; 
-            filter: blur(20px); 
-            transform: translateY(30px); 
-            will-change: opacity, filter, transform; 
-        }
-
-        /* Artisanal Touch: Organic Glows (Noise removed per request) */
-        .glow {
-            position: absolute; width: 800px; height: 800px;
-            background: radial-gradient(circle, rgba(63, 117, 245, 0.15) 0%, rgba(0,0,0,0) 60%);
-            border-radius: 50%; pointer-events: none; z-index: -1;
-        }
-
-        /* Liquid Blob Animation */
-        @keyframes liquidBlob {
-            0% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
-            25% { border-radius: 60% 40% 50% 50% / 50% 50% 40% 60%; }
-            50% { border-radius: 40% 60% 40% 60% / 60% 40% 50% 50%; }
-            75% { border-radius: 50% 50% 60% 40% / 40% 60% 60% 40%; }
-            100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
-        }
-        .liquid-circle {
-            animation: liquidBlob 10s ease-in-out infinite;
-        }
-
-        /* 3. Image Hover Scroll CSS structure */
-        .project-img-wrap { overflow: hidden; position: relative; border-radius: 1.5rem; }
-        .scroll-img { width: 100%; height: auto; display: block; transform: translateY(0); }
-
-        /* General UI Styling */
-        .glass-card {
-            background: rgba(17, 24, 39, 0.4);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .glass-nav {
-            background: rgba(3, 7, 18, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .text-gradient {
-            background: linear-gradient(to right, #3f75f5, #818cf8, #e879f9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .btn-gradient {
-            background: #3f75f5;
-            transition: all 0.3s ease;
-        }
-        .btn-gradient:hover {
-            box-shadow: 0 0 25px rgba(63, 117, 245, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .split-line { overflow: hidden; }
-        .split-line span { display: inline-block; transform: translateY(100%); opacity: 0; }
-        
-        /* Floating letters */
-        .floating-letter {
-            position: absolute;
-            color: rgba(255, 255, 255, 1);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            user-select: none;
-            pointer-events: none;
-        }
-
-        /* ── GLITCH EFFECT on H1 gradient span ── */
-        @keyframes glitch-1 {
-            0%,100%{clip-path:inset(0 0 95% 0);transform:translate(-3px,0)}
-            20%{clip-path:inset(30% 0 50% 0);transform:translate(3px,0)}
-            40%{clip-path:inset(70% 0 10% 0);transform:translate(-2px,0)}
-            60%{clip-path:inset(10% 0 80% 0);transform:translate(2px,0)}
-            80%{clip-path:inset(50% 0 30% 0);transform:translate(-1px,0)}
-        }
-        .glitch-wrap { position:relative; display:inline-block; }
-        .glitch-wrap::before, .glitch-wrap::after {
-            content: attr(data-text);
-            position:absolute; top:0; left:0; width:100%;
-            background: linear-gradient(to right,#3f75f5,#818cf8,#e879f9);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            background-clip:text; pointer-events:none;
-        }
-        .glitch-wrap::before { animation:glitch-1 4s infinite linear; color:#3f75f5; }
-        .glitch-wrap::after  { animation:glitch-1 4s infinite linear 0.1s; color:#e879f9; transform:scaleX(-1); }
-
-        /* ── 3D TILT CARD ── */
-        .tilt-card { transform-style:preserve-3d; transition:transform 0.1s ease; will-change:transform; }
-        .tilt-card .tilt-inner { transform:translateZ(20px); }
-
-        /* ── PARTICLE CANVAS on img wrap ── */
-        .particle-canvas {
-            position:absolute; inset:0; pointer-events:none;
-            opacity:0; transition:opacity 0.4s; z-index:20;
-        }
-        .hover-project:hover .particle-canvas { opacity:1; }
-
-        /* ── CTA PULSE GLOW ── */
-        @keyframes ctaPulse {
-            0%,100%{box-shadow:0 0 30px rgba(63,117,245,0.3),0 0 80px rgba(63,117,245,0.1);}
-            50%{box-shadow:0 0 60px rgba(63,117,245,0.6),0 0 120px rgba(232,121,249,0.2);}
-        }
-        .cta-glow-btn { animation:ctaPulse 3s ease-in-out infinite; }
-
-        /* ── MARQUEE STRIP ── */
-        @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        .marquee-track { display:flex; width:max-content; animation:marquee 20s linear infinite; }
-        .marquee-track:hover { animation-play-state:paused; }
-    </style>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Corvus | Memoria Académica Vectorial</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['"Google Sans"','sans-serif'],display:['"Google Sans"','sans-serif']},colors:{brand:{400:'#3f75f5',500:'#2b5ce0',900:'#0a1d5c'},dark:{900:'#030712',800:'#111827'}}}}}
+</script>
+<style>
+@font-face{font-family:'Google Sans';font-style:normal;font-weight:400;src:url('https://fonts.gstatic.com/s/googlesans/v14/4UaGrENHsxJlGDuGo1OIlL3Owp5eKRo.woff2') format('woff2');}
+@font-face{font-family:'Google Sans';font-style:normal;font-weight:500;src:url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLU94YtzCwZ-Qw.woff2') format('woff2');}
+@font-face{font-family:'Google Sans';font-style:normal;font-weight:700;src:url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLV154tzCwZ-Qw.woff2') format('woff2');}
+body{background-color:#030712;color:#f9fafb;overflow-x:hidden;margin:0;}
+*{cursor:none!important;box-sizing:border-box;}
+.cursor-dot,.cursor-outline{position:fixed;top:0;left:0;transform:translate(-50%,-50%);border-radius:50%;z-index:10001;pointer-events:none;}
+.cursor-dot{width:8px;height:8px;background-color:#3f75f5;}
+.cursor-outline{width:40px;height:40px;border:1px solid #3f75f5;transition:width 0.2s,height 0.2s,background-color 0.2s;display:flex;justify-content:center;align-items:center;color:transparent;}
+.cursor-outline.hover-active{width:60px;height:60px;background-color:rgba(63,117,245,0.1);}
+.cursor-outline.project-hover{width:100px;height:100px;background-color:#3f75f5;color:#fff;font-size:0.65rem;letter-spacing:2px;border-color:transparent;}
+.cursor-outline.project-hover::after{content:"VER";}
+.glass-card{background:rgba(17,24,39,0.4);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.05);}
+.glass-nav{background:rgba(3,7,18,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05);}
+.split-line{overflow:hidden;}
+.split-line span{display:inline-block;transform:translateY(100%);opacity:0;}
+#blob-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.6;pointer-events:none;}
+.pinned-section{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.h-scroll-container{display:flex;width:300vw;height:100vh;}
+.h-scroll-panel{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
+.project-img-wrap{overflow:hidden;position:relative;border-radius:1.5rem;cursor:none;}
+.scroll-img{width:100%;height:auto;display:block;transform:translateY(0);transition:transform 0.5s ease;}
+.project-img-wrap:hover .scroll-img{transform:scale(1.15);}
+.scramble-text{visibility:hidden;}
+.btn-gradient{background:#3f75f5;transition:all 0.3s ease;position:relative;overflow:hidden;}
+.btn-gradient::before{content:'';position:absolute;top:50%;left:50%;width:300px;height:300px;background:rgba(255,255,255,0.2);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:transform 0.5s;}
+.btn-gradient:hover::before{transform:translate(-50%,-50%) scale(1);}
+.btn-gradient:hover{box-shadow:0 0 25px rgba(63,117,245,0.4);transform:translateY(-2px);}
+.tilt-card{transform-style:preserve-3d;will-change:transform;}
+.tilt-inner{transform:translateZ(30px);}
+</style>
 </head>
 <body class="antialiased relative">
+<div class="cursor-dot"></div><div class="cursor-outline"></div>
+<nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3 hover-target"><div class="w-10 h-10 rounded-xl flex items-center justify-center bg-brand-500 shadow-lg shadow-brand-500/20"><span class="material-symbols-outlined text-white text-xl">analytics</span></div><span class="text-2xl font-display font-bold text-white">Corvus</span></div>
+<div class="hidden md:flex gap-8 items-center font-medium text-sm">
+<a href="#metodologia" class="hover-target text-gray-400 hover:text-white transition-colors">Metodología</a>
+<a href="#arquitectura" class="hover-target text-gray-400 hover:text-white transition-colors">Tecnología</a>
+<a href="#plataforma" class="hover-target text-gray-400 hover:text-white transition-colors">Plataforma</a>
+</div>
+<a href="#planes" class="btn-gradient text-white font-semibold px-6 py-2.5 rounded-full text-sm hover-target magnetic-target">Acceder</a>
+</div>
+</nav>
 
-    <!-- AMS Exact Cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+<main>
+<!-- ESCENA 1: HERO PINNED -->
+<section id="hero" class="pinned-section">
+<canvas id="blob-canvas"></canvas>
+<div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
+<div>
+<h1 class="font-display text-5xl md:text-7xl font-bold leading-tight mb-8">
+<div class="split-line"><span>Auditoría de</span></div>
+<div class="split-line"><span class="text-brand-400">Proyectos con IA.</span></div>
+<div class="split-line"><span>Zero-Storage.</span></div>
+</h1>
+<p class="hero-sub text-xl text-gray-400 font-light mb-10 max-w-xl" style="opacity:0; filter:blur(20px); transform:translateY(40px);">Sistema de soporte a la decisión basado en agrupamiento vectorial y NLP. Identificamos espacios inexplorados y eliminamos el plagio sin descargar un solo PDF.</p>
+</div>
+<div class="relative flex justify-end hero-img-container" style="opacity:0; transform:translateX(100px) rotateY(45deg);">
+<div class="relative w-[300px] h-[620px] rounded-[2.5rem] border-[10px] border-dark-800 shadow-2xl shadow-black overflow-hidden bg-dark-900">
+<img src="img/corvus_hero.png" alt="Corvus App" class="w-full h-auto opacity-90 block">
+</div>
+</div>
+</div>
+</section>
 
-    <!-- Top Navigation Bar -->
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3 hover-target">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-brand-500 to-indigo-600 shadow-lg shadow-brand-500/20">
-                    <span class="material-symbols-outlined text-white text-xl">analytics</span>
-                </div>
-                <span class="text-2xl font-display font-bold tracking-tight text-white">Corvus</span>
-            </div>
-            
-            <div class="hidden md:flex gap-8 items-center font-medium text-sm">
-                <a href="#soluciones" class="hover-target text-gray-400 hover:text-white transition-colors">Tecnología</a>
-                <a href="#metodologia" class="hover-target text-gray-400 hover:text-white transition-colors">Metodología</a>
-                <a href="#proyectos" class="hover-target text-gray-400 hover:text-white transition-colors">Plataforma</a>
-                <a href="#planes" class="hover-target text-gray-400 hover:text-white transition-colors">Planes</a>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <a href="#" class="btn-gradient text-white font-semibold px-6 py-2.5 rounded-full text-sm hover-target magnetic-target">Acceder al Sistema</a>
-            </div>
-        </div>
-    </nav>
+<!-- ESCENA 2: EL RETO (METODOLOGÍA) -->
+<section id="metodologia" class="py-32 relative">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="reto-text" style="opacity:0; transform:translateX(-100px);">
+<h4 class="text-brand-400 font-bold uppercase tracking-wider text-sm mb-4">El Reto Académico</h4>
+<h3 class="font-display text-4xl font-bold mb-6">Fuga sistemática de conocimiento.</h3>
+<p class="text-gray-400 text-lg font-light mb-6">Miles de horas de investigación terminan aisladas en carpetas olvidadas. Los alumnos repiten ideas. Los docentes consumen cientos de horas intentando detectar colisiones manualmente.</p>
+<h3 class="font-display text-2xl font-bold mb-4 mt-12 text-white">Nuestra Solución</h3>
+<p class="text-gray-400 text-lg font-light">Corvus extrae el historial, lo convierte en vectores locales y audita propuestas en tiempo real. Máxima privacidad, cero costos operativos de IA.</p>
+</div>
+<div class="grid grid-cols-2 gap-6 reto-cards">
+<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
+<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">memory</span><h4 class="font-bold text-white">Zero-Storage</h4></div>
+</div>
+<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
+<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">hub</span><h4 class="font-bold text-white">Clustering</h4></div>
+</div>
+<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
+<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">mic</span><h4 class="font-bold text-white">Simulador</h4></div>
+</div>
+<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
+<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">groups</span><h4 class="font-bold text-white">Matchmaking</h4></div>
+</div>
+</div>
+</div>
+</section>
 
-    <main class="pt-20">
-        <!-- Hero Section -->
-        <section class="relative min-h-[95vh] flex items-center pt-16 pb-24 overflow-hidden">
-            <!-- Floating Letters Container -->
-            <div id="floating-letters" class="absolute inset-0 pointer-events-none z-0"></div>
-            
-            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10 relative">
-                
-                <div class="lg:col-span-7 text-center lg:text-left">
-                    <div class="gsap-hero-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur text-sm font-medium text-brand-400 mb-8 opacity-0 translate-y-4">
-                        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-                        Gestión de Memoria Histórica
-                    </div>
-                    
-                    <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight mb-8">
-                        <div class="split-line"><span>Auditoría de</span></div>
-                        <div class="split-line"><span class="text-brand-400">Proyectos con IA.</span></div>
-                        <div class="split-line"><span>Zero-Storage.</span></div>
-                    </h1>
-                    
-                    <p class="gsap-hero-item text-lg md:text-xl text-gray-400 leading-relaxed mb-10 max-w-2xl mx-auto lg:mx-0 font-light opacity-0 translate-y-4">
-                        Sistema de soporte a la decisión basado en agrupamiento vectorial y NLP. Fomentamos la innovación identificando espacios inexplorados y eliminamos el plagio sin robar espacio en disco.
-                    </p>
-                    
-                    <div class="gsap-hero-item flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start opacity-0 translate-y-4">
-                        <a href="#proyectos" class="btn-gradient w-full sm:w-auto text-white px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center gap-2 hover-target magnetic-target">
-                            Ver plataforma
-                            <span class="material-symbols-outlined text-sm">arrow_downward</span>
-                        </a>
-                        <a href="#planes" class="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg border border-white/10 hover:bg-white/5 transition-colors text-center hover-target magnetic-target">
-                            Conocer planes
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Hero Visual / App Preview -->
-                <div class="lg:col-span-5 relative flex justify-center lg:justify-end">
-                    <div class="gsap-hero-img hover-target relative w-[300px] h-[620px] rounded-[2.5rem] border-[10px] border-dark-800 shadow-2xl shadow-black/80 overflow-hidden bg-dark-900 opacity-0 translate-y-12 rotate-2 hover:rotate-0 transition-transform duration-500">
-                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-dark-800 rounded-b-2xl z-20"></div>
-                        <img src="img/corvus_hero.png" id="hero-scroll-img" alt="Corvus App" class="w-full h-auto opacity-90 block">
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- ESCENA 3: ARQUITECTURA (PINNED + SCRAMBLE) -->
+<section id="arquitectura" class="pinned-section bg-dark-800/30">
+<div class="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
+<svg viewBox="0 0 100 100" class="w-full h-full max-w-4xl animate-[spin_60s_linear_infinite]"><circle cx="50" cy="50" r="40" stroke="#3f75f5" stroke-width="0.5" fill="none" stroke-dasharray="2 4"/><circle cx="50" cy="50" r="30" stroke="#fff" stroke-width="0.2" fill="none"/></svg>
+</div>
+<div class="max-w-7xl mx-auto px-6 w-full text-center z-10">
+<h2 class="font-display text-4xl md:text-5xl font-bold mb-16 arq-title">Arquitectura Vectorial</h2>
+<div class="relative h-[300px] w-full max-w-2xl mx-auto">
+<div class="absolute inset-0 flex flex-col items-center justify-center arq-card bg-dark-900 border border-brand-500/30 rounded-3xl p-10 opacity-0 transform scale-90">
+<span class="material-symbols-outlined text-4xl text-brand-400 mb-4">neurology</span>
+<h3 class="text-3xl font-display font-bold text-white mb-4 scramble-target">NLP & ChromaDB</h3>
+<p class="text-gray-400 scramble-target">Limpieza y fragmentación en chunks vectorizados con all-MiniLM-L6 para detectar colisiones exactas.</p>
+</div>
+<div class="absolute inset-0 flex flex-col items-center justify-center arq-card bg-dark-900 border border-indigo-500/30 rounded-3xl p-10 opacity-0 transform scale-90">
+<span class="material-symbols-outlined text-4xl text-indigo-400 mb-4">share</span>
+<h3 class="text-3xl font-display font-bold text-white mb-4 scramble-target">Ingesta Zero-Storage</h3>
+<p class="text-gray-400 scramble-target">Conexión API a Drive. Streameamos a RAM, vectorizamos y liberamos. Privacidad absoluta.</p>
+</div>
+<div class="absolute inset-0 flex flex-col items-center justify-center arq-card bg-dark-900 border border-purple-500/30 rounded-3xl p-10 opacity-0 transform scale-90">
+<span class="material-symbols-outlined text-4xl text-purple-400 mb-4">smart_toy</span>
+<h3 class="text-3xl font-display font-bold text-white mb-4 scramble-target">LLM Local Fine-Tuned</h3>
+<p class="text-gray-400 scramble-target">Modelo cuantizado (Phi-3 Mini / Llama-3 8B) afinado con LoRA operando en <8GB RAM.</p>
+</div>
+</div>
+</div>
+</section>
 
-        <!-- Stats Section -->
-        <section class="py-16 border-t border-b border-white/5 bg-dark-800/20">
-            <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center blur-reveal">
-                <div>
-                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="100">0</span>%</h3>
-                    <p class="text-gray-400 text-sm">Zero-Storage</p>
-                </div>
-                <div>
-                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="1000">0</span>+</h3>
-                    <p class="text-gray-400 text-sm">Vectores Procesados</p>
-                </div>
-                <div>
-                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="99">0</span>%</h3>
-                    <p class="text-gray-400 text-sm">Precisión Anti-plagio</p>
-                </div>
-                <div>
-                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="8">0</span>GB</h3>
-                    <p class="text-gray-400 text-sm">Memoria LLM Local</p>
-                </div>
-            </div>
-        </section>
+<!-- ESCENA 4: PLATAFORMA (SCROLL HORIZONTAL) -->
+<section id="plataforma" class="overflow-hidden bg-dark-900">
+<div class="py-20 text-center"><h2 class="font-display text-5xl font-bold">La Plataforma</h2></div>
+<div class="h-scroll-container">
+<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_dashboard.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Panel Triage Docente</h3></div></div>
+<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_matchmaking.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Matchmaking Inteligente</h3></div></div>
+<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_upload.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Chat de Apelación IA</h3></div></div>
+<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_simulador.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Simulador de Defensa</h3></div></div>
+<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_oceanos.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Explorador de Océanos Azules</h3></div></div>
+</div>
+</section>
 
-        <!-- Marquee Technology Strip -->
-        <div class="py-6 border-y border-white/5 bg-dark-900/60 overflow-hidden">
-            <div class="marquee-track gap-12 items-center">
-                <!-- duplicated for seamless loop -->
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">NLP · ChromaDB</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">GSAP ScrollTrigger</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Phi-3 Mini LLM</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Zero-Storage ETL</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Flutter Mobile</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Clustering Vectorial</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">FastAPI Backend</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">PEFT / LoRA</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">NLP · ChromaDB</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">GSAP ScrollTrigger</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Phi-3 Mini LLM</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Zero-Storage ETL</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Flutter Mobile</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Clustering Vectorial</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">FastAPI Backend</span>
-                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">PEFT / LoRA</span>
-            </div>
-        </div>
-        <section id="metodologia" class="py-32 bg-dark-800/30 border-t border-white/5 relative">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                    
-                    <div class="order-2 lg:order-1">
-                        <!-- El Problema -->
-                        <div class="mb-16 blur-reveal">
-                            <div class="flex items-center gap-4 mb-4">
-                                <span class="w-12 h-[2px] bg-brand-500"></span>
-                                <h4 class="text-brand-400 font-bold uppercase tracking-wider text-sm">El Reto Académico</h4>
-                            </div>
-                            <h3 class="font-display text-4xl font-bold mb-6">Una fuga sistemática de conocimiento.</h3>
-                            <ul class="space-y-4 text-gray-400 font-light text-lg">
-                                <li><strong class="text-white">Proyectos Muertos:</strong> Miles de horas de investigación terminan aisladas en carpetas de Drive olvidadas.</li>
-                                <li><strong class="text-white">Estancamiento Estudiantil:</strong> Al carecer de un marco histórico, los alumnos repiten ideas o usan la IA de forma deshonesta.</li>
-                                <li><strong class="text-white">Carga Burocrática:</strong> Los docentes consumen cientos de horas manuales intentando detectar copias o colisiones entre equipos.</li>
-                            </ul>
-                        </div>
-                        
-                        <!-- La Solución -->
-                        <div class="blur-reveal">
-                            <div class="flex items-center gap-4 mb-4">
-                                <span class="w-12 h-[2px] bg-indigo-500"></span>
-                                <h4 class="text-indigo-400 font-bold uppercase tracking-wider text-sm">La Consecuencia y Nuestra Solución</h4>
-                            </div>
-                            <h3 class="font-display text-4xl font-bold mb-6">Corvus. Centralización Inteligente.</h3>
-                            <p class="text-gray-400 text-lg font-light leading-relaxed">
-                                Quienes desean innovar no saben qué temas están libres. Con Corvus, extraemos el historial de la universidad y lo convertimos en información útil procesada de forma local y 100% privada para garantizar la propiedad intelectual.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <!-- Metodología bento grid cards with 3D tilt -->
-                    <div class="order-1 lg:order-2 grid grid-cols-2 gap-6 blur-reveal">
-                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 hover-target hover:bg-white/5 transition-colors">
-                            <div class="tilt-inner flex flex-col items-center">
-                                <span class="material-symbols-outlined text-4xl text-white mb-4">memory</span>
-                                <h4 class="font-bold text-white">Auditoría Zero-Storage</h4>
-                                <p class="text-sm text-gray-500 mt-2">RAM streaming</p>
-                            </div>
-                        </div>
-                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
-                            <div class="tilt-inner flex flex-col items-center">
-                                <span class="material-symbols-outlined text-4xl text-white mb-4">hub</span>
-                                <h4 class="font-bold text-white">Machine Learning</h4>
-                                <p class="text-sm text-gray-500 mt-2">Clustering Vectorial</p>
-                            </div>
-                        </div>
-                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
-                            <div class="tilt-inner flex flex-col items-center">
-                                <span class="material-symbols-outlined text-4xl text-white mb-4">mic</span>
-                                <h4 class="font-bold text-white">Simulador LLM</h4>
-                                <p class="text-sm text-gray-500 mt-2">Defensa por Voz</p>
-                            </div>
-                        </div>
-                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target hover:bg-white/5 transition-colors">
-                            <div class="tilt-inner flex flex-col items-center">
-                                <span class="material-symbols-outlined text-4xl text-white mb-4">groups</span>
-                                <h4 class="font-bold text-white">Matchmaking</h4>
-                                <p class="text-sm text-gray-500 mt-2">Skills Minados</p>
-                            </div>
-                        </div>
-                    </div>
+<!-- ESCENA 5: STATS -->
+<section class="py-32 border-y border-white/5 bg-dark-800/20">
+<div class="max-w-7xl mx-auto px-6 flex justify-around items-center text-center">
+<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="100">0</h3><p class="text-brand-400">% Zero-Storage</p></div>
+<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="1000">0</h3><p class="text-brand-400">+ Vectores</p></div>
+<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="99">0</h3><p class="text-brand-400">% Precisión</p></div>
+<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="8">0</h3><p class="text-brand-400">GB RAM Max</p></div>
+</div>
+</section>
 
-                </div>
-            </div>
-        </section>
+<!-- ESCENA 6: CTA FINAL ZOOM OUT -->
+<section id="cta" class="pinned-section">
+<div class="cta-content text-center" style="transform:scale(3); opacity:0;">
+<span class="text-brand-400 font-bold tracking-widest uppercase text-sm mb-4 block">Corvus</span>
+<h2 class="font-display text-6xl md:text-8xl font-bold mb-10 text-white">Auditando el futuro.</h2>
+<a href="#" class="btn-gradient inline-flex items-center gap-2 text-white px-12 py-6 rounded-full font-bold text-2xl hover-target magnetic-target">Implementar Sistema</a>
+</div>
+</section>
 
-        <!-- Ecosistema Usuarios / Comunidad -->
-        <section id="comunidad" class="py-32 bg-dark-800/10 border-t border-white/5 relative">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-20 blur-reveal">
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">El Ecosistema Corvus</h2>
-                    <p class="text-xl text-gray-400 font-light max-w-3xl mx-auto">Un entorno auditado donde cada usuario optimiza su tiempo.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <!-- Usuario Estudiante -->
-                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-brand-500/50 transition-colors hover-target group">
-                        <div class="w-16 h-16 bg-brand-500/10 rounded-full flex items-center justify-center mb-8 text-brand-400 group-hover:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-3xl">school</span>
-                        </div>
-                        <h3 class="text-2xl font-display font-bold mb-6 text-white">Usuario Estudiante</h3>
-                        <ul class="space-y-4 text-gray-400">
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">search</span> Explorar áreas y océanos azules antes de redactar.</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">fact_check</span> Validar propuestas contra el acervo histórico de la universidad.</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">handshake</span> Buscar compañeros de equipo mediante habilidades comprobadas.</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">model_training</span> Entrenar su exposición con el simulador de defensa de la IA local.</li>
-                        </ul>
-                    </div>
-                    <!-- Usuario Docente -->
-                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-indigo-500/50 transition-colors hover-target group">
-                        <div class="w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center mb-8 text-indigo-400 group-hover:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
-                        </div>
-                        <h3 class="text-2xl font-display font-bold mb-6 text-white">Usuario Docente / Coordinador</h3>
-                        <ul class="space-y-4 text-gray-400 mt-2">
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">cloud_sync</span> Conectar su Google Drive institucional mediante OAuth (Flujo ETL).</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">notifications_active</span> Recibir alertas automáticas de plagio o colisión (Panel Triage).</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">forum</span> Leer los chats de apelación y tomar decisiones finales respaldadas.</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">block</span> Bloquear temas saturados y forzar la innovación en sus alumnos.</li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">summarize</span> Generar reportes analíticos de CACEI.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+<footer class="py-10 border-t border-white/5 text-center text-gray-500 text-sm">
+<p>&copy; 2026 Corvus Project. Memoria Académica Vectorial.</p>
+</footer>
+</main>
 
-        <!-- Solutions / Services Section (Tecnología Core) -->
-        <section id="soluciones" class="py-32 relative overflow-hidden">
-            <!-- Círculo Sólido Líquido Original que se mueve con scroll -->
-            <div id="scroll-circle-right" class="absolute top-1/2 -translate-y-1/2 right-[-300px] w-[800px] h-[800px] liquid-circle bg-indigo-500/10 pointer-events-none z-[-1]"></div>
+<script>
+// INIT LENIS
+const lenis = new Lenis({ duration: 1.2, smooth: true });
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
+lenis.on("scroll", ScrollTrigger.update);
+gsap.ticker.add((time) => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
 
-            <div class="max-w-7xl mx-auto px-6 relative z-10">
-                <div class="mb-20 max-w-3xl blur-reveal">
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Arquitectura Vectorial Corvus.</h2>
-                    <p class="text-xl text-gray-400 font-light">
-                        Procesamos cada documento bajo estrictas políticas on-premise, asegurando máxima privacidad y cero costos operativos por el consumo de IA externa.
-                    </p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-brand-500/50 transition-colors group hover-target">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-8">
-                            <span class="material-symbols-outlined text-3xl">neurology</span>
-                        </div>
-                        <h3 class="text-2xl font-display font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">NLP & ChromaDB</h3>
-                        <p class="text-gray-400 leading-relaxed">
-                            Limpieza (NLTK/Spacy) y fragmentación de texto en <i>chunks</i> que se convierten a vectores (all-MiniLM-L6) para detectar colisiones matemáticas.
-                        </p>
-                    </div>
-                    
-                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-indigo-500/50 transition-colors group hover-target">
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-8">
-                            <span class="material-symbols-outlined text-3xl">share</span>
-                        </div>
-                        <h3 class="text-2xl font-display font-bold mb-4 text-white group-hover:text-indigo-400 transition-colors">Ingesta Zero-Storage</h3>
-                        <p class="text-gray-400 leading-relaxed">
-                            Nos conectamos por API al Google Drive del docente, streameamos el texto a RAM, lo vectorizamos y liberamos la memoria. Los PDFs jamás se descargan físicamente.
-                        </p>
-                    </div>
-                    
-                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-purple-500/50 transition-colors group hover-target">
-                        <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-8">
-                            <span class="material-symbols-outlined text-3xl">smart_toy</span>
-                        </div>
-                        <h3 class="text-2xl font-display font-bold mb-4 text-white group-hover:text-purple-400 transition-colors">LLM Local Fine-Tuned</h3>
-                        <p class="text-gray-400 leading-relaxed">
-                            Un modelo (Phi-3 Mini / Llama-3 8B) cuantizado y afinado con PEFT/LoRA para actuar como sinodal estricto sin superar los 8GB de RAM.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+// CURSOR
+const cursorDot = document.querySelector(".cursor-dot");
+const cursorOutline = document.querySelector(".cursor-outline");
+const setDotX = gsap.quickSetter(cursorDot, "x", "px");
+const setDotY = gsap.quickSetter(cursorDot, "y", "px");
+const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
+const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
+let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2, outlineX = mouseX, outlineY = mouseY;
+window.addEventListener("mousemove", (e) => { mouseX = e.clientX; mouseY = e.clientY; setDotX(mouseX); setDotY(mouseY); });
+gsap.ticker.add(() => { outlineX += (mouseX - outlineX) * 0.15; outlineY += (mouseY - outlineY) * 0.15; setOutlineX(outlineX); setOutlineY(outlineY); });
 
-        <!-- Proyectos / Portfolio (Capacidades de la Plataforma) -->
-        <section id="proyectos" class="py-32 relative border-t border-white/5 bg-dark-800/10">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-16 blur-reveal">
-                    <div class="max-w-2xl">
-                        <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Capacidades de la Plataforma.</h2>
-                        <p class="text-xl text-gray-400 font-light">
-                            Conoce el ecosistema Corvus y nuestro enfoque de auditoría académica.
-                        </p>
-                    </div>
-                    <a href="#" class="text-brand-400 hover:text-white font-medium flex items-center gap-2 transition-colors mt-6 md:mt-0 hover-target underline-offset-8 hover:underline">
-                        Ver despliegue Docker <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                    </a>
-                </div>
+document.querySelectorAll(".hover-target").forEach(el => {
+    el.addEventListener("mouseenter", () => cursorOutline.classList.add("hover-active"));
+    el.addEventListener("mouseleave", () => cursorOutline.classList.remove("hover-active"));
+});
+document.querySelectorAll(".hover-project").forEach(el => {
+    el.addEventListener("mouseenter", () => { cursorOutline.classList.add("project-hover"); cursorDot.style.opacity="0"; });
+    el.addEventListener("mouseleave", () => { cursorOutline.classList.remove("project-hover"); cursorDot.style.opacity="1"; });
+});
+document.querySelectorAll(".magnetic-target").forEach((elem) => {
+    elem.addEventListener("mousemove", (e) => {
+        const r = elem.getBoundingClientRect();
+        gsap.to(elem, { x: (e.clientX - r.left - r.width/2)*0.4, y: (e.clientY - r.top - r.height/2)*0.4, duration: 0.5 });
+    });
+    elem.addEventListener("mouseleave", () => gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" }));
+});
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <!-- Item 1 -->
-                    <div class="blur-reveal group hover-project">
-                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
-                            <img src="img/corvus_dashboard.png" alt="Panel Docente" class="scroll-img">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Panel Triage Docente</h3>
-                                <p class="text-gray-400">Alertas de colisión semántica en vivo.</p>
-                            </div>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">Docentes</span>
-                        </div>
-                    </div>
+// TILT CARDS
+document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width/2) / (r.width/2);
+        const y = (e.clientY - r.top - r.height/2) / (r.height/2);
+        gsap.to(card, { rotateY: x*20, rotateX: -y*20, duration: 0.4 });
+    });
+    card.addEventListener('mouseleave', () => gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out' }));
+});
 
-                    <!-- Item 2 -->
-                    <div class="blur-reveal group hover-project lg:mt-16">
-                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
-                            <img src="img/corvus_matchmaking.png" alt="Matchmaking" class="scroll-img">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Matchmaking Inteligente</h3>
-                                <p class="text-gray-400">Equipos basados en habilidades reales.</p>
-                            </div>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">Alumnos</span>
-                        </div>
-                    </div>
+// BLOB BACKGROUND
+const canvas = document.getElementById('blob-canvas');
+const ctx = canvas.getContext('2d');
+let width, height;
+function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize); resize();
+const blobs = Array.from({length:3}, () => ({x:Math.random()*width, y:Math.random()*height, r:Math.random()*300+200, vx:Math.random()*1-0.5, vy:Math.random()*1-0.5, c:'rgba(63,117,245,0.08)'}));
+function draw() {
+    ctx.clearRect(0,0,width,height);
+    blobs.forEach(b => {
+        b.x += b.vx; b.y += b.vy;
+        if(b.x < -b.r || b.x > width+b.r) b.vx *= -1;
+        if(b.y < -b.r || b.y > height+b.r) b.vy *= -1;
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        grad.addColorStop(0, b.c); grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+}
+draw();
 
-                    <!-- Item 3 -->
-                    <div class="blur-reveal group hover-project">
-                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
-                            <img src="img/corvus_upload.png" alt="Chat Apelación" class="scroll-img">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Chat de Apelación AI</h3>
-                                <p class="text-gray-400">Debate el rechazo con el LLM.</p>
-                            </div>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">App Móvil</span>
-                        </div>
-                    </div>
+// SCENE 1: HERO PINNED
+const heroTl = gsap.timeline({ scrollTrigger: { trigger: "#hero", start: "top top", end: "+=1000", pin: true, scrub: 1 } });
+gsap.to('.split-line span', { y: "0%", opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out" });
+gsap.to('.hero-sub', { opacity: 1, filter: "blur(0px)", y: 0, duration: 1.5, delay: 0.5 });
+gsap.to('.hero-img-container', { opacity: 1, x: 0, rotateY: 0, duration: 1.5, ease: "power3.out", delay: 0.3 });
+heroTl.to('.hero-img-container', { scale: 0.5, y: -200, opacity: 0 }).to('.split-line span', { y: "-100%", opacity: 0, stagger: 0.1 }, "<").to('.hero-sub', { opacity: 0 }, "<");
 
-                    <!-- Item 4 -->
-                    <div class="blur-reveal group hover-project lg:mt-16">
-                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
-                            <img src="img/corvus_simulador.png" alt="Simulador" class="scroll-img">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Simulador de Defensa</h3>
-                                <p class="text-gray-400">Voz a Texto contra Sinodal IA.</p>
-                            </div>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">App Móvil</span>
-                        </div>
-                    </div>
+// SCENE 2: METODOLOGIA
+gsap.to('.reto-text', { x: 0, opacity: 1, duration: 1, scrollTrigger: { trigger: "#metodologia", start: "top 70%" } });
+gsap.to('.reto-cards .tilt-card', { rotateX: 0, y: 0, opacity: 1, duration: 1, stagger: 0.2, scrollTrigger: { trigger: "#metodologia", start: "top 50%" } });
 
-                    <!-- Item 5 -->
-                    <div class="blur-reveal group hover-project">
-                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
-                            <img src="img/corvus_oceanos.png" alt="Océanos Azules" class="scroll-img">
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Océanos Azules</h3>
-                                <p class="text-gray-400">Recomendaciones de vacíos vectoriales.</p>
-                            </div>
-                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">Innovación</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+// SCENE 3: ARQUITECTURA PINNED
+const arqCards = gsap.utils.toArray('.arq-card');
+const arqTl = gsap.timeline({ scrollTrigger: { trigger: "#arquitectura", start: "top top", end: "+=2000", pin: true, scrub: 1 } });
+arqCards.forEach((card, i) => {
+    arqTl.to(card, { scale: 1, opacity: 1, duration: 1 });
+    const texts = card.querySelectorAll('.scramble-target');
+    texts.forEach(t => {
+        const text = t.innerText;
+        t.innerText = ""; t.style.visibility = "visible";
+        arqTl.to(t, { text: { value: text, delimiter: "" }, duration: 1 }, "<+=0.2");
+    });
+    if (i < arqCards.length - 1) { arqTl.to(card, { scale: 1.1, opacity: 0, duration: 1 }, "+=0.5"); }
+});
 
-        <!-- Pricing / Suscripciones SaaS Freemium -->
-        <section id="planes" class="py-32 bg-dark-800/50 border-t border-white/5 relative">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-24 blur-reveal">
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Elige tu Nivel de Rigor.</h2>
-                    <p class="text-xl text-gray-400 font-light max-w-2xl mx-auto">
-                        Un modelo SaaS diseñado para cubrir el costo de procesamiento de Inteligencia Artificial sin comprometer la evaluación básica.
-                    </p>
-                </div>
+// SCENE 4: PLATAFORMA H-SCROLL
+const container = document.querySelector('.h-scroll-container');
+gsap.to(container, {
+    x: () => -(container.scrollWidth - window.innerWidth) + "px",
+    ease: "none",
+    scrollTrigger: { trigger: "#plataforma", start: "top top", end: "+=3000", pin: true, scrub: 1 }
+});
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Plan Base -->
-                    <div class="blur-reveal glass-card p-8 rounded-[2.5rem] flex flex-col hover-target hover:border-brand-500/30 transition-colors">
-                        <h3 class="text-xl font-display font-bold text-white mb-2">Plan Base</h3>
-                        <p class="text-brand-400 text-sm mb-6 font-semibold">Gratuito para Alumnos</p>
-                        <p class="text-gray-400 text-sm mb-8 h-10">Acceso esencial para la validación de proyectos.</p>
-                        <div class="flex items-baseline gap-2 mb-8">
-                            <span class="text-4xl font-display font-bold text-white">$0</span>
-                            <span class="text-gray-500 text-sm">/ siempre</span>
-                        </div>
-                        
-                        <ul class="space-y-4 mb-10 flex-1 text-sm">
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-gray-400 text-[20px]">check</span> <span class="text-gray-300">1 Validación única por cuatrimestre.</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-gray-400 text-[20px]">check</span> <span class="text-gray-300">Explorador de Océanos Azules.</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-gray-400 text-[20px]">check</span> <span class="text-gray-300">Matchmaking básico (tu clase).</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-gray-400 text-[20px]">check</span> <span class="text-gray-300">1 Mensaje de apelación en Chat IA.</span></li>
-                            <li class="flex items-start gap-3 opacity-50"><span class="material-symbols-outlined text-gray-600 text-[20px]">close</span> <span class="text-gray-500">Simulador de Defensa por Voz.</span></li>
-                        </ul>
-                        <button class="w-full py-4 rounded-full font-semibold text-white border border-white/20 hover:bg-white/10 transition-colors hover-target">
-                            Comenzar Gratis
-                        </button>
-                    </div>
+// SCENE 5: STATS
+const stats = document.querySelectorAll('.stat-item');
+gsap.to(stats, {
+    y: 0, opacity: 1, duration: 1, stagger: 0.2,
+    scrollTrigger: { trigger: ".stat-item", start: "top 80%" }
+});
+document.querySelectorAll('.stat-num').forEach(num => {
+    gsap.to(num, { innerText: num.dataset.val, snap: { innerText: 1 }, duration: 2, scrollTrigger: { trigger: num, start: "top 80%" } });
+});
 
-                    <!-- Plan Pro-Tesista -->
-                    <div class="blur-reveal relative p-8 rounded-[2.5rem] flex flex-col bg-gradient-to-b from-brand-900 to-dark-800 border border-brand-500/30 transform md:-translate-y-6 shadow-[0_0_40px_rgba(63,117,245,0.15)] hover-target hover:scale-[1.02] transition-transform duration-300">
-                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg">
-                            Más Popular
-                        </div>
-                        <h3 class="text-xl font-display font-bold text-white mb-2">Plan Pro-Tesista</h3>
-                        <p class="text-brand-300 text-sm mb-6 font-semibold">Monetización Compute</p>
-                        <p class="text-brand-200/80 text-sm mb-8 h-10">Para alumnos que buscan asegurar la excelencia antes de la defensa final.</p>
-                        <div class="flex items-baseline gap-2 mb-8">
-                            <span class="text-4xl font-display font-bold text-white">$49</span>
-                            <span class="text-brand-200/60 text-sm">MXN / mes</span>
-                        </div>
-                        
-                        <ul class="space-y-4 mb-10 flex-1 text-sm">
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-300 text-[20px]">check_circle</span> <span class="text-white font-medium">Validaciones ilimitadas (borradores).</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-300 text-[20px]">check_circle</span> <span class="text-brand-100 font-bold">Simulador de Defensa por Voz (LLM).</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-300 text-[20px]">check_circle</span> <span class="text-brand-100">Matchmaking Global (toda la escuela).</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-300 text-[20px]">check_circle</span> <span class="text-brand-100">Hasta 3 mensajes de apelación profunda.</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-300 text-[20px]">check_circle</span> <span class="text-brand-100">Reporte avanzado de debilidades.</span></li>
-                        </ul>
-                        <button class="w-full py-4 rounded-full font-bold text-white btn-gradient shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover-target magnetic-target">
-                            Mejorar mi tesis
-                        </button>
-                    </div>
-
-                    <!-- Plan Institución -->
-                    <div class="blur-reveal glass-card p-8 rounded-[2.5rem] flex flex-col hover-target hover:border-indigo-500/30 transition-colors">
-                        <h3 class="text-xl font-display font-bold text-white mb-2">Facultad / B2B</h3>
-                        <p class="text-indigo-400 text-sm mb-6 font-semibold">Licencia Anual Docente</p>
-                        <p class="text-gray-400 text-sm mb-8 h-10">Para el control total del cuerpo docente y la gestión de la memoria institucional.</p>
-                        <div class="flex items-baseline gap-2 mb-8">
-                            <span class="text-4xl font-display font-bold text-white">Custom</span>
-                        </div>
-                        
-                        <ul class="space-y-4 mb-10 flex-1 text-sm">
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-[20px]">check</span> <span class="text-gray-300">Conexión ETL ilimitada de Google Drive.</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-[20px]">check</span> <span class="text-gray-300">Panel de decisiones priorizado (Triage).</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-[20px]">check</span> <span class="text-gray-300">Exportación de métricas para CACEI.</span></li>
-                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-[20px]">check</span> <span class="text-gray-300">Control de rigor del LLM ajustable.</span></li>
-                        </ul>
-                        <button class="w-full py-4 rounded-full font-semibold text-white border border-white/20 hover:bg-white/10 transition-colors hover-target">
-                            Contactar Ventas
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Final -->
-        <section class="py-40 relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-900/20 pointer-events-none"></div>
-            
-            <div class="max-w-4xl mx-auto px-6 text-center relative z-10 blur-reveal">
-                <span class="text-brand-400 font-bold tracking-widest uppercase text-sm mb-4 block">Corvus</span>
-                <h2 class="font-display text-5xl md:text-7xl font-bold mb-8 text-white">Auditando el futuro académico.</h2>
-                <a href="#planes" class="cta-glow-btn btn-gradient inline-flex items-center gap-2 text-white px-10 py-5 rounded-full font-bold text-xl hover-target magnetic-target">
-                    Implementar Sistema <span class="material-symbols-outlined">arrow_forward</span>
-                </a>
-            </div>
-        </section>
-
-        <!-- Footer Corvus -->
-        <footer class="border-t border-white/5 bg-dark-900 pt-20 pb-10 relative z-20">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                    <div class="md:col-span-1">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-brand-500 to-indigo-600 shadow-lg shadow-brand-500/20">
-                                <span class="material-symbols-outlined text-white text-xl">analytics</span>
-                            </div>
-                            <span class="text-2xl font-display font-bold tracking-tight text-white">Corvus</span>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Sistema B2B/B2C de gestión de memoria académica con auditoría vectorial automática.
-                        </p>
-                        <div class="flex gap-4">
-                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors hover-target"><span class="material-symbols-outlined text-[20px]">language</span></a>
-                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors hover-target"><span class="material-symbols-outlined text-[20px]">share</span></a>
-                            <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors hover-target"><span class="material-symbols-outlined text-[20px]">mail</span></a>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-white font-bold mb-6">Plataforma</h4>
-                        <ul class="space-y-3 text-sm text-gray-400">
-                            <li><a href="#proyectos" class="hover:text-brand-400 transition-colors hover-target">Explorar App</a></li>
-                            <li><a href="#planes" class="hover:text-brand-400 transition-colors hover-target">Suscripciones</a></li>
-                            <li><a href="#metodologia" class="hover:text-brand-400 transition-colors hover-target">Metodología</a></li>
-                            <li><a href="#soluciones" class="hover:text-brand-400 transition-colors hover-target">Tecnología</a></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4 class="text-white font-bold mb-6">Categorías</h4>
-                        <ul class="space-y-3 text-sm text-gray-400">
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Educación</a></li>
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Tecnología NLP</a></li>
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Ciencias Exactas</a></li>
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Machine Learning</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-white font-bold mb-6">Legal</h4>
-                        <ul class="space-y-3 text-sm text-gray-400">
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Términos (+18)</a></li>
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Privacidad de Datos</a></li>
-                            <li><a href="#" class="hover:text-brand-400 transition-colors hover-target">Políticas Institucionales</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p class="text-gray-500 text-sm">© 2026 Corvus Project. Todos los derechos reservados.</p>
-                    <div class="flex gap-2">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-400 border border-white/10">Zero-Storage</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-400 border border-white/10">NLP Activo</span>
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-400 border border-white/10">LLM Local</span>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </main>
-
-    <!-- Exact AMS Animation Code Extracted via Subagent -->
-    <script>
-        // A. Smooth Scroll Integration (Lenis + GSAP)
-        const lenis = new Lenis({ duration: 1.2, smooth: true });
-        window.lenis = lenis;
-
-        gsap.registerPlugin(ScrollTrigger);
-        lenis.on("scroll", ScrollTrigger.update);
-
-        gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-
-        ScrollTrigger.scrollerProxy(document.documentElement, {
-            scrollTop(value) {
-                if (arguments.length) {
-                    lenis.scrollTo(value, { immediate: true });
-                }
-                return lenis.scroll;
-            },
-            getBoundingClientRect() {
-                return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
-            }
-        });
-
-        // B. Dynamic Custom Cursor (GSAP quickSetter)
-        const cursorDot = document.querySelector(".cursor-dot");
-        const cursorOutline = document.querySelector(".cursor-outline");
-        const setDotX = gsap.quickSetter(cursorDot, "x", "px");
-        const setDotY = gsap.quickSetter(cursorDot, "y", "px");
-        const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
-        const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
-
-        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-        let outlineX = mouseX, outlineY = mouseY;
-
-        window.addEventListener("mousemove", (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            setDotX(mouseX); setDotY(mouseY);
-        });
-
-        gsap.ticker.add(() => {
-            outlineX += (mouseX - outlineX) * 0.15; // Interpolation speed multiplier
-            outlineY += (mouseY - outlineY) * 0.15;
-            setOutlineX(outlineX); setOutlineY(outlineY);
-        });
-
-        // Cursor States
-        document.querySelectorAll(".hover-target").forEach(el => {
-            el.addEventListener("mouseenter", () => cursorOutline.classList.add("hover-active"));
-            el.addEventListener("mouseleave", () => cursorOutline.classList.remove("hover-active"));
-        });
-        document.querySelectorAll(".hover-project").forEach(el => {
-            el.addEventListener("mouseenter", () => {
-                cursorOutline.classList.add("project-hover");
-                cursorDot.style.opacity = "0";
-            });
-            el.addEventListener("mouseleave", () => {
-                cursorOutline.classList.remove("project-hover");
-                cursorDot.style.opacity = "1";
-            });
-        });
-
-        // C. Magnetic Interactive Buttons
-        document.querySelectorAll(".magnetic-target").forEach((elem) => {
-            elem.addEventListener("mousemove", (e) => {
-                const rect = elem.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                gsap.to(elem, { x: x * 0.4, y: y * 0.4, duration: 0.5, ease: "power3.out" });
-            });
-            elem.addEventListener("mouseleave", () => {
-                gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
-            });
-        });
-
-        // D. Scroll-driven Blur & Translation
-        gsap.utils.toArray(".blur-reveal").forEach((element) => {
-            gsap.to(element, {
-                opacity: 1, filter: "blur(0px)", y: 0, duration: 1.2, ease: "power3.out",
-                scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
-            });
-        });
-
-        // E. Long Screenshot Hover Scroll Interaction
-        document.querySelectorAll('.hover-project').forEach(card => {
-            const img = card.querySelector('.scroll-img');
-            if(img) {
-                card.addEventListener('mouseenter', () => {
-                    const maxScroll = img.clientHeight - img.parentElement.clientHeight;
-                    if(maxScroll > 0) {
-                        gsap.to(img, { y: -maxScroll, duration: maxScroll / 250, ease: "sine.inOut", overwrite: true });
-                    }
-                });
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(img, { y: 0, duration: 1, ease: "power3.out", overwrite: true });
-                });
-            }
-        });
-
-        // E.2 Hero Mobile Auto-scroll
-        const heroImg = document.getElementById('hero-scroll-img');
-        if(heroImg) {
-            const startAutoScroll = () => {
-                const maxHScroll = heroImg.clientHeight - heroImg.parentElement.clientHeight;
-                if(maxHScroll > 0) {
-                    gsap.to(heroImg, { y: -maxHScroll, duration: maxHScroll / 80, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 2 });
-                }
-            };
-            if (heroImg.complete) { startAutoScroll(); } else { heroImg.onload = startAutoScroll; }
-        }
-
-        // F. Interactive Stats Counting
-        document.querySelectorAll(".stat-number").forEach((stat) => {
-            const target = +stat.getAttribute("data-target");
-            gsap.to(stat, {
-                innerText: target, duration: 2, snap: { innerText: 1 },
-                scrollTrigger: { trigger: stat, start: "top 90%" }
-            });
-        });
-
-        // Initial Hero Reveal
-        gsap.to('.split-line span', { y: "0%", opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out", delay: 0.2 });
-        gsap.to('.gsap-hero-item', { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out", delay: 0.8 });
-        gsap.to('.gsap-hero-img', { y: 0, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.5 });
-
-        // G. Floating Letters / Symbols Animation
-        const lettersContainer = document.getElementById('floating-letters');
-        const chars = ['∑', 'λ', '0', '1', '{', '}', 'NLP', 'Corvus', 'A', 'B', 'μ', 'σ', '</>'];
-        if(lettersContainer) {
-            for(let i=0; i<35; i++) {
-                let span = document.createElement('span');
-                span.className = 'floating-letter';
-                span.innerText = chars[Math.floor(Math.random() * chars.length)];
-                span.style.left = Math.random() * 100 + '%';
-                span.style.top = (100 + Math.random() * 20) + '%';
-                let fontSize = 20 + Math.random() * 50;
-                span.style.fontSize = fontSize + 'px';
-                span.style.opacity = (Math.random() * 0.04 + 0.01).toFixed(2); // Very subtle opacity 1% to 5%
-                lettersContainer.appendChild(span);
-
-                gsap.to(span, {
-                    y: -window.innerHeight * 1.5,
-                    x: "+=" + (Math.random() * 100 - 50),
-                    rotation: Math.random() * 360 - 180,
-                    duration: 15 + Math.random() * 25,
-                    ease: "none",
-                    repeat: -1,
-                    delay: Math.random() * -20 // Start at different times
-                });
-            }
-        }
-
-        // H. Random Ambient Glows Movement
-        function animateGlow(glow) {
-            gsap.to(glow, {
-                x: gsap.utils.random(-500, 500),
-                y: gsap.utils.random(-300, 300),
-                duration: gsap.utils.random(15, 25),
-                ease: "sine.inOut",
-                onComplete: () => animateGlow(glow)
-            });
-        }
-        gsap.utils.toArray('.glow').forEach(animateGlow);
-
-        // I. Solid Circle Scroll Animation (Right to Left)
-        const rightCircle = document.getElementById('scroll-circle-right');
-        if (rightCircle) {
-            gsap.to(rightCircle, {
-                x: -window.innerWidth - 300,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#soluciones",
-                    start: "top bottom", 
-                    end: "bottom top",
-                    scrub: 1.5
-                }
-            });
-        }
-
-        // J. 3D Tilt on cards
-        document.querySelectorAll('.tilt-card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const r = card.getBoundingClientRect();
-                const x = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-                const y = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-                gsap.to(card, { rotateY: x * 15, rotateX: -y * 15, duration: 0.4, ease: 'power2.out' });
-            });
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
-            });
-        });
-    </script>
+// SCENE 6: CTA
+gsap.to('.cta-content', {
+    scale: 1, opacity: 1, ease: "power2.out",
+    scrollTrigger: { trigger: "#cta", start: "top top", end: "+=800", pin: true, scrub: 1 }
+});
+</script>
 </body>
 </html>
