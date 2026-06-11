@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Acceso - Corvus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800;900&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            400: '#3f75f5', 
+                            500: '#2b5ce0',
+                            600: '#1e48ba',
+                            900: '#0a1d5c',
+                        },
+                        dark: {
+                            900: '#030712', 
+                            800: '#111827', 
+                            700: '#1f2937', 
+                        },
+                        light: {
+                            surface: '#f8f9ff',
+                            surfaceHigh: '#dce9ff',
+                            onSurface: '#0d1c2e',
+                            onSurfaceVariant: '#444653',
+                            outlineVariant: '#c4c5d5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #f8f9ff; 
+            color: #0d1c2e; 
+            transition: background-color 0.3s, color 0.3s;
+        }
+        html.dark body {
+            background-color: #030712; 
+            color: #f9fafb; 
+        }
+        
+        .role-toggle {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex antialiased selection:bg-brand-500/30">
+
+    <!-- Left Side: Branding / Marketing (Hidden on Mobile) -->
+    <div class="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-brand-900 via-[#0d226a] to-indigo-900 overflow-hidden items-center justify-center p-12">
+        <!-- Abstract Background Elements -->
+        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 opacity-60 pointer-events-none"></div>
+        
+        <div class="relative z-10 w-full max-w-lg">
+            <a href="../index.html" class="flex items-center gap-3 mb-16 opacity-90 hover:opacity-100 transition-opacity">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20">
+                    <span class="material-symbols-outlined text-white text-xl">analytics</span>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight text-white">Corvus</span>
+            </a>
+            
+            <h1 class="font-display text-4xl xl:text-5xl font-bold text-white mb-6 leading-tight">
+                Auditoría de <br>
+                <em class="font-serif italic font-normal text-brand-400">Proyectos</em> Académicos.
+            </h1>
+            <p class="text-lg text-brand-100/80 mb-10 max-w-md">
+                Únete a la nueva era de la auditoría. Fomentamos la innovación identificando espacios inexplorados y validamos propuestas contra el acervo histórico.
+            </p>
+            
+            <div class="flex items-center gap-4 text-sm text-brand-100/60">
+                <div class="flex -space-x-3">
+                    <img class="w-10 h-10 rounded-full border-2 border-brand-900" src="https://i.pravatar.cc/100?img=1" alt="Avatar">
+                    <img class="w-10 h-10 rounded-full border-2 border-brand-900" src="https://i.pravatar.cc/100?img=2" alt="Avatar">
+                    <img class="w-10 h-10 rounded-full border-2 border-brand-900" src="https://i.pravatar.cc/100?img=3" alt="Avatar">
+                </div>
+                <p>Más de <strong class="text-white">2,000</strong> universitarios ya están en la lista de espera.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-light-surface dark:bg-dark-900 relative">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="absolute top-6 right-6 p-2 rounded-full border border-light-outlineVariant dark:border-white/10 text-light-onSurfaceVariant dark:text-gray-400 hover:text-light-onSurface dark:hover:text-white transition-colors">
+            <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+            <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+        </button>
+
+        <!-- Back Button (Mobile Only) -->
+        <a href="../index.html" class="absolute top-6 left-6 lg:hidden flex items-center gap-2 text-light-onSurfaceVariant dark:text-gray-400 hover:text-brand-500 transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span class="text-sm font-medium">Volver</span>
+        </a>
+
+        <div class="w-full max-w-md pt-12 lg:pt-0">
+            <div class="text-center mb-10">
+                <h2 class="font-display text-3xl font-bold text-light-onSurface dark:text-white mb-2 tracking-tight">
+                    Únete a la Revolución RAG
+                </h2>
+                <p class="text-light-onSurfaceVariant dark:text-gray-400">Tu conocimiento, amplificado por IA.</p>
+            </div>
+            
+            <!-- Role Selector -->
+            <div class="flex p-1.5 bg-light-surfaceHigh dark:bg-dark-800 rounded-xl mb-8 border border-light-outlineVariant/50 dark:border-white/5">
+                <button class="role-toggle active flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 bg-brand-500 text-white shadow-sm" id="btnStudent" onclick="setRole('student')">
+                    <span class="material-symbols-outlined text-[18px]">person</span>
+                    Soy Estudiante
+                </button>
+                <button class="role-toggle flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 text-light-onSurfaceVariant dark:text-gray-400 hover:text-light-onSurface dark:hover:text-white" id="btnTeacher" onclick="setRole('teacher')">
+                    <span class="material-symbols-outlined text-[18px]">school</span>
+                    Soy Profesor
+                </button>
+            </div>
+
+            <form class="space-y-5" onsubmit="window.location.href='early-access.html'; return false;">
+                <!-- Full Name -->
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Nombre Completo</label>
+                    <div class="relative group">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">person_outline</span>
+                        <input class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="Ej: Julian Casablancas" type="text" required>
+                    </div>
+                </div>
+
+                <!-- University Email -->
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Email Universitario</label>
+                    <div class="relative group">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">alternate_email</span>
+                        <input class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="julian@uni.edu" type="email" required>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Contraseña</label>
+                    <div class="relative group">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">lock</span>
+                        <input class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-11 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="••••••••" type="password" required>
+                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 hover:text-light-onSurface dark:hover:text-white transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="flex items-start gap-3 px-1 pt-2">
+                    <div class="flex items-center h-5">
+                        <input class="w-4 h-4 rounded border-light-outlineVariant/70 dark:border-white/20 text-brand-500 focus:ring-brand-500 bg-white dark:bg-[#111827] cursor-pointer" type="checkbox" required>
+                    </div>
+                    <label class="text-xs text-light-onSurfaceVariant dark:text-gray-400 leading-tight">
+                        Acepto los <a class="text-brand-500 font-medium hover:underline" href="#">Términos de Servicio</a> y la <a class="text-brand-500 font-medium hover:underline" href="#">Política de Privacidad</a>.
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="w-full bg-gradient-to-r from-brand-500 to-indigo-600 text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all duration-200 mt-6 active:scale-[0.98]" type="submit">
+                    Obtener Acceso Anticipado
+                </button>
+            </form>
+
+            <div class="mt-8 text-center pt-6 border-t border-light-outlineVariant/50 dark:border-white/10">
+                <p class="text-sm text-light-onSurfaceVariant dark:text-gray-400">
+                    ¿Ya tienes cuenta? 
+                    <a class="text-brand-500 font-semibold hover:underline transition-all" href="#">Iniciar sesión</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for interaction -->
+    <script>
+        // Theme Setup
+        const htmlElement = document.documentElement;
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        function setTheme() {
+            let isDarkMode = false;
+            if (localStorage.getItem('theme') === 'dark') {
+                isDarkMode = true;
+                htmlElement.classList.add('dark');
+            } else if (localStorage.getItem('theme') === 'light') {
+                isDarkMode = false;
+                htmlElement.classList.remove('dark');
+            } else {
+                // If no preference, default to light
+                isDarkMode = false;
+                htmlElement.classList.remove('dark');
+            }
+        }
+        setTheme();
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Role Selector Setup
+        function setRole(role) {
+            const studentBtn = document.getElementById('btnStudent');
+            const teacherBtn = document.getElementById('btnTeacher');
+            
+            const activeClasses = ['bg-brand-500', 'text-white', 'shadow-sm'];
+            const inactiveClasses = ['text-light-onSurfaceVariant', 'dark:text-gray-400', 'hover:text-light-onSurface', 'dark:hover:text-white'];
+            
+            if (role === 'student') {
+                studentBtn.classList.add(...activeClasses);
+                studentBtn.classList.remove(...inactiveClasses);
+                
+                teacherBtn.classList.remove(...activeClasses);
+                teacherBtn.classList.add(...inactiveClasses);
+            } else {
+                teacherBtn.classList.add(...activeClasses);
+                teacherBtn.classList.remove(...inactiveClasses);
+                
+                studentBtn.classList.remove(...activeClasses);
+                studentBtn.classList.add(...inactiveClasses);
+            }
+        }
+    </script>
+</body>
+</html>
