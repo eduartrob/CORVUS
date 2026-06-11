@@ -3,7 +3,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPasswor
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD7y9T0b6SzLFQoQKnWzBr-G3-O_8AaNvM",
+  apiKey: "AIzaSyD7y9TOb6SzLFQoQKnWzBr-G3-0_8AaNvM",
   authDomain: "corvus-376d3.firebaseapp.com",
   projectId: "corvus-376d3",
   storageBucket: "corvus-376d3.firebasestorage.app",
