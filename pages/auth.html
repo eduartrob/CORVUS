@@ -73,11 +73,11 @@
                 <span class="text-2xl font-display font-bold tracking-tight text-white">Corvus</span>
             </a>
             
-            <h1 class="font-display text-4xl xl:text-5xl font-bold text-white mb-6 leading-tight">
+            <h1 id="hero-title" class="font-display text-4xl xl:text-5xl font-bold text-white mb-6 leading-tight">
                 Auditoría de <br>
                 <em class="font-serif italic font-normal text-brand-400">Proyectos</em> Académicos.
             </h1>
-            <p class="text-lg text-white/80 mb-10 max-w-md">
+            <p id="hero-subtitle" class="text-lg text-white/80 mb-10 max-w-md">
                 Únete a la nueva era de la auditoría. Fomentamos la innovación identificando espacios inexplorados y validamos propuestas contra el acervo histórico.
             </p>
             
@@ -108,34 +108,25 @@
 
         <div class="w-full max-w-md pt-12 lg:pt-0">
             <div class="text-center mb-10">
-                <h2 class="font-display text-3xl font-bold text-light-onSurface dark:text-white mb-2 tracking-tight">
-                    Únete a la Revolución RAG
+                <h2 id="form-title" class="font-display text-3xl font-bold text-light-onSurface dark:text-white mb-2 tracking-tight">
+                    Acceso Anticipado
                 </h2>
-                <p class="text-light-onSurfaceVariant dark:text-gray-400">Tu conocimiento, amplificado por IA.</p>
+                <p id="form-subtitle" class="text-light-onSurfaceVariant dark:text-gray-400">Valida tus proyectos antes de la defensa.</p>
             </div>
             
             <!-- Role Selector -->
             <div class="flex p-1.5 bg-light-surfaceHigh dark:bg-dark-800 rounded-xl mb-8 border border-light-outlineVariant/50 dark:border-white/5">
-                <button class="role-toggle active flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 bg-brand-500 text-white shadow-sm" id="btnStudent" onclick="setRole('student')">
+                <button type="button" class="role-toggle active flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 bg-brand-500 text-white shadow-sm" id="btnStudent">
                     <span class="material-symbols-outlined text-[18px]">person</span>
                     Soy Estudiante
                 </button>
-                <button class="role-toggle flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 text-light-onSurfaceVariant dark:text-gray-400 hover:text-light-onSurface dark:hover:text-white" id="btnTeacher" onclick="setRole('teacher')">
+                <button type="button" class="role-toggle flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 text-light-onSurfaceVariant dark:text-gray-400 hover:text-light-onSurface dark:hover:text-white" id="btnTeacher">
                     <span class="material-symbols-outlined text-[18px]">school</span>
                     Soy Profesor
                 </button>
             </div>
 
-            <form class="space-y-5" onsubmit="validateAndSubmit(event)">
-                <!-- Full Name -->
-                <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Nombre Completo</label>
-                    <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">person_outline</span>
-                        <input class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="Ej: Julian Casablancas" type="text" required>
-                    </div>
-                </div>
-
+            <form id="waitlist-form" class="space-y-5">
                 <!-- University Email -->
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Email Universitario</label>
@@ -146,18 +137,6 @@
                     <p id="email-error" class="hidden text-red-500 dark:text-red-400 text-xs px-1 mt-1">
                         Por ahora, el acceso es exclusivo para correos de la Universidad Politécnica de Chiapas (@upchiapas.edu.mx o @ids.upchiapas.edu.mx).
                     </p>
-                </div>
-
-                <!-- Password -->
-                <div class="space-y-1.5">
-                    <label class="text-sm font-medium text-light-onSurfaceVariant dark:text-gray-300 px-1">Contraseña</label>
-                    <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 text-[20px] transition-colors group-focus-within:text-brand-500">lock</span>
-                        <input class="w-full bg-white dark:bg-[#111827] border border-light-outlineVariant/70 dark:border-white/10 rounded-xl py-3 pl-11 pr-11 text-light-onSurface dark:text-white placeholder:text-light-onSurfaceVariant/50 dark:placeholder:text-gray-600 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none" placeholder="••••••••" type="password" required>
-                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-light-onSurfaceVariant/70 dark:text-gray-500 hover:text-light-onSurface dark:hover:text-white transition-colors" type="button">
-                            <span class="material-symbols-outlined text-[20px]">visibility</span>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Terms -->
@@ -176,10 +155,27 @@
                 </button>
             </form>
 
+            <div class="my-6 flex items-center justify-center">
+                <div class="flex-grow border-t border-light-outlineVariant/50 dark:border-white/10"></div>
+                <span class="px-3 text-xs text-light-onSurfaceVariant dark:text-gray-500 font-medium">O continúa con</span>
+                <div class="flex-grow border-t border-light-outlineVariant/50 dark:border-white/10"></div>
+            </div>
+
+            <!-- Google Sign In -->
+            <button id="google-login-btn" type="button" class="w-full flex items-center justify-center gap-3 bg-white dark:bg-dark-800 text-light-onSurface dark:text-white font-medium border border-light-outlineVariant/50 dark:border-white/10 py-3.5 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors shadow-sm">
+                <svg viewBox="0 0 24 24" class="w-5 h-5">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Google (Solo Institucional)
+            </button>
+
             <div class="mt-8 text-center pt-6 border-t border-light-outlineVariant/50 dark:border-white/10">
                 <p class="text-sm text-light-onSurfaceVariant dark:text-gray-400">
                     ¿Ya tienes cuenta? 
-                    <a class="text-brand-500 font-semibold hover:underline transition-all" href="#">Iniciar sesión</a>
+                    <span class="text-brand-500 font-semibold opacity-50 cursor-not-allowed" title="Próximamente">Iniciar sesión</span>
                 </p>
             </div>
         </div>
@@ -187,11 +183,10 @@
 
     <!-- Script for interaction -->
     <script>
-        // Theme Setup
+        // Make functions globally available for inline onclick handlers
         const htmlElement = document.documentElement;
-        const themeToggleBtn = document.getElementById('theme-toggle');
-
-        function setTheme() {
+        
+        window.setTheme = function() {
             let isDarkMode = false;
             if (localStorage.getItem('theme') === 'dark') {
                 isDarkMode = true;
@@ -200,14 +195,13 @@
                 isDarkMode = false;
                 htmlElement.classList.remove('dark');
             } else {
-                // If no preference, default to light
                 isDarkMode = false;
                 htmlElement.classList.remove('dark');
             }
-        }
-        setTheme();
+        };
+        window.setTheme();
 
-        themeToggleBtn.addEventListener('click', () => {
+        document.getElementById('theme-toggle').addEventListener('click', () => {
             if (htmlElement.classList.contains('dark')) {
                 htmlElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
@@ -217,48 +211,211 @@
             }
         });
 
-        // Role Selector Setup
-        function setRole(role) {
+        window.setRole = function(role) {
+            window.currentRole = role;
+            
             const studentBtn = document.getElementById('btnStudent');
             const teacherBtn = document.getElementById('btnTeacher');
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+            const formTitle = document.getElementById('form-title');
+            const formSubtitle = document.getElementById('form-subtitle');
             
             const activeClasses = ['bg-brand-500', 'text-white', 'shadow-sm'];
             const inactiveClasses = ['text-light-onSurfaceVariant', 'dark:text-gray-400', 'hover:text-light-onSurface', 'dark:hover:text-white'];
             
-            if (role === 'student') {
-                studentBtn.classList.add(...activeClasses);
-                studentBtn.classList.remove(...inactiveClasses);
+            // GSAP-like simple fade animation for text change
+            heroTitle.style.opacity = 0;
+            heroSubtitle.style.opacity = 0;
+            formTitle.style.opacity = 0;
+            formSubtitle.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (role === 'student') {
+                    studentBtn.classList.add(...activeClasses);
+                    studentBtn.classList.remove(...inactiveClasses);
+                    teacherBtn.classList.remove(...activeClasses);
+                    teacherBtn.classList.add(...inactiveClasses);
+                    
+                    heroTitle.innerHTML = `Auditoría de <br><em class="font-serif italic font-normal text-brand-400">Proyectos</em> Académicos.`;
+                    heroSubtitle.innerText = "Únete a la nueva era de la auditoría. Fomentamos la innovación identificando espacios inexplorados y validamos propuestas contra el acervo histórico.";
+                    
+                    formTitle.innerText = "Acceso Anticipado";
+                    formSubtitle.innerText = "Valida tus proyectos antes de la defensa.";
+                    
+                    // Update placeholder
+                    document.getElementById('email-input').placeholder = "221214@ids.upchiapas.edu.mx";
+                } else {
+                    teacherBtn.classList.add(...activeClasses);
+                    teacherBtn.classList.remove(...inactiveClasses);
+                    studentBtn.classList.remove(...activeClasses);
+                    studentBtn.classList.add(...inactiveClasses);
+                    
+                    heroTitle.innerHTML = `Auditoría sin <br><em class="font-serif italic font-normal text-brand-400">fricción</em> para tus grupos.`;
+                    heroSubtitle.innerText = "Recibe alertas automáticas de colisión y plagio, evalúa con respaldo de IA y mantén la trazabilidad completa de cada decisión académica.";
+                    
+                    formTitle.innerText = "Herramientas Docentes";
+                    formSubtitle.innerText = "Evalúa con respaldo de inteligencia artificial.";
+                    
+                    // Update placeholder
+                    document.getElementById('email-input').placeholder = "correo@upchiapas.edu.mx";
+                }
                 
-                teacherBtn.classList.remove(...activeClasses);
-                teacherBtn.classList.add(...inactiveClasses);
-            } else {
-                teacherBtn.classList.add(...activeClasses);
-                teacherBtn.classList.remove(...inactiveClasses);
-                
-                studentBtn.classList.remove(...activeClasses);
-                studentBtn.classList.add(...inactiveClasses);
-            }
-        }
+                heroTitle.style.transition = 'opacity 0.4s ease';
+                heroSubtitle.style.transition = 'opacity 0.4s ease';
+                formTitle.style.transition = 'opacity 0.4s ease';
+                formSubtitle.style.transition = 'opacity 0.4s ease';
+                heroTitle.style.opacity = 1;
+                heroSubtitle.style.opacity = 1;
+                formTitle.style.opacity = 1;
+                formSubtitle.style.opacity = 1;
+            }, 200);
+        };
 
-        // Form Validation Setup
-        function validateAndSubmit(event) {
-            event.preventDefault();
+        // Attach event listeners safely after DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if already registered
+            if (localStorage.getItem('waitlist_joined')) {
+                window.location.href = 'early-access.html';
+                return;
+            }
+            
+            document.getElementById('btnStudent').addEventListener('click', () => window.setRole('student'));
+            document.getElementById('btnTeacher').addEventListener('click', () => window.setRole('teacher'));
+        });
+
+        // Form Validation & Submit Setup (Outside module to guarantee execution)
+        document.getElementById('waitlist-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // ALWAYS prevent default reload
             
             const emailInput = document.getElementById('email-input');
             const emailError = document.getElementById('email-error');
             const email = emailInput.value.trim().toLowerCase();
             
-            // Validate domain: @upchiapas.edu.mx or @ids.upchiapas.edu.mx
-            if (email.endsWith('@upchiapas.edu.mx') || email.endsWith('@ids.upchiapas.edu.mx')) {
+            // Strict domain validation based on role
+            let isValidDomain = false;
+            
+            if (window.currentRole === 'student') {
+                isValidDomain = email.endsWith('@ids.upchiapas.edu.mx');
+                if (!isValidDomain) {
+                    emailError.innerText = "Los estudiantes deben registrarse con el correo institucional @ids.upchiapas.edu.mx";
+                }
+            } else if (window.currentRole === 'teacher') {
+                // Teachers must have @upchiapas.edu.mx but NOT the student's @ids.upchiapas.edu.mx
+                isValidDomain = email.endsWith('@upchiapas.edu.mx') && !email.endsWith('@ids.upchiapas.edu.mx');
+                if (!isValidDomain) {
+                    emailError.innerText = "Los profesores deben registrarse con el correo institucional @upchiapas.edu.mx";
+                }
+            }
+            
+            if (isValidDomain) {
                 emailError.classList.add('hidden');
-                // Valid, redirect to Early Access
-                window.location.href = 'early-access.html';
+                
+                const submitBtn = event.target.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerText;
+                submitBtn.innerText = "Guardando...";
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+                
+                // Si el módulo de Firebase cargó bien, usamos la función real. Si no, usamos simulación local.
+                if (window.saveToFirebase) {
+                    try {
+                        await window.saveToFirebase(email, window.currentRole);
+                        localStorage.setItem('waitlist_joined', 'true');
+                        window.location.href = 'early-access.html';
+                    } catch (error) {
+                        console.error("Error adding document: ", error);
+                        alert("Ocurrió un error guardando tu registro en Firebase. Por favor, intenta de nuevo.");
+                        submitBtn.innerText = originalText;
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    }
+                } else {
+                    // Fallback para pruebas locales si Firebase fue bloqueado por CORS (ej. abrir archivo directo sin servidor)
+                    console.log("Firebase no cargó (posible CORS). Simulando guardado local...");
+                    setTimeout(() => {
+                        localStorage.setItem('waitlist_joined', 'true');
+                        window.location.href = 'early-access.html';
+                    }, 800);
+                }
+                
             } else {
                 // Invalid domain
                 emailError.classList.remove('hidden');
                 emailInput.focus();
             }
-        }
+        });
+
+        // Google Login Handler for Waitlist
+        document.getElementById('google-login-btn').addEventListener('click', async function() {
+            const emailError = document.getElementById('email-error');
+            emailError.classList.add('hidden');
+            
+            if (window.loginWithGoogle) {
+                try {
+                    const email = await window.loginWithGoogle();
+                    
+                    let isValidDomain = false;
+                    if (window.currentRole === 'student') {
+                        isValidDomain = email.endsWith('@ids.upchiapas.edu.mx');
+                        if (!isValidDomain) emailError.innerText = "Los estudiantes deben registrarse con el correo @ids.upchiapas.edu.mx";
+                    } else if (window.currentRole === 'teacher') {
+                        isValidDomain = email.endsWith('@upchiapas.edu.mx') && !email.endsWith('@ids.upchiapas.edu.mx');
+                        if (!isValidDomain) emailError.innerText = "Los profesores deben registrarse con el correo @upchiapas.edu.mx";
+                    }
+                    
+                    if (!isValidDomain) {
+                        emailError.classList.remove('hidden');
+                    } else {
+                        // Save to Firebase waitlist collection
+                        if (window.saveToFirebase) {
+                            await window.saveToFirebase(email, window.currentRole);
+                        }
+                        localStorage.setItem('waitlist_joined', 'true');
+                        window.location.href = 'early-access.html';
+                    }
+                } catch (error) {
+                    console.error("Google sign in error: ", error);
+                    if (error !== 'popup-closed') {
+                        emailError.innerText = "Ocurrió un error al conectar con Google.";
+                        emailError.classList.remove('hidden');
+                    }
+                }
+            } else {
+                alert("Simulación: Se abriría el popup de Google. (Firebase bloqueado por CORS)");
+            }
+        });
+    </script>
+    <script type="module">
+        // Import Firebase modules
+        import { auth, db, googleProvider, signInWithPopup, collection, addDoc, serverTimestamp } from './firebase.js';
+
+        // Expose Firebase function globally so the UI script can call it
+        window.saveToFirebase = async function(email, role) {
+            await addDoc(collection(db, "waitlist"), {
+                email: email,
+                role: role,
+                timestamp: serverTimestamp()
+            });
+        };
+        
+        window.loginWithGoogle = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const email = result.user.email.toLowerCase();
+                
+                // Immediately sign out since this is just for getting the email for waitlist
+                await auth.signOut();
+                
+                return email;
+            } catch (error) {
+                if (error.code === 'auth/popup-closed-by-user') {
+                    throw 'popup-closed';
+                }
+                throw error;
+            }
+        };
+
     </script>
 </body>
 </html>
