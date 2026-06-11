@@ -364,15 +364,8 @@
     <script>
         // ── 1. SETUP LENIS (Ultra Smooth Scroll) ──
         const lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing for premium feel
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-            infinite: false,
+            lerp: 0.1,
+            smoothWheel: true
         });
 
         // Sync Lenis with GSAP ScrollTrigger
@@ -478,11 +471,11 @@
         // Scene 1: Hero Parallax Out (Scrubbed)
         gsap.to('.hero-content', {
             y: -150, opacity: 0,
-            scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+            scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 1 }
         });
         gsap.to('.hero-img-wrap', {
             y: -100, // Move up slower than content for depth
-            scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+            scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 1 }
         });
 
         // Scene 2: Metodología
@@ -501,7 +494,7 @@
             gsap.fromTo(card, 
                 { y: 150 * speed, opacity: 0 },
                 { y: -50 * speed, opacity: 1, ease: "none",
-                  scrollTrigger: { trigger: ".parallax-cards-container", start: "top bottom", end: "bottom top", scrub: true }
+                  scrollTrigger: { trigger: ".parallax-cards-container", start: "top bottom", end: "bottom top", scrub: 1 }
                 }
             );
         });
@@ -530,7 +523,7 @@
             gsap.fromTo(col,
                 { y: 200 * speed },
                 { y: -100 * speed, ease: "none",
-                  scrollTrigger: { trigger: "#plataforma", start: "top bottom", end: "bottom top", scrub: true }
+                  scrollTrigger: { trigger: "#plataforma", start: "top bottom", end: "bottom top", scrub: 1 }
                 }
             );
         });
@@ -553,10 +546,15 @@
 
         // Scene 6: Cinematic CTA Expansion (Scrubbed Zoom Out)
         const ctaTl = gsap.timeline({
-            scrollTrigger: { trigger: "#cta", start: "top bottom", end: "center center", scrub: 0.5 }
+            scrollTrigger: { trigger: "#cta", start: "top bottom", end: "center center", scrub: 1 }
         });
         ctaTl.to('.cta-circle', { width: "150vw", height: "150vw", duration: 1 })
              .to('.cta-content', { scale: 1, opacity: 1, duration: 1 }, "<");
+
+        // FORZAR RECALCULO AL CARGAR IMAGENES (Evita saltos)
+        window.addEventListener('load', () => {
+            ScrollTrigger.refresh();
+        });
 
     </script>
 </body>
