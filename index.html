@@ -1,290 +1,563 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Corvus | Memoria Académica Vectorial</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
-<script>
-tailwind.config={theme:{extend:{fontFamily:{sans:['"Google Sans"','sans-serif'],display:['"Google Sans"','sans-serif']},colors:{brand:{400:'#3f75f5',500:'#2b5ce0',900:'#0a1d5c'},dark:{900:'#030712',800:'#111827'}}}}}
-</script>
-<style>
-@font-face{font-family:'Google Sans';font-style:normal;font-weight:400;src:url('https://fonts.gstatic.com/s/googlesans/v14/4UaGrENHsxJlGDuGo1OIlL3Owp5eKRo.woff2') format('woff2');}
-@font-face{font-family:'Google Sans';font-style:normal;font-weight:500;src:url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLU94YtzCwZ-Qw.woff2') format('woff2');}
-@font-face{font-family:'Google Sans';font-style:normal;font-weight:700;src:url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLV154tzCwZ-Qw.woff2') format('woff2');}
-body{background-color:#030712;color:#f9fafb;overflow-x:hidden;margin:0;}
-*{cursor:none!important;box-sizing:border-box;}
-.cursor-dot,.cursor-outline{position:fixed;top:0;left:0;transform:translate(-50%,-50%);border-radius:50%;z-index:10001;pointer-events:none;}
-.cursor-dot{width:8px;height:8px;background-color:#3f75f5;}
-.cursor-outline{width:40px;height:40px;border:1px solid #3f75f5;transition:width 0.2s,height 0.2s,background-color 0.2s;display:flex;justify-content:center;align-items:center;color:transparent;}
-.cursor-outline.hover-active{width:60px;height:60px;background-color:rgba(63,117,245,0.1);}
-.cursor-outline.project-hover{width:100px;height:100px;background-color:#3f75f5;color:#fff;font-size:0.65rem;letter-spacing:2px;border-color:transparent;}
-.cursor-outline.project-hover::after{content:"VER";}
-.glass-card{background:rgba(17,24,39,0.4);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.05);}
-.glass-nav{background:rgba(3,7,18,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05);}
-.split-line{overflow:hidden;}
-.split-line span{display:inline-block;transform:translateY(100%);opacity:0;}
-#blob-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.6;pointer-events:none;}
-.pinned-section{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.h-scroll-container{display:flex;width:300vw;height:100vh;}
-.h-scroll-panel{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;}
-.project-img-wrap{overflow:hidden;position:relative;border-radius:1.5rem;cursor:none;}
-.scroll-img{width:100%;height:auto;display:block;transform:translateY(0);transition:transform 0.5s ease;}
-.project-img-wrap:hover .scroll-img{transform:scale(1.15);}
-.scramble-text{visibility:hidden;}
-.btn-gradient{background:#3f75f5;transition:all 0.3s ease;position:relative;overflow:hidden;}
-.btn-gradient::before{content:'';position:absolute;top:50%;left:50%;width:300px;height:300px;background:rgba(255,255,255,0.2);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:transform 0.5s;}
-.btn-gradient:hover::before{transform:translate(-50%,-50%) scale(1);}
-.btn-gradient:hover{box-shadow:0 0 25px rgba(63,117,245,0.4);transform:translateY(-2px);}
-.tilt-card{transform-style:preserve-3d;will-change:transform;}
-.tilt-inner{transform:translateZ(30px);}
-</style>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Corvus | Memoria Académica Vectorial</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Libraries -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Google Sans"', 'sans-serif'],
+                        display: ['"Google Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: { 400: '#3f75f5', 500: '#2b5ce0', 900: '#0a1d5c' },
+                        dark: { 900: '#030712', 800: '#111827' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ── OFFICIAL GOOGLE SANS FONT ── */
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UaGrENHsxJlGDuGo1OIlL3Owp5eKRo.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 500;
+            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLU94YtzCwZ-Qw.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 700;
+            src: url('https://fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLV154tzCwZ-Qw.woff2') format('woff2');
+        }
+
+        body {
+            background-color: #030712;
+            color: #f9fafb;
+            overflow-x: hidden;
+            margin: 0;
+            cursor: none !important; /* Custom Cursor */
+        }
+
+        /* ── CUSTOM CURSOR ── */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 10001; pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px; background-color: #3f75f5;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(63, 117, 245, 0.5);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+            display: flex; justify-content: center; align-items: center; color: transparent;
+        }
+        .cursor-outline.hover-active {
+            width: 60px; height: 60px; background-color: rgba(63, 117, 245, 0.1); border-color: transparent;
+        }
+        .cursor-outline.project-hover {
+            width: 100px; height: 100px; background-color: #3f75f5; color: #fff;
+            font-size: 0.75rem; font-weight: bold; letter-spacing: 2px; border-color: transparent;
+            mix-blend-mode: exclusion;
+        }
+        .cursor-outline.project-hover::after { content: "VER"; }
+
+        /* ── UTILITIES & COMPONENTS ── */
+        .glass-nav {
+            background: rgba(3, 7, 18, 0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .btn-gradient {
+            background: #3f75f5; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+        }
+        .btn-gradient:hover {
+            box-shadow: 0 0 30px rgba(63, 117, 245, 0.5); transform: translateY(-2px);
+        }
+
+        /* ── ANIMATION MASKS (AWWWARDS STYLE) ── */
+        .mask-wrap {
+            overflow: hidden; display: inline-block; vertical-align: bottom;
+        }
+        .mask-text {
+            display: inline-block; transform: translateY(100%); opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        /* ── CANVAS BACKGROUND ── */
+        #hero-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; opacity: 0.4; pointer-events: none;
+        }
+
+        /* ── HOVER EFFECTS ── */
+        .img-parallax-wrap {
+            overflow: hidden; border-radius: 1.5rem; transform: translateZ(0);
+        }
+        .img-parallax-wrap img {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); transform: scale(1.05);
+        }
+        .hover-project:hover .img-parallax-wrap img {
+            transform: scale(1.15);
+        }
+        
+        /* ── ISOMETRIC TECH CARDS ── */
+        .iso-grid {
+            perspective: 1000px;
+        }
+    </style>
 </head>
-<body class="antialiased relative">
-<div class="cursor-dot"></div><div class="cursor-outline"></div>
-<nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-<div class="flex items-center gap-3 hover-target"><div class="w-10 h-10 rounded-xl flex items-center justify-center bg-brand-500 shadow-lg shadow-brand-500/20"><span class="material-symbols-outlined text-white text-xl">analytics</span></div><span class="text-2xl font-display font-bold text-white">Corvus</span></div>
-<div class="hidden md:flex gap-8 items-center font-medium text-sm">
-<a href="#metodologia" class="hover-target text-gray-400 hover:text-white transition-colors">Metodología</a>
-<a href="#arquitectura" class="hover-target text-gray-400 hover:text-white transition-colors">Tecnología</a>
-<a href="#plataforma" class="hover-target text-gray-400 hover:text-white transition-colors">Plataforma</a>
-</div>
-<a href="#planes" class="btn-gradient text-white font-semibold px-6 py-2.5 rounded-full text-sm hover-target magnetic-target">Acceder</a>
-</div>
-</nav>
+<body>
 
-<main>
-<!-- ESCENA 1: HERO PINNED -->
-<section id="hero" class="pinned-section">
-<canvas id="blob-canvas"></canvas>
-<div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
-<div>
-<h1 class="font-display text-5xl md:text-7xl font-bold leading-tight mb-8">
-<div class="split-line"><span>Auditoría de</span></div>
-<div class="split-line"><span class="text-brand-400">Proyectos con IA.</span></div>
-<div class="split-line"><span>Zero-Storage.</span></div>
-</h1>
-<p class="hero-sub text-xl text-gray-400 font-light mb-10 max-w-xl" style="opacity:0; filter:blur(20px); transform:translateY(40px);">Sistema de soporte a la decisión basado en agrupamiento vectorial y NLP. Identificamos espacios inexplorados y eliminamos el plagio sin descargar un solo PDF.</p>
-</div>
-<div class="relative flex justify-end hero-img-container" style="opacity:0; transform:translateX(100px) rotateY(45deg);">
-<div class="relative w-[300px] h-[620px] rounded-[2.5rem] border-[10px] border-dark-800 shadow-2xl shadow-black overflow-hidden bg-dark-900">
-<img src="img/corvus_hero.png" alt="Corvus App" class="w-full h-auto opacity-90 block">
-</div>
-</div>
-</div>
-</section>
+    <!-- Canvas Background -->
+    <canvas id="hero-canvas"></canvas>
 
-<!-- ESCENA 2: EL RETO (METODOLOGÍA) -->
-<section id="metodologia" class="py-32 relative">
-<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-<div class="reto-text" style="opacity:0; transform:translateX(-100px);">
-<h4 class="text-brand-400 font-bold uppercase tracking-wider text-sm mb-4">El Reto Académico</h4>
-<h3 class="font-display text-4xl font-bold mb-6">Fuga sistemática de conocimiento.</h3>
-<p class="text-gray-400 text-lg font-light mb-6">Miles de horas de investigación terminan aisladas en carpetas olvidadas. Los alumnos repiten ideas. Los docentes consumen cientos de horas intentando detectar colisiones manualmente.</p>
-<h3 class="font-display text-2xl font-bold mb-4 mt-12 text-white">Nuestra Solución</h3>
-<p class="text-gray-400 text-lg font-light">Corvus extrae el historial, lo convierte en vectores locales y audita propuestas en tiempo real. Máxima privacidad, cero costos operativos de IA.</p>
-</div>
-<div class="grid grid-cols-2 gap-6 reto-cards">
-<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
-<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">memory</span><h4 class="font-bold text-white">Zero-Storage</h4></div>
-</div>
-<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
-<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">hub</span><h4 class="font-bold text-white">Clustering</h4></div>
-</div>
-<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
-<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">mic</span><h4 class="font-bold text-white">Simulador</h4></div>
-</div>
-<div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target" style="opacity:0; transform:rotateX(45deg) translateY(50px);">
-<div class="tilt-inner"><span class="material-symbols-outlined text-4xl text-white mb-4">groups</span><h4 class="font-bold text-white">Matchmaking</h4></div>
-</div>
-</div>
-</div>
-</section>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-<!-- ESCENA 3: ARQUITECTURA (PINNED + SCRAMBLE) -->
-<section id="arquitectura" class="pinned-section bg-dark-800/30">
-<div class="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
-<svg viewBox="0 0 100 100" class="w-full h-full max-w-4xl animate-[spin_60s_linear_infinite]"><circle cx="50" cy="50" r="40" stroke="#3f75f5" stroke-width="0.5" fill="none" stroke-dasharray="2 4"/><circle cx="50" cy="50" r="30" stroke="#fff" stroke-width="0.2" fill="none"/></svg>
-</div>
-<div class="max-w-7xl mx-auto px-6 w-full text-center z-10">
-<h2 class="font-display text-4xl md:text-5xl font-bold mb-16 arq-title">Arquitectura Vectorial</h2>
-<div class="relative h-[300px] w-full max-w-2xl mx-auto">
-<div class="absolute inset-0 flex flex-col items-center justify-center arq-card bg-dark-900 border border-brand-500/30 rounded-3xl p-10 opacity-0 transform scale-90">
-<span class="material-symbols-outlined text-4xl text-brand-400 mb-4">neurology</span>
-<h3 class="text-3xl font-display font-bold text-white mb-4 scramble-target">NLP & ChromaDB</h3>
-<p class="text-gray-400 scramble-target">Limpieza y fragmentación en chunks vectorizados con all-MiniLM-L6 para detectar colisiones exactas.</p>
-</div>
-<div class="absolute inset-0 flex flex-col items-center justify-center arq-card bg-dark-900 border border-indigo-500/30 rounded-3xl p-10 opacity-0 transform scale-90">
-<span class="material-symbols-outlined text-4xl text-indigo-400 mb-4">share</span>
-<h3 class="text-3xl font-display font-bold text-white mb-4 scramble-target">Ingesta Zero-Storage</h3>
-<p class="text-gray-400 scramble-target">Conexión API a Drive. Streameamos a RAM, vectorizamos y liberamos. Privacidad absoluta.</p>
-</div>
-<div class="absolute inset-0 flex flex-col items-center justify-center arq-card bg-dark-900 border border-purple-500/30 rounded-3xl p-10 opacity-0 transform scale-90">
-<span class="material-symbols-outlined text-4xl text-purple-400 mb-4">smart_toy</span>
-<h3 class="text-3xl font-display font-bold text-white mb-4 scramble-target">LLM Local Fine-Tuned</h3>
-<p class="text-gray-400 scramble-target">Modelo cuantizado (Phi-3 Mini / Llama-3 8B) afinado con LoRA operando en <8GB RAM.</p>
-</div>
-</div>
-</div>
-</section>
+    <!-- Nav -->
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-transform duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 hover-target">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-brand-500 shadow-lg shadow-brand-500/30">
+                    <span class="material-symbols-outlined text-white text-xl">analytics</span>
+                </div>
+                <span class="text-2xl font-display font-bold text-white">Corvus</span>
+            </div>
+            <div class="hidden md:flex gap-8 items-center font-medium text-sm">
+                <a href="#metodologia" class="hover-target text-gray-400 hover:text-white transition-colors">La Fuga</a>
+                <a href="#arquitectura" class="hover-target text-gray-400 hover:text-white transition-colors">Tecnología</a>
+                <a href="#plataforma" class="hover-target text-gray-400 hover:text-white transition-colors">Plataforma</a>
+            </div>
+            <a href="#cta" class="btn-gradient text-white font-semibold px-6 py-2.5 rounded-full text-sm hover-target magnetic-target">Auditar Ahora</a>
+        </div>
+    </nav>
 
-<!-- ESCENA 4: PLATAFORMA (SCROLL HORIZONTAL) -->
-<section id="plataforma" class="overflow-hidden bg-dark-900">
-<div class="py-20 text-center"><h2 class="font-display text-5xl font-bold">La Plataforma</h2></div>
-<div class="h-scroll-container">
-<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_dashboard.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Panel Triage Docente</h3></div></div>
-<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_matchmaking.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Matchmaking Inteligente</h3></div></div>
-<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_upload.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Chat de Apelación IA</h3></div></div>
-<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_simulador.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Simulador de Defensa</h3></div></div>
-<div class="h-scroll-panel"><div class="w-full max-w-sm hover-project"><div class="project-img-wrap aspect-[4/5]"><img src="img/corvus_oceanos.png" class="scroll-img"></div><h3 class="text-2xl font-bold mt-6 text-center">Explorador de Océanos Azules</h3></div></div>
-</div>
-</section>
+    <main>
+        <!-- 🎬 SCENE 1: HERO (Mask Reveals & Floating Parallax) -->
+        <section id="hero" class="relative min-h-[100vh] flex items-center pt-24 pb-20 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
+                <div class="hero-content">
+                    <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight mb-8">
+                        <div class="mask-wrap"><span class="mask-text text-white">Auditoría de</span></div>
+                        <div class="mask-wrap"><span class="mask-text text-brand-400">Proyectos con IA.</span></div>
+                        <div class="mask-wrap"><span class="mask-text text-white">Zero-Storage.</span></div>
+                    </h1>
+                    <p class="hero-sub text-xl text-gray-400 font-light mb-10 max-w-xl opacity-0 transform translate-y-8">
+                        Sistema de soporte a la decisión basado en agrupamiento vectorial. Detectamos plagio e ideas repetidas sin retener un solo documento.
+                    </p>
+                    <div class="hero-btn opacity-0 transform translate-y-8">
+                        <a href="#plataforma" class="inline-flex items-center gap-2 text-white font-bold hover-target group">
+                            Ver Plataforma 
+                            <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Hero Image Parallax (Moves up faster on scroll) -->
+                <div class="relative flex justify-center lg:justify-end hero-img-wrap">
+                    <div class="relative w-[300px] h-[620px] rounded-[2.5rem] border-[10px] border-dark-800 shadow-2xl shadow-black overflow-hidden bg-dark-900 hero-phone" style="transform: rotate(5deg) translateY(50px); opacity: 0;">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-dark-800 rounded-b-2xl z-20"></div>
+                        <img src="img/corvus_hero.png" alt="Corvus App" class="w-full h-auto opacity-90 block">
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<!-- ESCENA 5: STATS -->
-<section class="py-32 border-y border-white/5 bg-dark-800/20">
-<div class="max-w-7xl mx-auto px-6 flex justify-around items-center text-center">
-<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="100">0</h3><p class="text-brand-400">% Zero-Storage</p></div>
-<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="1000">0</h3><p class="text-brand-400">+ Vectores</p></div>
-<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="99">0</h3><p class="text-brand-400">% Precisión</p></div>
-<div class="stat-item" style="opacity:0; transform:translateY(50px);"><h3 class="text-6xl font-display font-bold text-white mb-2 stat-num" data-val="8">0</h3><p class="text-brand-400">GB RAM Max</p></div>
-</div>
-</section>
+        <!-- 🎬 SCENE 2: METODOLOGÍA (Floating Cards Parallax) -->
+        <section id="metodologia" class="py-32 relative bg-dark-900 border-t border-white/5 z-20">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
+                <div class="sticky top-40 h-fit mb-12 lg:mb-0 reto-text">
+                    <div class="mask-wrap"><h4 class="mask-text text-brand-400 font-bold uppercase tracking-wider text-sm mb-4">El Problema</h4></div>
+                    <br>
+                    <div class="mask-wrap"><h3 class="mask-text font-display text-4xl md:text-5xl font-bold mb-6 text-white">Fuga sistemática de<br>conocimiento.</h3></div>
+                    <p class="text-gray-400 text-lg font-light mb-6 opacity-0 reto-desc">Miles de horas de investigación terminan aisladas. Los docentes consumen cientos de horas intentando detectar colisiones manualmente entre generaciones de alumnos.</p>
+                </div>
+                
+                <!-- Parallax Asimétrico: Diferentes velocidades (data-speed) -->
+                <div class="grid grid-cols-2 gap-6 parallax-cards-container pt-10">
+                    <div class="glass-card p-8 rounded-3xl flex flex-col items-start parallax-card hover-target" data-speed="0.8">
+                        <div class="w-12 h-12 rounded-full bg-brand-500/20 flex items-center justify-center mb-6"><span class="material-symbols-outlined text-brand-400">memory</span></div>
+                        <h4 class="font-bold text-white text-xl mb-2">Zero-Storage</h4>
+                        <p class="text-sm text-gray-400">Análisis en RAM volatil. Privacidad absoluta de los documentos.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl flex flex-col items-start parallax-card hover-target" data-speed="1.2" style="margin-top: 60px;">
+                        <div class="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center mb-6"><span class="material-symbols-outlined text-indigo-400">hub</span></div>
+                        <h4 class="font-bold text-white text-xl mb-2">Clustering</h4>
+                        <p class="text-sm text-gray-400">Agrupamos semánticamente vectores para detectar océanos azules.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl flex flex-col items-start parallax-card hover-target" data-speed="0.9">
+                        <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-6"><span class="material-symbols-outlined text-purple-400">mic</span></div>
+                        <h4 class="font-bold text-white text-xl mb-2">Simulador LLM</h4>
+                        <p class="text-sm text-gray-400">Defensa guiada por IA local para pre-evaluar propuestas.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl flex flex-col items-start parallax-card hover-target" data-speed="1.1" style="margin-top: 60px;">
+                        <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mb-6"><span class="material-symbols-outlined text-emerald-400">groups</span></div>
+                        <h4 class="font-bold text-white text-xl mb-2">Matchmaking</h4>
+                        <p class="text-sm text-gray-400">Conectamos alumnos y mentores en base a métricas y skills.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<!-- ESCENA 6: CTA FINAL ZOOM OUT -->
-<section id="cta" class="pinned-section">
-<div class="cta-content text-center" style="transform:scale(3); opacity:0;">
-<span class="text-brand-400 font-bold tracking-widest uppercase text-sm mb-4 block">Corvus</span>
-<h2 class="font-display text-6xl md:text-8xl font-bold mb-10 text-white">Auditando el futuro.</h2>
-<a href="#" class="btn-gradient inline-flex items-center gap-2 text-white px-12 py-6 rounded-full font-bold text-2xl hover-target magnetic-target">Implementar Sistema</a>
-</div>
-</section>
+        <!-- 🎬 SCENE 3: ARQUITECTURA VECTORIAL (Creative 3D Lateral Layout) -->
+        <section id="arquitectura" class="py-40 bg-dark-800/50 relative overflow-hidden">
+            <!-- Background organic ring -->
+            <div class="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-brand-500/20 opacity-30 animate-[spin_60s_linear_infinite] pointer-events-none"></div>
+            
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left: Sticky Title -->
+                <div class="lg:col-span-5 relative h-full">
+                    <div class="sticky top-1/3">
+                        <div class="mask-wrap"><h2 class="mask-text font-display text-5xl font-bold mb-6 text-white">Arquitectura<br>Vectorial.</h2></div>
+                        <p class="text-gray-400 text-lg arq-desc opacity-0">El núcleo de Corvus. Convertimos texto en dimensiones matemáticas para identificar similitudes que el ojo humano pasa por alto.</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Isometric Floating Flow -->
+                <div class="lg:col-span-7 relative iso-grid flex flex-col gap-8 items-end py-20">
+                    <div class="absolute top-0 bottom-0 right-[150px] w-px bg-gradient-to-b from-transparent via-brand-500 to-transparent opacity-50 hidden lg:block"></div>
+                    
+                    <div class="glass-card p-8 rounded-3xl w-full max-w-md relative z-10 tech-card transform translate-x-20 opacity-0">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="material-symbols-outlined text-3xl text-brand-400">neurology</span>
+                            <h3 class="text-2xl font-bold text-white">NLP & ChromaDB</h3>
+                        </div>
+                        <p class="text-gray-400">Limpieza y fragmentación en chunks vectorizados con all-MiniLM-L6 para detectar colisiones semánticas exactas.</p>
+                    </div>
+                    
+                    <div class="glass-card p-8 rounded-3xl w-full max-w-md relative z-10 tech-card transform translate-x-20 opacity-0 mr-12 lg:-mr-12">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="material-symbols-outlined text-3xl text-indigo-400">share</span>
+                            <h3 class="text-2xl font-bold text-white">Ingesta Memory-Only</h3>
+                        </div>
+                        <p class="text-gray-400">Conexión API a Drive. Streameamos a RAM, vectorizamos al vuelo y liberamos el buffer. Privacidad absoluta garantizada.</p>
+                    </div>
+                    
+                    <div class="glass-card p-8 rounded-3xl w-full max-w-md relative z-10 tech-card transform translate-x-20 opacity-0">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="material-symbols-outlined text-3xl text-purple-400">smart_toy</span>
+                            <h3 class="text-2xl font-bold text-white">LLM Local Peft</h3>
+                        </div>
+                        <p class="text-gray-400">Modelo cuántico (Phi-3 Mini) afinado con LoRA operando directamente en VRAM local, analizando las métricas resultantes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<footer class="py-10 border-t border-white/5 text-center text-gray-500 text-sm">
-<p>&copy; 2026 Corvus Project. Memoria Académica Vectorial.</p>
-</footer>
-</main>
+        <!-- 🎬 SCENE 4: LA PLATAFORMA (Asymmetrical Floating Grid) -->
+        <section id="plataforma" class="py-40 bg-dark-900 relative z-30 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 text-center mb-24">
+                <div class="mask-wrap"><h2 class="mask-text font-display text-5xl md:text-6xl font-bold text-white">La Plataforma</h2></div>
+            </div>
+            
+            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- We use flex columns with different translate speeds for a masonry parallax effect -->
+                <div class="flex flex-col md:flex-row gap-8 justify-center items-start">
+                    
+                    <!-- Column 1 (Moves up faster) -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-8 platform-col" data-speed="1.15">
+                        <div class="hover-project group">
+                            <div class="img-parallax-wrap bg-dark-800 p-2 shadow-2xl">
+                                <img src="img/corvus_dashboard.png" class="w-full h-auto rounded-xl">
+                            </div>
+                            <h3 class="text-white font-bold text-xl mt-4 opacity-0 group-hover:opacity-100 transition-opacity">Triage Docente</h3>
+                        </div>
+                        <div class="hover-project group mt-12">
+                            <div class="img-parallax-wrap bg-dark-800 p-2 shadow-2xl">
+                                <img src="img/corvus_simulador.png" class="w-full h-auto rounded-xl">
+                            </div>
+                            <h3 class="text-white font-bold text-xl mt-4 opacity-0 group-hover:opacity-100 transition-opacity">Simulador IA</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Column 2 (Moves up slower, staggered down) -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-8 mt-24 md:mt-40 platform-col" data-speed="0.85">
+                        <div class="hover-project group">
+                            <div class="img-parallax-wrap bg-dark-800 p-2 shadow-2xl">
+                                <img src="img/corvus_matchmaking.png" class="w-full h-auto rounded-xl">
+                            </div>
+                            <h3 class="text-white font-bold text-xl mt-4 opacity-0 group-hover:opacity-100 transition-opacity">Matchmaking</h3>
+                        </div>
+                        <div class="hover-project group mt-12">
+                            <div class="img-parallax-wrap bg-dark-800 p-2 shadow-2xl">
+                                <img src="img/corvus_upload.png" class="w-full h-auto rounded-xl">
+                            </div>
+                            <h3 class="text-white font-bold text-xl mt-4 opacity-0 group-hover:opacity-100 transition-opacity">Sistema de Ingesta</h3>
+                        </div>
+                    </div>
 
-<script>
-// INIT LENIS
-const lenis = new Lenis({ duration: 1.2, smooth: true });
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
-lenis.on("scroll", ScrollTrigger.update);
-gsap.ticker.add((time) => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
+                    <!-- Column 3 (Moves up moderate) -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-8 mt-12 md:mt-16 platform-col" data-speed="1.05">
+                        <div class="hover-project group">
+                            <div class="img-parallax-wrap bg-dark-800 p-2 shadow-2xl">
+                                <img src="img/corvus_oceanos.png" class="w-full h-auto rounded-xl">
+                            </div>
+                            <h3 class="text-white font-bold text-xl mt-4 opacity-0 group-hover:opacity-100 transition-opacity">Océanos Azules</h3>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
 
-// CURSOR
-const cursorDot = document.querySelector(".cursor-dot");
-const cursorOutline = document.querySelector(".cursor-outline");
-const setDotX = gsap.quickSetter(cursorDot, "x", "px");
-const setDotY = gsap.quickSetter(cursorDot, "y", "px");
-const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
-const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
-let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2, outlineX = mouseX, outlineY = mouseY;
-window.addEventListener("mousemove", (e) => { mouseX = e.clientX; mouseY = e.clientY; setDotX(mouseX); setDotY(mouseY); });
-gsap.ticker.add(() => { outlineX += (mouseX - outlineX) * 0.15; outlineY += (mouseY - outlineY) * 0.15; setOutlineX(outlineX); setOutlineY(outlineY); });
+        <!-- 🎬 SCENE 5: STATS REVEAL -->
+        <section class="py-24 bg-dark-800/30 border-y border-white/5 relative z-30">
+            <div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-16 md:gap-32 text-center stats-container">
+                <div class="stat-item transform translate-y-10 opacity-0">
+                    <h3 class="text-6xl font-display font-bold text-white mb-2"><span class="stat-num" data-val="100">0</span>%</h3>
+                    <p class="text-brand-400 font-medium">Zero-Storage</p>
+                </div>
+                <div class="stat-item transform translate-y-10 opacity-0">
+                    <h3 class="text-6xl font-display font-bold text-white mb-2"><span class="stat-num" data-val="1000">0</span>+</h3>
+                    <p class="text-brand-400 font-medium">Vectores Procesados</p>
+                </div>
+                <div class="stat-item transform translate-y-10 opacity-0">
+                    <h3 class="text-6xl font-display font-bold text-white mb-2"><span class="stat-num" data-val="8">0</span>GB</h3>
+                    <p class="text-brand-400 font-medium">Memoria LLM Local</p>
+                </div>
+            </div>
+        </section>
 
-document.querySelectorAll(".hover-target").forEach(el => {
-    el.addEventListener("mouseenter", () => cursorOutline.classList.add("hover-active"));
-    el.addEventListener("mouseleave", () => cursorOutline.classList.remove("hover-active"));
-});
-document.querySelectorAll(".hover-project").forEach(el => {
-    el.addEventListener("mouseenter", () => { cursorOutline.classList.add("project-hover"); cursorDot.style.opacity="0"; });
-    el.addEventListener("mouseleave", () => { cursorOutline.classList.remove("project-hover"); cursorDot.style.opacity="1"; });
-});
-document.querySelectorAll(".magnetic-target").forEach((elem) => {
-    elem.addEventListener("mousemove", (e) => {
-        const r = elem.getBoundingClientRect();
-        gsap.to(elem, { x: (e.clientX - r.left - r.width/2)*0.4, y: (e.clientY - r.top - r.height/2)*0.4, duration: 0.5 });
-    });
-    elem.addEventListener("mouseleave", () => gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" }));
-});
+        <!-- 🎬 SCENE 6: CTA (Cinematic Zoom Out Expansion) -->
+        <section id="cta" class="h-screen flex flex-col items-center justify-center relative overflow-hidden bg-dark-900 z-10">
+            <!-- Background expansion circle -->
+            <div class="cta-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 rounded-full bg-brand-900/40 z-0"></div>
+            
+            <div class="cta-content text-center z-10" style="transform: scale(2); opacity: 0;">
+                <span class="text-brand-400 font-bold tracking-widest uppercase text-sm mb-6 block">Corvus</span>
+                <h2 class="font-display text-6xl md:text-8xl font-bold mb-12 text-white px-4">Auditando el futuro.</h2>
+                <a href="#planes" class="btn-gradient inline-flex items-center gap-2 text-white px-10 py-5 rounded-full font-bold text-xl hover-target magnetic-target shadow-[0_0_40px_rgba(63,117,245,0.4)]">
+                    Implementar Sistema
+                </a>
+            </div>
+        </section>
 
-// TILT CARDS
-document.querySelectorAll('.tilt-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width/2) / (r.width/2);
-        const y = (e.clientY - r.top - r.height/2) / (r.height/2);
-        gsap.to(card, { rotateY: x*20, rotateX: -y*20, duration: 0.4 });
-    });
-    card.addEventListener('mouseleave', () => gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out' }));
-});
+        <footer class="py-8 bg-dark-900 border-t border-white/5 text-center text-gray-600 text-sm relative z-20">
+            <p>&copy; 2026 Corvus Project. Memoria Académica Vectorial.</p>
+        </footer>
+    </main>
 
-// BLOB BACKGROUND
-const canvas = document.getElementById('blob-canvas');
-const ctx = canvas.getContext('2d');
-let width, height;
-function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
-window.addEventListener('resize', resize); resize();
-const blobs = Array.from({length:3}, () => ({x:Math.random()*width, y:Math.random()*height, r:Math.random()*300+200, vx:Math.random()*1-0.5, vy:Math.random()*1-0.5, c:'rgba(63,117,245,0.08)'}));
-function draw() {
-    ctx.clearRect(0,0,width,height);
-    blobs.forEach(b => {
-        b.x += b.vx; b.y += b.vy;
-        if(b.x < -b.r || b.x > width+b.r) b.vx *= -1;
-        if(b.y < -b.r || b.y > height+b.r) b.vy *= -1;
-        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
-        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
-        grad.addColorStop(0, b.c); grad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = grad; ctx.fill();
-    });
-    requestAnimationFrame(draw);
-}
-draw();
+    <script>
+        // ── 1. SETUP LENIS (Ultra Smooth Scroll) ──
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing for premium feel
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
 
-// SCENE 1: HERO PINNED
-const heroTl = gsap.timeline({ scrollTrigger: { trigger: "#hero", start: "top top", end: "+=1000", pin: true, scrub: 1 } });
-gsap.to('.split-line span', { y: "0%", opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out" });
-gsap.to('.hero-sub', { opacity: 1, filter: "blur(0px)", y: 0, duration: 1.5, delay: 0.5 });
-gsap.to('.hero-img-container', { opacity: 1, x: 0, rotateY: 0, duration: 1.5, ease: "power3.out", delay: 0.3 });
-heroTl.to('.hero-img-container', { scale: 0.5, y: -200, opacity: 0 }).to('.split-line span', { y: "-100%", opacity: 0, stagger: 0.1 }, "<").to('.hero-sub', { opacity: 0 }, "<");
+        // Sync Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
 
-// SCENE 2: METODOLOGIA
-gsap.to('.reto-text', { x: 0, opacity: 1, duration: 1, scrollTrigger: { trigger: "#metodologia", start: "top 70%" } });
-gsap.to('.reto-cards .tilt-card', { rotateX: 0, y: 0, opacity: 1, duration: 1, stagger: 0.2, scrollTrigger: { trigger: "#metodologia", start: "top 50%" } });
+        // ── 2. CUSTOM CURSOR ──
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const setDotX = gsap.quickSetter(cursorDot, "x", "px");
+        const setDotY = gsap.quickSetter(cursorDot, "y", "px");
+        const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
+        const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
+        
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let outlineX = mouseX, outlineY = mouseY;
 
-// SCENE 3: ARQUITECTURA PINNED
-const arqCards = gsap.utils.toArray('.arq-card');
-const arqTl = gsap.timeline({ scrollTrigger: { trigger: "#arquitectura", start: "top top", end: "+=2000", pin: true, scrub: 1 } });
-arqCards.forEach((card, i) => {
-    arqTl.to(card, { scale: 1, opacity: 1, duration: 1 });
-    const texts = card.querySelectorAll('.scramble-target');
-    texts.forEach(t => {
-        const text = t.innerText;
-        t.innerText = ""; t.style.visibility = "visible";
-        arqTl.to(t, { text: { value: text, delimiter: "" }, duration: 1 }, "<+=0.2");
-    });
-    if (i < arqCards.length - 1) { arqTl.to(card, { scale: 1.1, opacity: 0, duration: 1 }, "+=0.5"); }
-});
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            setDotX(mouseX); setDotY(mouseY);
+        });
 
-// SCENE 4: PLATAFORMA H-SCROLL
-const container = document.querySelector('.h-scroll-container');
-gsap.to(container, {
-    x: () => -(container.scrollWidth - window.innerWidth) + "px",
-    ease: "none",
-    scrollTrigger: { trigger: "#plataforma", start: "top top", end: "+=3000", pin: true, scrub: 1 }
-});
+        gsap.ticker.add(() => {
+            outlineX += (mouseX - outlineX) * 0.15;
+            outlineY += (mouseY - outlineY) * 0.15;
+            setOutlineX(outlineX); setOutlineY(outlineY);
+        });
 
-// SCENE 5: STATS
-const stats = document.querySelectorAll('.stat-item');
-gsap.to(stats, {
-    y: 0, opacity: 1, duration: 1, stagger: 0.2,
-    scrollTrigger: { trigger: ".stat-item", start: "top 80%" }
-});
-document.querySelectorAll('.stat-num').forEach(num => {
-    gsap.to(num, { innerText: num.dataset.val, snap: { innerText: 1 }, duration: 2, scrollTrigger: { trigger: num, start: "top 80%" } });
-});
+        // Hover States
+        document.querySelectorAll('.hover-target').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover-active'));
+        });
+        document.querySelectorAll('.hover-project').forEach(el => {
+            el.addEventListener('mouseenter', () => { cursorOutline.classList.add('project-hover'); cursorDot.style.opacity = '0'; });
+            el.addEventListener('mouseleave', () => { cursorOutline.classList.remove('project-hover'); cursorDot.style.opacity = '1'; });
+        });
 
-// SCENE 6: CTA
-gsap.to('.cta-content', {
-    scale: 1, opacity: 1, ease: "power2.out",
-    scrollTrigger: { trigger: "#cta", start: "top top", end: "+=800", pin: true, scrub: 1 }
-});
-</script>
+        // Magnetic Buttons
+        document.querySelectorAll('.magnetic-target').forEach((elem) => {
+            elem.addEventListener("mousemove", (e) => {
+                const r = elem.getBoundingClientRect();
+                gsap.to(elem, { x: (e.clientX - r.left - r.width/2) * 0.3, y: (e.clientY - r.top - r.height/2) * 0.3, duration: 0.4, ease: "power2.out" });
+            });
+            elem.addEventListener("mouseleave", () => {
+                gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
+            });
+        });
+
+        // ── 3. LIQUID CANVAS BACKGROUND (Softer) ──
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        function resizeCanvas() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+        const blobs = Array.from({length: 4}, () => ({
+            x: Math.random() * width, y: Math.random() * height,
+            r: Math.random() * 400 + 300,
+            vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+            c: 'rgba(63, 117, 245, 0.05)'
+        }));
+
+        function drawBlobs() {
+            ctx.clearRect(0, 0, width, height);
+            blobs.forEach(b => {
+                b.x += b.vx; b.y += b.vy;
+                if(b.x < -b.r || b.x > width + b.r) b.vx *= -1;
+                if(b.y < -b.r || b.y > height + b.r) b.vy *= -1;
+                
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+                const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+                grad.addColorStop(0, b.c);
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = grad;
+                ctx.fill();
+            });
+            requestAnimationFrame(drawBlobs);
+        }
+        drawBlobs();
+
+
+        // ── 4. AWWWARDS GSAP ANIMATIONS ──
+
+        // Initial Reveal (No scrub, just play on load)
+        const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+        heroTl.to('#hero .mask-text', { y: "0%", opacity: 1, duration: 1.2, stagger: 0.15, delay: 0.2 })
+              .to('.hero-sub', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to('.hero-btn', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to('.hero-phone', { opacity: 1, y: 0, rotate: 0, duration: 1.5, ease: "back.out(1.2)" }, "-=1");
+
+        // Navbar Hide/Show on Scroll
+        let lastScrollY = window.scrollY;
+        lenis.on('scroll', (e) => {
+            const nav = document.getElementById('navbar');
+            if (e.animatedScroll > 100 && e.animatedScroll > lastScrollY) { nav.style.transform = 'translateY(-100%)'; } 
+            else { nav.style.transform = 'translateY(0)'; }
+            lastScrollY = e.animatedScroll;
+        });
+
+        // Scene 1: Hero Parallax Out (Scrubbed)
+        gsap.to('.hero-content', {
+            y: -150, opacity: 0,
+            scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+        });
+        gsap.to('.hero-img-wrap', {
+            y: -100, // Move up slower than content for depth
+            scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        // Scene 2: Metodología
+        gsap.to('#metodologia .mask-text', {
+            y: "0%", opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out",
+            scrollTrigger: { trigger: ".reto-text", start: "top 80%" }
+        });
+        gsap.to('.reto-desc', {
+            opacity: 1, duration: 1, delay: 0.3,
+            scrollTrigger: { trigger: ".reto-text", start: "top 80%" }
+        });
+
+        // Parallax Cards (Floating upwards at different speeds using scrub)
+        document.querySelectorAll('.parallax-card').forEach(card => {
+            const speed = parseFloat(card.dataset.speed);
+            gsap.fromTo(card, 
+                { y: 150 * speed, opacity: 0 },
+                { y: -50 * speed, opacity: 1, ease: "none",
+                  scrollTrigger: { trigger: ".parallax-cards-container", start: "top bottom", end: "bottom top", scrub: true }
+                }
+            );
+        });
+
+        // Scene 3: Arquitectura (Lateral 3D Stagger Reveal)
+        gsap.to('#arquitectura .mask-text', {
+            y: "0%", opacity: 1, duration: 1, ease: "power3.out",
+            scrollTrigger: { trigger: "#arquitectura", start: "top 70%" }
+        });
+        gsap.to('.arq-desc', { opacity: 1, duration: 1, delay: 0.2, scrollTrigger: { trigger: "#arquitectura", start: "top 70%" } });
+
+        const techCards = gsap.utils.toArray('.tech-card');
+        gsap.to(techCards, {
+            x: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "back.out(1.5)",
+            scrollTrigger: { trigger: ".iso-grid", start: "top 70%" }
+        });
+
+        // Scene 4: Plataforma Asymmetrical Parallax
+        gsap.to('#plataforma .mask-text', {
+            y: "0%", opacity: 1, duration: 1, ease: "power3.out",
+            scrollTrigger: { trigger: "#plataforma", start: "top 80%" }
+        });
+
+        document.querySelectorAll('.platform-col').forEach(col => {
+            const speed = parseFloat(col.dataset.speed);
+            gsap.fromTo(col,
+                { y: 200 * speed },
+                { y: -100 * speed, ease: "none",
+                  scrollTrigger: { trigger: "#plataforma", start: "top bottom", end: "bottom top", scrub: true }
+                }
+            );
+        });
+
+        // Scene 5: Stats Reveal
+        gsap.to('.stat-item', {
+            y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.2)",
+            scrollTrigger: { trigger: ".stats-container", start: "top 85%" }
+        });
+        
+        document.querySelectorAll('.stat-num').forEach(num => {
+            ScrollTrigger.create({
+                trigger: num, start: "top 85%",
+                onEnter: () => {
+                    gsap.to(num, { innerText: num.dataset.val, snap: { innerText: 1 }, duration: 2, ease: "power2.out" });
+                },
+                once: true
+            });
+        });
+
+        // Scene 6: Cinematic CTA Expansion (Scrubbed Zoom Out)
+        const ctaTl = gsap.timeline({
+            scrollTrigger: { trigger: "#cta", start: "top bottom", end: "center center", scrub: 0.5 }
+        });
+        ctaTl.to('.cta-circle', { width: "150vw", height: "150vw", duration: 1 })
+             .to('.cta-content', { scale: 1, opacity: 1, duration: 1 }, "<");
+
+    </script>
 </body>
 </html>
