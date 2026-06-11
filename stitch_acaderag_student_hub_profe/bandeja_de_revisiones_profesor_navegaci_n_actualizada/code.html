@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Centro de Revisiones - Bandeja</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449; /* surface-variant */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464554; /* outline-variant */
+        }
+    </style>
+<!-- Tailwind Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#0b1326",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary-container": "#00302a",
+                      "outline-variant": "#464554",
+                      "secondary-container": "#6f00be",
+                      "on-primary-container": "#0d0096",
+                      "background": "#0b1326",
+                      "on-surface": "#dae2fd",
+                      "on-error": "#690005",
+                      "inverse-primary": "#494bd6",
+                      "outline": "#908fa0",
+                      "on-secondary-container": "#d6a9ff",
+                      "on-surface-variant": "#c7c4d7",
+                      "surface": "#0b1326",
+                      "surface-container": "#171f33",
+                      "on-secondary-fixed-variant": "#6900b3",
+                      "secondary-fixed-dim": "#ddb7ff",
+                      "primary-container": "#8083ff",
+                      "surface-variant": "#2d3449",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "on-primary-fixed": "#07006c",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "inverse-surface": "#dae2fd",
+                      "on-tertiary": "#003731",
+                      "error": "#ffb4ab",
+                      "surface-container-low": "#131b2e",
+                      "surface-container-high": "#222a3d",
+                      "on-background": "#dae2fd",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "tertiary-container": "#00a392",
+                      "secondary-fixed": "#f0dbff",
+                      "primary-fixed": "#e1e0ff",
+                      "surface-container-lowest": "#060e20",
+                      "inverse-on-surface": "#283044",
+                      "error-container": "#93000a",
+                      "surface-tint": "#c0c1ff",
+                      "surface-container-highest": "#2d3449",
+                      "tertiary-fixed": "#71f8e4",
+                      "tertiary": "#4fdbc8",
+                      "on-secondary-fixed": "#2c0051",
+                      "on-secondary": "#490080",
+                      "on-primary": "#1000a9",
+                      "secondary": "#ddb7ff",
+                      "on-tertiary-fixed": "#00201c",
+                      "surface-bright": "#31394d",
+                      "primary": "#c0c1ff",
+                      "on-primary-fixed-variant": "#2f2ebe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "1.5rem",
+                      "xl": "3rem",
+                      "sm": "1rem",
+                      "lg": "2rem",
+                      "container-max": "1280px",
+                      "gutter": "1.5rem",
+                      "base": "4px",
+                      "margin": "2rem",
+                      "xs": "0.5rem"
+              },
+              "fontFamily": {
+                      "label-md": ["Geist"],
+                      "display": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["Geist"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- DESKTOP NAVIGATION DRAWER -->
+<aside class="hidden md:flex flex-col h-full py-md bg-surface-container-low dark:bg-surface-container-lowest docked left-0 h-full w-80 shadow-xl z-40 border-r border-surface-container dark:border-surface-container-high Transition-all duration-300 ease-in-out shrink-0">
+<!-- Header -->
+<div class="px-6 mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary-fixed-dim text-2xl">account_circle</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-display font-black text-on-surface text-lg leading-tight">Professor Access</span>
+<span class="font-label-md text-label-md text-secondary dark:text-secondary-fixed-dim">Faculty Portal</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-70">AcadeRAG Admin</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-1 px-4">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 hover:bg-surface-variant/40 group transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Reviews (ACTIVE) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 shadow-[0_0_15px_rgba(111,0,190,0.2)] transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+<span class="font-label-md text-label-md font-bold">Reviews</span>
+<span class="ml-auto bg-error text-on-error font-label-sm text-[10px] px-2 py-0.5 rounded-full">12</span>
+</a>
+<!-- Rules (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 hover:bg-surface-variant/40 group transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">gavel</span>
+<span class="font-label-md text-label-md">Rules</span>
+</a>
+<!-- History (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 hover:bg-surface-variant/40 group transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="p-4 rounded-xl bg-surface-container border border-outline-variant/20 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent"></div>
+<div class="relative z-10 flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">bolt</span>
+<span class="font-label-sm text-label-sm text-on-surface">RAG Engine Online</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT CANVAS -->
+<div class="flex-1 flex flex-col h-full relative overflow-hidden">
+<!-- TOP APP BAR -->
+<header class="flex justify-between items-center px-sm py-xs w-full sticky top-0 z-50 bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm shrink-0">
+<div class="flex items-center gap-4">
+<div class="md:hidden w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary-fixed-dim text-sm">account_circle</span>
+</div>
+<h1 class="font-display text-headline-md font-bold text-on-surface dark:text-on-background tracking-tight">AcadeRAG</h1>
+</div>
+<button class="p-2 rounded-full text-primary dark:text-primary-fixed-dim hover:bg-surface-variant/50 transition-colors active:scale-95 duration-150 flex items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- SCROLLABLE CONTENT AREA -->
+<main class="flex-1 overflow-y-auto w-full pb-32 md:pb-8 relative">
+<!-- Background Atmospheric Effect -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-8 w-full space-y-8">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-display text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface mb-2">Bandeja de Revisiones</h2>
+<p class="font-body-md text-on-surface-variant">Analizador predictivo RAG. <span class="text-error font-medium">12 propuestas requieren atención.</span></p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant/50 transition-colors flex items-center gap-2 backdrop-blur-md">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filtrar
+                        </button>
+<button class="px-4 py-2 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center gap-2 border border-outline-variant/20 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">sort</span> Recientes
+                        </button>
+</div>
+</div>
+<!-- BENTO GRID FOR PROPOSALS -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
+<!-- CARD 1: CRITICAL WARNING (Plagio Histórico) -->
+<article class="group relative bg-surface-container-high/60 backdrop-blur-2xl rounded-2xl p-6 border border-error/40 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(255,180,171,0.15)] overflow-hidden">
+<!-- Critical Inner Glow -->
+<div class="absolute -inset-[1px] bg-gradient-to-b from-error/20 to-transparent opacity-50 rounded-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Equipo Alpha</span>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mt-1 leading-tight">Optimización de LLMs en Edge Devices</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-error-container/20 flex items-center justify-center border border-error/30 shrink-0">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm line-clamp-3 mb-6">Propuesta para la implementación de modelos de lenguaje cuantizados en dispositivos IoT de bajos recursos utilizando técnicas de RAG adaptativo y compresión de memoria vectorial.</p>
+<!-- Tags Container -->
+<div class="flex flex-wrap gap-2 mb-8 mt-auto">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-error-container/30 border border-error/30 text-error font-label-sm text-[11px] font-semibold shadow-[0_0_10px_rgba(255,180,171,0.1)]">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                    PLAGIO HISTÓRICO DETECTADO
+                                </div>
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-variant/50 border border-outline-variant/30 text-on-surface-variant font-label-sm text-[11px]">
+                                    Similitud: 89%
+                                </div>
+</div>
+<!-- Action Footer -->
+<div class="flex gap-3 pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2.5 bg-error text-on-error rounded-lg font-label-md text-label-md font-semibold hover:bg-error/90 transition-colors shadow-sm">Rechazar</button>
+<button class="flex-1 py-2.5 bg-surface-bright border border-outline-variant/50 text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors">Auditar</button>
+</div>
+</div>
+</article>
+<!-- CARD 2: MEDIUM WARNING (Colisión de Temática) -->
+<article class="group relative bg-surface-container-high/60 backdrop-blur-2xl rounded-2xl p-6 border border-tertiary/40 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(79,219,200,0.1)] overflow-hidden">
+<!-- Medium Inner Glow -->
+<div class="absolute -inset-[1px] bg-gradient-to-b from-tertiary/10 to-transparent opacity-50 rounded-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Data Miners</span>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mt-1 leading-tight">Análisis Predictivo de Mercados Financieros</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-tertiary-container/20 flex items-center justify-center border border-tertiary/30 shrink-0">
+<span class="material-symbols-outlined text-tertiary">group_remove</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm line-clamp-3 mb-6">Uso de modelos transformers para predecir fluctuaciones en mercados emergentes basándose en análisis de sentimiento de noticias financieras en tiempo real.</p>
+<!-- Tags Container -->
+<div class="flex flex-wrap gap-2 mb-8 mt-auto">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-tertiary-container/20 border border-tertiary/30 text-tertiary font-label-sm text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                                    COLISIÓN DE GRUPO ACTUAL
+                                </div>
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-variant/50 border border-outline-variant/30 text-on-surface-variant font-label-sm text-[11px]">
+                                    Conflicto con: "Equipo Beta"
+                                </div>
+</div>
+<!-- Action Footer -->
+<div class="flex gap-3 pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2.5 bg-inverse-primary text-on-primary rounded-lg font-label-md text-label-md font-semibold hover:opacity-90 transition-opacity shadow-sm">Revisar Conflicto</button>
+</div>
+</div>
+</article>
+<!-- CARD 3: CLEAN / APPROVED -->
+<article class="group relative bg-surface-container-low/80 backdrop-blur-2xl rounded-2xl p-6 border border-outline-variant/30 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 overflow-hidden">
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Cybernetics</span>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mt-1 leading-tight">Biomarcadores Sintéticos vía RAG</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center border border-outline-variant/30 shrink-0">
+<span class="material-symbols-outlined text-outline">description</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm line-clamp-3 mb-6">Desarrollo de un sistema de recuperación aumentada para asistir en la identificación de biomarcadores sintéticos en literatura médica oncológica masiva.</p>
+<!-- Tags Container -->
+<div class="flex flex-wrap gap-2 mb-8 mt-auto">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary-container/10 border border-primary/20 text-primary font-label-sm text-[11px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                    Análisis IA: Limpio
+                                </div>
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-variant/50 border border-outline-variant/30 text-on-surface-variant font-label-sm text-[11px]">
+                                    Originalidad: 98%
+                                </div>
+</div>
+<!-- Action Footer -->
+<div class="flex gap-3 pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2.5 bg-inverse-primary text-on-primary rounded-lg font-label-md text-label-md font-semibold hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(73,75,214,0.3)]">Evaluar</button>
+</div>
+</div>
+</article>
+<!-- CARD 4: CRITICAL WARNING (Plagio Histórico) -->
+<article class="group relative bg-surface-container-high/60 backdrop-blur-2xl rounded-2xl p-6 border border-error/40 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(255,180,171,0.15)] overflow-hidden">
+<div class="absolute -inset-[1px] bg-gradient-to-b from-error/20 to-transparent opacity-50 rounded-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Byte Forge</span>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mt-1 leading-tight">Arquitectura de Microservicios Serverless</h3>
+</div>
+<div class="w-10 h-10 rounded-full bg-error-container/20 flex items-center justify-center border border-error/30 shrink-0">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm line-clamp-3 mb-6">Diseño de una arquitectura basada en eventos utilizando AWS Lambda y DynamoDB para sistemas de alta concurrencia en e-commerce.</p>
+<div class="flex flex-wrap gap-2 mb-8 mt-auto">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-error-container/30 border border-error/30 text-error font-label-sm text-[11px] font-semibold shadow-[0_0_10px_rgba(255,180,171,0.1)]">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                                    PLAGIO HISTÓRICO DETECTADO
+                                </div>
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-variant/50 border border-outline-variant/30 text-on-surface-variant font-label-sm text-[11px]">
+                                    Similitud: 94% (Proyecto 2022)
+                                </div>
+</div>
+<div class="flex gap-3 pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2.5 bg-error text-on-error rounded-lg font-label-md text-label-md font-semibold hover:bg-error/90 transition-colors shadow-sm">Rechazar</button>
+<button class="flex-1 py-2.5 bg-surface-bright border border-outline-variant/50 text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors">Auditar</button>
+</div>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- MOBILE BOTTOM NAV BAR (Hidden on md, visible on small screens) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container/80 dark:bg-surface-container-high/80 backdrop-blur-2xl border-t border-outline-variant/20 shadow-lg rounded-t-xl shrink-0"><!-- Dash -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-0.5 transition-transform">dashboard</span>
+<span class="font-label-sm text-[10px] font-medium">Dash</span>
+</a>
+<!-- Reviews (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 shadow-[0_0_15px_rgba(128,131,255,0.3)] w-20 scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-0.5" style="font-variation-settings: 'FILL' 1;">rate_review</span>
+<span class="font-label-sm text-[10px] font-bold">Reviews</span>
+</a>
+<!-- Rules -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-0.5 transition-transform">gavel</span>
+<span class="font-label-sm text-[10px] font-medium">Rules</span>
+</a>
+<!-- History -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:-translate-y-0.5 transition-transform">history</span>
+<span class="font-label-sm text-[10px] font-medium">History</span>
+</a></nav>
+</div>
+</body></html>

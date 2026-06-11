@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Historial de Decisiones</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#171f33",
+                      "on-primary-container": "#0d0096",
+                      "surface-container-highest": "#2d3449",
+                      "on-error": "#690005",
+                      "tertiary-fixed-dim": "#4fdbc8",
+                      "on-tertiary-container": "#00302a",
+                      "on-surface-variant": "#c7c4d7",
+                      "outline-variant": "#464554",
+                      "secondary-fixed": "#f0dbff",
+                      "inverse-primary": "#494bd6",
+                      "on-background": "#dae2fd",
+                      "on-secondary-fixed-variant": "#6900b3",
+                      "on-primary-fixed": "#07006c",
+                      "on-tertiary-fixed": "#00201c",
+                      "tertiary": "#4fdbc8",
+                      "surface-tint": "#c0c1ff",
+                      "secondary-fixed-dim": "#ddb7ff",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "on-primary": "#1000a9",
+                      "surface-container-low": "#131b2e",
+                      "on-secondary-fixed": "#2c0051",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#283044",
+                      "background": "#0b1326",
+                      "error-container": "#93000a",
+                      "surface-container-lowest": "#060e20",
+                      "surface": "#0b1326",
+                      "on-tertiary-fixed-variant": "#005048",
+                      "primary-container": "#8083ff",
+                      "on-secondary": "#490080",
+                      "secondary": "#ddb7ff",
+                      "primary-fixed": "#e1e0ff",
+                      "surface-dim": "#0b1326",
+                      "inverse-surface": "#dae2fd",
+                      "secondary-container": "#6f00be",
+                      "surface-variant": "#2d3449",
+                      "error": "#ffb4ab",
+                      "surface-container-high": "#222a3d",
+                      "on-tertiary": "#003731",
+                      "surface-bright": "#31394d",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "on-surface": "#dae2fd",
+                      "on-secondary-container": "#d6a9ff",
+                      "primary": "#c0c1ff",
+                      "outline": "#908fa0",
+                      "tertiary-fixed": "#71f8e4",
+                      "tertiary-container": "#00a392"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin": "2rem",
+                      "gutter": "1.5rem",
+                      "base": "4px",
+                      "sm": "1rem",
+                      "container-max": "1280px",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "xs": "0.5rem",
+                      "md": "1.5rem"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Geist"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-card {
+            background-color: rgba(30, 41, 59, 0.7); /* Slate-800 at 70% opacity approx */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(51, 65, 85, 0.5); /* Slate-700 at 50% opacity approx */
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col pb-20">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline z-40">
+<div class="flex justify-between items-center px-4 md:px-margin-desktop h-16 w-full max-w-container-max mx-auto">
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full p-2 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary dark:text-primary-fixed-dim">Historial de Decisiones</h1>
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full p-2 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max mx-auto px-4 md:px-margin pt-6 flex flex-col gap-6">
+<!-- Filters Section -->
+<section class="flex flex-col gap-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Filter: Motivo -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Motivo</label>
+<div class="relative">
+<select class="w-full bg-surface-container text-on-surface border border-outline-variant rounded-lg p-3 appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+<option value="">Seleccione motivo</option>
+<option value="plagio">Plagio</option>
+<option value="formato">Formato Incorrecto</option>
+<option value="contenido">Contenido Insuficiente</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Filter: Fecha Desde -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Fecha Desde</label>
+<div class="relative">
+<input class="w-full bg-surface-container text-on-surface border border-outline-variant rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors [color-scheme:dark]" type="date"/>
+</div>
+</div>
+<!-- Filter: Fecha Hasta -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Fecha Hasta</label>
+<div class="relative">
+<input class="w-full bg-surface-container text-on-surface border border-outline-variant rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors [color-scheme:dark]" type="date"/>
+</div>
+</div>
+</div>
+<div class="flex justify-end">
+<button class="bg-gradient-to-r from-inverse-primary to-secondary-container text-white px-6 py-2 rounded-lg font-label-md text-label-md shadow-md hover:opacity-90 transition-opacity">
+                    Aplicar Filtros
+                </button>
+</div>
+</section>
+<!-- Results List -->
+<section class="flex flex-col gap-4 mt-4">
+<!-- Result Card 1 -->
+<article class="glass-card rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:glow-active cursor-pointer">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Blockchain Inventory System</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Propuesta de sistema de inventario descentralizado utilizando smart contracts en Ethereum para trazabilidad de componentes electrónicos.</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 12 Oct 2023
+                        </span>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">person</span> Juan Pérez
+                        </span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[120px]">
+<span class="bg-error-container/20 text-error border border-error/50 px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">cancel</span> Rechazado
+                    </span>
+<button class="text-primary hover:text-primary-fixed-dim transition-colors text-sm font-medium flex items-center gap-1">
+                        Ver Detalles <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</article>
+<!-- Result Card 2 (Placeholder for more data to show list structure) -->
+<article class="glass-card rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:glow-active cursor-pointer">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">AI-Driven Supply Chain</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Optimización de rutas logísticas utilizando algoritmos de aprendizaje por refuerzo predictivo.</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 05 Oct 2023
+                        </span>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">person</span> María García
+                        </span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-3 min-w-[120px]">
+<span class="bg-tertiary-container/20 text-tertiary border border-tertiary/50 px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Aprobado
+                    </span>
+<button class="text-primary hover:text-primary-fixed-dim transition-colors text-sm font-medium flex items-center gap-1">
+                        Ver Detalles <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</article>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only per design system rules, hidden md:flex usually handles TopNav, but prompt specifically asked for this footer to be visible) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-4 bg-surface dark:bg-surface border-t-0 shadow-sm transition-transform duration-150">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="rate_review">rate_review</span>
+<span class="font-label-sm text-label-sm mt-1">Reviews</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-label-sm text-label-sm mt-1">Rules</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-3 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="history" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label-sm text-label-sm mt-1">History</span>
+</a>
+</nav>
+<!-- Desktop Side Nav / Layout adjustment (Optional based on how strict the mobile-only nav rule is interpreted vs the prompt's request for the specific footer. Assuming mobile view is requested based on the footer description). -->
+</body></html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AcadeRAG - Explorador de Océanos Azules</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Inter and Geist -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#0b1326",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-container": "#00302a",
+                    "outline-variant": "#464554",
+                    "secondary-container": "#6f00be",
+                    "on-primary-container": "#0d0096",
+                    "background": "#0b1326",
+                    "on-surface": "#dae2fd",
+                    "on-error": "#690005",
+                    "inverse-primary": "#494bd6",
+                    "outline": "#908fa0",
+                    "on-secondary-container": "#d6a9ff",
+                    "on-surface-variant": "#c7c4d7",
+                    "surface": "#0b1326",
+                    "surface-container": "#171f33",
+                    "on-secondary-fixed-variant": "#6900b3",
+                    "secondary-fixed-dim": "#ddb7ff",
+                    "primary-container": "#8083ff",
+                    "surface-variant": "#2d3449",
+                    "tertiary-fixed-dim": "#4fdbc8",
+                    "on-primary-fixed": "#07006c",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "inverse-surface": "#dae2fd",
+                    "on-tertiary": "#003731",
+                    "error": "#ffb4ab",
+                    "surface-container-low": "#131b2e",
+                    "surface-container-high": "#222a3d",
+                    "on-background": "#dae2fd",
+                    "on-tertiary-fixed-variant": "#005048",
+                    "tertiary-container": "#00a392",
+                    "secondary-fixed": "#f0dbff",
+                    "primary-fixed": "#e1e0ff",
+                    "surface-container-lowest": "#060e20",
+                    "inverse-on-surface": "#283044",
+                    "error-container": "#93000a",
+                    "surface-tint": "#c0c1ff",
+                    "surface-container-highest": "#2d3449",
+                    "tertiary-fixed": "#71f8e4",
+                    "tertiary": "#4fdbc8",
+                    "on-secondary-fixed": "#2c0051",
+                    "on-secondary": "#490080",
+                    "on-primary": "#1000a9",
+                    "secondary": "#ddb7ff",
+                    "on-tertiary-fixed": "#00201c",
+                    "surface-bright": "#31394d",
+                    "primary": "#c0c1ff",
+                    "on-primary-fixed-variant": "#2f2ebe"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "1.5rem",
+                    "xl": "3rem",
+                    "sm": "1rem",
+                    "lg": "2rem",
+                    "container-max": "1280px",
+                    "gutter": "1.5rem",
+                    "base": "4px",
+                    "margin": "2rem",
+                    "xs": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-md": ["Geist", "sans-serif"],
+                    "display": ["Inter", "sans-serif"],
+                    "headline-md": ["Inter", "sans-serif"],
+                    "body-lg": ["Inter", "sans-serif"],
+                    "body-md": ["Inter", "sans-serif"],
+                    "headline-lg-mobile": ["Inter", "sans-serif"],
+                    "headline-lg": ["Inter", "sans-serif"],
+                    "label-sm": ["Geist", "sans-serif"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                    "display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                    "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                    "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "label-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "500" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(34, 42, 61, 0.7); /* surface-container-high */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(70, 69, 84, 0.5); /* outline-variant */
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 15px rgba(192, 193, 255, 0.2); /* primary */
+            border-color: rgba(192, 193, 255, 0.4);
+        }
+        .mesh-gradient {
+            background-color: #0b1326;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(241, 100%, 70%, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(285, 100%, 70%, 0.15) 0px, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl flex justify-between items-center px-sm py-xs w-full sticky top-0 z-50 shadow-sm border-b border-outline-variant/30">
+<div class="flex items-center gap-xs">
+<!-- Leading Avatar -->
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex-shrink-0">
+<img alt="User profile photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJujzt8lQ5IHsNtyTZ_iBTIjQrFi4bo7Mejw4fj87ZuBERV4yPwSqwn4tnuuhYxT5LXb_EEYUozBh73HKhLGH87FE9S8uYedRtvWM-8q22gatG8Epdw9jDqx0dF9QTEzkaJPSpVr49YyB9J0T4AexpGwXaLgwP2z0XprIZ6j8KAbyQ8qY8wxbGvDiqCq0StaiMwfBBz4G-WT7tTQ5w0RXP7fEQBWoI-SUS7labXvPAqyalR7rbSkB74oo1YQZph6OKEKeoBEGOsDk">
+</div>
+<h1 class="font-display text-headline-md font-bold text-on-surface dark:text-on-background tracking-tight">AcadeRAG</h1>
+</div>
+<!-- Desktop Nav Placeholder (Hidden on Mobile) -->
+<nav class="hidden md:flex items-center gap-md ml-lg">
+<a class="font-label-md text-label-md text-primary font-bold" href="#">Inspiration</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant/50 transition-colors px-xs py-1 rounded-md" href="#">My Project</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant/50 transition-colors px-xs py-1 rounded-md" href="#">Teams</a>
+</nav>
+<div class="flex items-center flex-1 justify-end max-w-md ml-md">
+<!-- Search / Trailing Icon -->
+<div class="relative w-full max-w-xs hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full py-1.5 pl-10 pr-4 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all font-body-md text-sm placeholder:text-outline/70" placeholder="Buscar temas..." type="text">
+</div>
+<button class="sm:hidden text-primary dark:text-primary-fixed-dim hover:bg-surface-variant/50 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-gutter py-xl">
+<!-- Hero Section -->
+<div class="mb-xl relative">
+<div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-on-background mb-xs">Temas Inexplorados</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Descubre océanos azules en la intersección de la tecnología y la sociedad. Selecciona un área de innovación para comenzar tu investigación.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md auto-rows-[minmax(280px,auto)]">
+<!-- Featured Card (Spans across) -->
+<article class="glass-panel rounded-2xl md:col-span-8 lg:col-span-8 p-md flex flex-col justify-between group glow-hover transition-all duration-300 relative overflow-hidden mesh-gradient">
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-30 mix-blend-screen pointer-events-none" data-alt="A striking abstract visualization of artificial intelligence intersecting with nature. Glowing, generative geometric nodes and neural networks overlay a high-tech agricultural field. The scene is illuminated by deep space blacks, vibrant indigo accents, and a soft bioluminescent green. The mood is highly advanced, serene, and represents a premium technological future. Minimalist glassmorphism elements frame the composition." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcuUpcJJPOrMzXOb8FNdh1fRRs5FspcecAnewU1PGhPuQ_hP829DdyVEEwPfM37MHmfz4_8Fs1lJQhc7bhwuzX8MbMOB6dJ1ZCCepHuN5AXI5bHxOawXTJsJvUC4p1bcinI_QvztLNwKk4cFAsmEbsGg4zfAJfsMykaTB7fD6hRtE20FbfpsMfkVg9L2hChjU7iNvAQ1OylEO4arVDuWA_TsQ3tP4BYShZQm_XsKwXLk2WljcaZ_-_Wk6EaojRJCkLkGGtXmk9GHo'); background-size: cover; background-position: center;"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/80 text-on-secondary-container font-label-sm text-label-sm border border-secondary/20 backdrop-blur-md">
+<span class="material-symbols-outlined text-[14px] mr-1">psychology</span> IA &amp; Sostenibilidad
+                        </span>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-variant/80 text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30 backdrop-blur-md">
+                            Alto Potencial
+                        </span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2">IA en Agricultura de Precisión</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">Optimización de recursos hídricos y predicción de cosechas mediante modelos de RAG alimentados por datos climáticos en tiempo real y sensores IoT.</p>
+</div>
+<div class="relative z-10 mt-lg flex justify-between items-end">
+<div class="flex -space-x-2">
+<img alt="Researcher" class="w-8 h-8 rounded-full border-2 border-surface-container-high z-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9kCfpHWxUjRII7hlxfFhF6x44H4WdViTb2NIq9daihE34mqDWKeX3b78sUnydG6fBJgqK6o5ZfyKv2EqH5C73dSMAjufgCuPxKrlbIa1AGEMgB93wwylPspWtjVv-RIgFBWS_HKsP5kCA7l17hXIjc-sahixp7RQiCy1hb-VqQ82fqVRWr_DGlOkyFE6hGEvFGGq1skuBb-dzZZzid_FQlwOiAKFdpUdq3rEeCawKKomFxmxhzSzk2fmPHnncQjKLi5H_jGGi0tc">
+<img alt="Researcher" class="w-8 h-8 rounded-full border-2 border-surface-container-high z-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHBRtEOxAQ_ojZ-9GmhhNtiP5qj-XO6ARNsneWEROa6GGPkLb5ap_Qc8A4Zf-QfmJmP7cieTd8JNadTVOadBByX6Oh3K8bQwz50PGw2u2_Du-Hl9_9LBK93fAEnlGQBHecXm2ilzo6KVVQ-bsFiErqKcZGxw0SS7zEvd_jfEUxXwx8t2VBBASlrEv0s--dd_0wocehK4txFiE-WuxC0cs1INxa8jp894ui5kQgSk1Y4rWyl5_uQh51_aAqrFlGVT-5vojWXHsc9yo">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-high bg-surface-variant flex items-center justify-center text-xs font-label-sm z-10">+3</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-label-md text-label-md hover:text-primary-fixed-dim transition-colors">
+                        Explorar <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="glass-panel rounded-2xl md:col-span-4 lg:col-span-4 p-md flex flex-col justify-between group glow-hover transition-all duration-300 relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at top right, #4fdbc8 0%, transparent 60%);"></div>
+<div>
+<div class="mb-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm border border-tertiary/20">
+                            Logística &amp; Supply Chain
+                        </span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2">Logística Circular</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Rediseño de cadenas de suministro para eliminar residuos, utilizando blockchain para trazabilidad de materiales reciclados.</p>
+</div>
+<div class="mt-lg">
+<button class="w-full py-2 rounded-lg border border-outline-variant hover:border-primary/50 text-on-surface font-label-md text-label-md transition-colors bg-surface-variant/30 hover:bg-surface-variant/50">
+                        Ver Detalles
+                    </button>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="glass-panel rounded-2xl md:col-span-4 lg:col-span-4 p-md flex flex-col justify-between group glow-hover transition-all duration-300">
+<div>
+<div class="flex items-center gap-2 mb-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">hub</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">BioTech</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2 leading-tight">Biomateriales de Construcción</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Desarrollo de estructuras vivas y auto-reparables utilizando micelio fúngico integrado en arquitecturas modulares.</p>
+</div>
+<div class="mt-lg pt-4 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-outline">12 Recursos</span>
+<button class="text-primary hover:text-primary-fixed-dim p-1 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">bookmark_add</span>
+</button>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="glass-panel rounded-2xl md:col-span-4 lg:col-span-4 p-md flex flex-col justify-between group glow-hover transition-all duration-300">
+<div>
+<div class="flex items-center gap-2 mb-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary">memory</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">FinTech &amp; Quantum</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2 leading-tight">Computación Cuántica en Finanzas</h3>
+<p class="font-body-md text-on-surface-variant text-sm">Modelado de riesgos hiper-complejos y optimización de carteras utilizando algoritmos cuánticos híbridos.</p>
+</div>
+<div class="mt-lg pt-4 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-outline">Novedad Alta</span>
+<button class="text-primary hover:text-primary-fixed-dim p-1 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">bookmark_add</span>
+</button>
+</div>
+</article>
+<!-- Card 5 (AI Helper Hub style) -->
+<article class="rounded-2xl md:col-span-4 lg:col-span-4 p-[1px] bg-gradient-to-br from-primary via-secondary to-surface-dim overflow-hidden shadow-lg group">
+<div class="w-full h-full bg-surface-container-low/90 backdrop-blur-xl rounded-2xl p-md flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-sm">
+<span class="material-symbols-outlined text-primary animate-pulse">auto_awesome</span>
+<span class="font-label-md text-label-md text-primary font-bold">Generar Ideas</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2">¿No encuentras tu nicho?</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-4">Utiliza el asistente de IA para cruzar tus intereses académicos y descubrir nuevos océanos azules personalizados.</p>
+<div class="bg-surface-dim border border-outline-variant/50 rounded-lg p-2 flex items-center gap-2 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/30 transition-all">
+<input class="bg-transparent border-none text-sm font-body-md text-on-surface w-full focus:ring-0 placeholder:text-outline p-1" placeholder="Ej: Energía + Sociología..." type="text">
+<button class="bg-primary hover:bg-inverse-primary text-on-primary rounded-md p-1.5 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container/80 dark:bg-surface-container-high/80 backdrop-blur-2xl fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 border-t border-outline-variant/20 rounded-t-xl shadow-lg">
+<!-- Tab 1: Inspiration (Active) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<span class="font-label-sm text-label-sm mt-1">Inspiration</span>
+</button>
+<!-- Tab 2: My Project -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="font-label-sm text-label-sm mt-1">My Project</span>
+</button>
+<!-- Tab 3: Teams -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-sm text-label-sm mt-1">Teams</span>
+</button>
+<!-- Tab 4: Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</body></html>
