@@ -186,6 +186,9 @@
         // Make functions globally available for inline onclick handlers
         const htmlElement = document.documentElement;
         
+        // Default role is student (must be set BEFORE any form submission)
+        window.currentRole = 'student';
+        
         window.setTheme = function() {
             let isDarkMode = false;
             if (localStorage.getItem('theme') === 'dark') {
