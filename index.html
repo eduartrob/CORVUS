@@ -153,6 +153,61 @@
             user-select: none;
             pointer-events: none;
         }
+
+        /* ── GLITCH EFFECT on H1 gradient span ── */
+        @keyframes glitch-1 {
+            0%,100%{clip-path:inset(0 0 95% 0);transform:translate(-3px,0)}
+            20%{clip-path:inset(30% 0 50% 0);transform:translate(3px,0)}
+            40%{clip-path:inset(70% 0 10% 0);transform:translate(-2px,0)}
+            60%{clip-path:inset(10% 0 80% 0);transform:translate(2px,0)}
+            80%{clip-path:inset(50% 0 30% 0);transform:translate(-1px,0)}
+        }
+        .glitch-wrap { position:relative; display:inline-block; }
+        .glitch-wrap::before, .glitch-wrap::after {
+            content: attr(data-text);
+            position:absolute; top:0; left:0; width:100%;
+            background: linear-gradient(to right,#3f75f5,#818cf8,#e879f9);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text; pointer-events:none;
+        }
+        .glitch-wrap::before { animation:glitch-1 4s infinite linear; color:#3f75f5; }
+        .glitch-wrap::after  { animation:glitch-1 4s infinite linear 0.1s; color:#e879f9; transform:scaleX(-1); }
+
+        /* ── 3D TILT CARD ── */
+        .tilt-card { transform-style:preserve-3d; transition:transform 0.1s ease; will-change:transform; }
+        .tilt-card .tilt-inner { transform:translateZ(20px); }
+
+        /* ── PARTICLE CANVAS on img wrap ── */
+        .particle-canvas {
+            position:absolute; inset:0; pointer-events:none;
+            opacity:0; transition:opacity 0.4s; z-index:20;
+        }
+        .hover-project:hover .particle-canvas { opacity:1; }
+
+        /* ── SCAN LINE reveal ── */
+        @keyframes scanline {
+            0%{transform:translateY(-100%)}
+            100%{transform:translateY(100%)}
+        }
+        .stat-scan::after {
+            content:''; position:absolute; left:0; top:0;
+            width:100%; height:2px;
+            background:linear-gradient(90deg,transparent,#3f75f5,transparent);
+            animation:scanline 2.5s linear infinite;
+        }
+        .stat-scan { position:relative; overflow:hidden; }
+
+        /* ── CTA PULSE GLOW ── */
+        @keyframes ctaPulse {
+            0%,100%{box-shadow:0 0 30px rgba(63,117,245,0.3),0 0 80px rgba(63,117,245,0.1);}
+            50%{box-shadow:0 0 60px rgba(63,117,245,0.6),0 0 120px rgba(232,121,249,0.2);}
+        }
+        .cta-glow-btn { animation:ctaPulse 3s ease-in-out infinite; }
+
+        /* ── MARQUEE STRIP ── */
+        @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        .marquee-track { display:flex; width:max-content; animation:marquee 20s linear infinite; }
+        .marquee-track:hover { animation-play-state:paused; }
     </style>
 </head>
 <body class="antialiased relative">
@@ -204,7 +259,7 @@
                     
                     <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight mb-8">
                         <div class="split-line"><span>Auditoría de</span></div>
-                        <div class="split-line"><span class="text-gradient">Proyectos con IA.</span></div>
+                        <div class="split-line"><span class="glitch-wrap text-gradient" data-text="Proyectos con IA.">Proyectos con IA.</span></div>
                         <div class="split-line"><span>Zero-Storage.</span></div>
                     </h1>
                     
@@ -236,26 +291,47 @@
         <!-- Stats Section -->
         <section class="py-16 border-t border-b border-white/5 bg-dark-800/20">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center blur-reveal">
-                <div>
+                <div class="stat-scan">
                     <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="100">0</span>%</h3>
                     <p class="text-gray-400 text-sm">Zero-Storage</p>
                 </div>
-                <div>
+                <div class="stat-scan">
                     <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="1000">0</span>+</h3>
                     <p class="text-gray-400 text-sm">Vectores Procesados</p>
                 </div>
-                <div>
+                <div class="stat-scan">
                     <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="99">0</span>%</h3>
                     <p class="text-gray-400 text-sm">Precisión Anti-plagio</p>
                 </div>
-                <div>
+                <div class="stat-scan">
                     <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="8">0</span>GB</h3>
                     <p class="text-gray-400 text-sm">Memoria LLM Local</p>
                 </div>
             </div>
         </section>
 
-        <!-- Metodología / El Reto vs Solución -->
+        <!-- Marquee Technology Strip -->
+        <div class="py-6 border-y border-white/5 bg-dark-900/60 overflow-hidden">
+            <div class="marquee-track gap-12 items-center">
+                <!-- duplicated for seamless loop -->
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">NLP · ChromaDB</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">GSAP ScrollTrigger</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Phi-3 Mini LLM</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Zero-Storage ETL</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Flutter Mobile</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Clustering Vectorial</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">FastAPI Backend</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">PEFT / LoRA</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">NLP · ChromaDB</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">GSAP ScrollTrigger</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Phi-3 Mini LLM</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Zero-Storage ETL</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Flutter Mobile</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">Clustering Vectorial</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">FastAPI Backend</span>
+                <span class="text-gray-500 font-semibold text-sm uppercase tracking-widest whitespace-nowrap px-6">PEFT / LoRA</span>
+            </div>
+        </div>
         <section id="metodologia" class="py-32 bg-dark-800/30 border-t border-white/5 relative">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -288,26 +364,35 @@
                         </div>
                     </div>
                     
+                    <!-- Metodología bento grid cards with 3D tilt -->
                     <div class="order-1 lg:order-2 grid grid-cols-2 gap-6 blur-reveal">
-                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 hover-target hover:bg-white/5 transition-colors">
-                            <span class="material-symbols-outlined text-4xl text-white mb-4">memory</span>
-                            <h4 class="font-bold text-white">Auditoría Zero-Storage</h4>
-                            <p class="text-sm text-gray-500 mt-2">RAM streaming</p>
+                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 hover-target hover:bg-white/5 transition-colors">
+                            <div class="tilt-inner flex flex-col items-center">
+                                <span class="material-symbols-outlined text-4xl text-white mb-4">memory</span>
+                                <h4 class="font-bold text-white">Auditoría Zero-Storage</h4>
+                                <p class="text-sm text-gray-500 mt-2">RAM streaming</p>
+                            </div>
                         </div>
-                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
-                            <span class="material-symbols-outlined text-4xl text-white mb-4">hub</span>
-                            <h4 class="font-bold text-white">Machine Learning</h4>
-                            <p class="text-sm text-gray-500 mt-2">Clustering Vectorial</p>
+                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
+                            <div class="tilt-inner flex flex-col items-center">
+                                <span class="material-symbols-outlined text-4xl text-white mb-4">hub</span>
+                                <h4 class="font-bold text-white">Machine Learning</h4>
+                                <p class="text-sm text-gray-500 mt-2">Clustering Vectorial</p>
+                            </div>
                         </div>
-                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
-                            <span class="material-symbols-outlined text-4xl text-white mb-4">mic</span>
-                            <h4 class="font-bold text-white">Simulador LLM</h4>
-                            <p class="text-sm text-gray-500 mt-2">Defensa por Voz</p>
+                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
+                            <div class="tilt-inner flex flex-col items-center">
+                                <span class="material-symbols-outlined text-4xl text-white mb-4">mic</span>
+                                <h4 class="font-bold text-white">Simulador LLM</h4>
+                                <p class="text-sm text-gray-500 mt-2">Defensa por Voz</p>
+                            </div>
                         </div>
-                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target hover:bg-white/5 transition-colors">
-                            <span class="material-symbols-outlined text-4xl text-white mb-4">groups</span>
-                            <h4 class="font-bold text-white">Matchmaking</h4>
-                            <p class="text-sm text-gray-500 mt-2">Skills Minados</p>
+                        <div class="tilt-card glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target hover:bg-white/5 transition-colors">
+                            <div class="tilt-inner flex flex-col items-center">
+                                <span class="material-symbols-outlined text-4xl text-white mb-4">groups</span>
+                                <h4 class="font-bold text-white">Matchmaking</h4>
+                                <p class="text-sm text-gray-500 mt-2">Skills Minados</p>
+                            </div>
                         </div>
                     </div>
 
@@ -584,7 +669,7 @@
             <div class="max-w-4xl mx-auto px-6 text-center relative z-10 blur-reveal">
                 <span class="text-brand-400 font-bold tracking-widest uppercase text-sm mb-4 block">Corvus</span>
                 <h2 class="font-display text-5xl md:text-7xl font-bold mb-8 text-white">Auditando el futuro académico.</h2>
-                <a href="#planes" class="btn-gradient inline-flex items-center gap-2 text-white px-10 py-5 rounded-full font-bold text-xl hover-target magnetic-target">
+                <a href="#planes" class="cta-glow-btn btn-gradient inline-flex items-center gap-2 text-white px-10 py-5 rounded-full font-bold text-xl hover-target magnetic-target">
                     Implementar Sistema <span class="material-symbols-outlined">arrow_forward</span>
                 </a>
             </div>
@@ -823,7 +908,7 @@
         const rightCircle = document.getElementById('scroll-circle-right');
         if (rightCircle) {
             gsap.to(rightCircle, {
-                x: -window.innerWidth - 300, // Move it completely across to the left
+                x: -window.innerWidth - 300,
                 ease: "none",
                 scrollTrigger: {
                     trigger: "#soluciones",
@@ -833,6 +918,19 @@
                 }
             });
         }
+
+        // J. 3D Tilt on cards
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const r = card.getBoundingClientRect();
+                const x = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+                const y = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+                gsap.to(card, { rotateY: x * 15, rotateX: -y * 15, duration: 0.4, ease: 'power2.out' });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
+            });
+        });
     </script>
 </body>
 </html>
