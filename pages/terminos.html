@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Términos de Servicio | Corvus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#2b5ce0',
+                            600: '#1e48ba',
+                        },
+                        dark: {
+                            900: '#030712',
+                            800: '#111827',
+                        },
+                        light: {
+                            onSurface: '#0d1c2e',
+                            onSurfaceVariant: '#444653',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #030712; 
+            color: #f9fafb; 
+        }
+        .prose h1, .prose h2, .prose h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="border-b border-white/10 bg-dark-900/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-brand-500 to-indigo-600 shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/40 transition-shadow">
+                    <span class="material-symbols-outlined text-white text-xl">analytics</span>
+                </div>
+                <span class="text-xl font-display font-bold tracking-tight text-white group-hover:text-brand-400 transition-colors">Corvus</span>
+            </a>
+            <a href="auth.html" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Volver</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="flex-grow max-w-3xl mx-auto px-6 py-16 w-full">
+        <div class="mb-12">
+            <h1 class="text-4xl font-display font-bold text-white mb-4">Acuerdos Legales de Corvus</h1>
+            <p class="text-xl text-gray-400">Parte I: Términos de Servicio (Reglas de Uso)</p>
+        </div>
+
+        <div class="prose prose-invert max-w-none prose-p:text-gray-400 prose-headings:text-white space-y-8">
+            <p class="text-gray-400">
+                Este documento establece las condiciones de uso entre la plataforma Corvus y el usuario (Docente o Estudiante), definiendo los límites operativos y la propiedad de la plataforma.
+            </p>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">speed</span>
+                    1. Límites Operativos del Sistema
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p><strong>Restricción de Apelaciones:</strong> Para garantizar la estabilidad del servidor local (limitado a 8GB de RAM), el "Chat de Apelación" para documentos rechazados está estrictamente restringido a un máximo de dos (2) mensajes por documento subido. Superar este límite bloqueará el acceso a la apelación.</p>
+                    <p><strong>Uso del Simulador de Defensa:</strong> El simulador actúa únicamente como una herramienta de apoyo formativo. Las respuestas, preguntas o sugerencias generadas por el Modelo de Lenguaje (LLM) no constituyen una evaluación oficial, por lo que el sistema no asume responsabilidad si el comité evaluador real emite un dictamen distinto.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">copyright</span>
+                    2. Propiedad Intelectual
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p>Los algoritmos de vectorización, la base de datos ChromaDB estructurada, el modelo de embeddings afinado y las interfaces gráficas son propiedad exclusiva de los desarrolladores del proyecto Corvus y/o la institución universitaria.</p>
+                    <p>El contenido técnico, texto e ideas extraídas de los documentos originales (PDF/DOCX) siguen siendo propiedad intelectual y derechos de autor absolutos de los alumnos o docentes que los redactaron.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">warning</span>
+                    3. Exclusión de Garantías
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p>Corvus es un sistema experimental ejecutado en infraestructura on-premise (local). El equipo desarrollador no garantiza un uptime del 100% y se deslinda de responsabilidades en caso de caídas del servidor por exceso de solicitudes simultáneas.</p>
+                </div>
+            </section>
+        </div>
+        
+        <div class="mt-16 flex flex-col sm:flex-row gap-4 items-center justify-between border-t border-white/10 pt-8">
+            <a href="privacidad.html" class="flex items-center gap-2 text-brand-500 hover:text-brand-400 font-medium transition-colors">
+                Ver Política de Privacidad <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+            <a href="auth.html" class="bg-white text-dark-900 px-6 py-2.5 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                Entendido, volver al registro
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-dark-900 py-8 text-center text-gray-500 text-sm">
+        <p>© 2026 Corvus Project. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
