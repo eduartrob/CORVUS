@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Política de Privacidad | Corvus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#2b5ce0',
+                            600: '#1e48ba',
+                        },
+                        dark: {
+                            900: '#030712',
+                            800: '#111827',
+                        },
+                        light: {
+                            onSurface: '#0d1c2e',
+                            onSurfaceVariant: '#444653',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #030712; 
+            color: #f9fafb; 
+        }
+        .prose h1, .prose h2, .prose h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="border-b border-white/10 bg-dark-900/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-brand-500 to-indigo-600 shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/40 transition-shadow">
+                    <span class="material-symbols-outlined text-white text-xl">analytics</span>
+                </div>
+                <span class="text-xl font-display font-bold tracking-tight text-white group-hover:text-brand-400 transition-colors">Corvus</span>
+            </a>
+            <a href="auth.html" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">Volver</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="flex-grow max-w-3xl mx-auto px-6 py-16 w-full">
+        <div class="mb-12">
+            <h1 class="text-4xl font-display font-bold text-white mb-4">Acuerdos Legales de Corvus</h1>
+            <p class="text-xl text-gray-400">Parte II: Política de Privacidad y Protección de Datos</p>
+        </div>
+
+        <div class="prose prose-invert max-w-none prose-p:text-gray-400 prose-headings:text-white space-y-8">
+            <p class="text-gray-400">
+                Este aviso detalla el tratamiento de la información recabada por el sistema, garantizando la privacidad absoluta bajo una arquitectura Zero-Data-Leak.
+            </p>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">cloud_off</span>
+                    1. Alcance de Acceso a Google Drive (OAuth 2.0)
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p>El sistema Corvus requiere autorización para acceder a los repositorios documentales en la nube del usuario mediante Google OAuth 2.0 bajo las siguientes reglas:</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong>Aislamiento de Directorios:</strong> La aplicación NO tiene permisos de lectura global. El acceso se restringe exclusivamente a las carpetas específicas que el usuario seleccione manualmente mediante la interfaz de selección (Drive Picker).</li>
+                        <li><strong>Permisos de Solo Lectura:</strong> La integración técnica utiliza alcances (scopes) de solo lectura. Corvus no tiene capacidad técnica para modificar, eliminar o alterar los archivos originales.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">memory</span>
+                    2. Procesamiento de Datos en Memoria (Arquitectura Zero-Storage)
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p>Para garantizar la confidencialidad, Corvus opera bajo un modelo de procesamiento ETL en streaming:</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li>Los documentos PDF seleccionados son procesados directamente en la memoria volátil (RAM) del servidor para la extracción de texto.</li>
+                        <li><strong>Cero Almacenamiento Físico:</strong> Ningún archivo original o copia íntegra del texto es descargado o guardado en discos duros. El documento se descarta de la memoria inmediatamente tras su procesamiento.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">lock</span>
+                    3. Vectorización y Anonimización Matemática
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p>El texto extraído se convierte en representaciones matemáticas (vectores de alta dimensionalidad).</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li>Únicamente se almacena en la base de datos (ChromaDB) el vector matemático resultante junto con metadatos no sensibles y el enlace (URL) al archivo en Google Drive.</li>
+                        <li>Es criptográfica y técnicamente imposible reconstruir el documento original en texto plano a partir de los vectores almacenados.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-500">vpn_lock</span>
+                    4. Privacidad del Simulador de Defensa (LLM Local)
+                </h2>
+                <div class="bg-dark-800/50 rounded-2xl p-6 border border-white/5 space-y-4">
+                    <p>El entrenamiento y afinamiento (Fine-Tuning) de los modelos de lenguaje se ejecutan en un entorno estrictamente local (on-premise). La información extraída no se comparte ni se procesa mediante APIs de IA de terceros (ej. OpenAI, Gemini).</p>
+                </div>
+            </section>
+        </div>
+        
+        <div class="mt-16 flex flex-col sm:flex-row gap-4 items-center justify-between border-t border-white/10 pt-8">
+            <a href="terminos.html" class="flex items-center gap-2 text-brand-500 hover:text-brand-400 font-medium transition-colors">
+                <span class="material-symbols-outlined">arrow_back</span> Ver Términos de Servicio
+            </a>
+            <a href="auth.html" class="bg-white text-dark-900 px-6 py-2.5 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                Entendido, volver al registro
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-dark-900 py-8 text-center text-gray-500 text-sm">
+        <p>© 2026 Corvus Project. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
