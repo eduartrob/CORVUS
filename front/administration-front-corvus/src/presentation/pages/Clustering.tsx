@@ -80,7 +80,13 @@ export default function Clustering() {
       // 4. Fetch Cluster Stats
       try {
         const statsRes = await axios.get(`${API_CONFIG.BASE_URL}/clustering/integrator/admin/clusters-stats`);
-        if (statsRes.data && statsRes.data.labels && statsRes.data.data) {
+        if (statsRes.data && statsRes.data.clusters_detail) {
+          const formattedData = statsRes.data.clusters_detail.map((c: any) => ({
+            name: `Clúster ${c.cluster_id}`,
+            value: c.project_count
+          }));
+          setDynamicBarData(formattedData);
+        } else if (statsRes.data && statsRes.data.labels && statsRes.data.data) {
           const formattedData = statsRes.data.labels.map((label: string, index: number) => ({
             name: label,
             value: statsRes.data.data[index],
