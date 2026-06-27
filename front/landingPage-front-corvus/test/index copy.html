@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Corvus | Sistema de Gestión de Memoria Académica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Anti-AI Typography: Bricolage Grotesque (Display) + JetBrains Mono (Tech Accent) + Inter (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    
+    <!-- Phosphor Icons (Cleaner, more professional than Material) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Animation Libraries -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Bricolage Grotesque', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#FFFFFF', // Primary action is pure white
+                            accent: '#0047FF', // International Typographic Blue
+                        },
+                        dark: {
+                            900: '#050505', // Deep raven black
+                            800: '#0F0F0F', // Surface
+                            700: '#1A1A1A', // Border
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #A1A1AA; /* Zinc 400 */
+            overflow-x: hidden; 
+            font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+        }
+        
+        /* Analogue Noise Texture (Kills the "digital perfect" AI look) */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom Cursor - Refined and Minimal */
+        * { cursor: none !important; }
+        .cursor-dot {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 6px; height: 6px; background-color: #fff;
+            border-radius: 50%; z-index: 10001; pointer-events: none;
+            mix-blend-mode: difference;
+        }
+        .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%; z-index: 10000; pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            display: flex; justify-content: center; align-items: center; color: transparent;
+        }
+        .cursor-outline.hover-active { width: 48px; height: 48px; background-color: rgba(255,255,255,0.1); border-color: transparent; }
+        .cursor-outline.project-hover {
+            width: 80px; height: 80px; background-color: #fff; color: #000; 
+            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 500; letter-spacing: 1px;
+            border-color: transparent; mix-blend-mode: normal;
+        }
+        .cursor-outline.project-hover::after { content: "EXPLORAR"; }
+        
+        /* Blur Reveal Animation */
+        .blur-reveal { 
+            opacity: 0; 
+            filter: blur(12px); 
+            transform: translateY(20px); 
+            will-change: opacity, filter, transform; 
+        }
+
+        /* Image Hover Scroll CSS structure */
+        .project-img-wrap { overflow: hidden; position: relative; }
+        .scroll-img { width: 100%; height: auto; display: block; transform: translateY(0); }
+
+        /* Premium Bento Cards (Replaces generic glassmorphism) */
+        .bento-card {
+            background: #0F0F0F;
+            border: 1px solid #1A1A1A;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+        .bento-card:hover {
+            border-color: #333;
+            background: #121212;
+        }
+        
+        .solid-nav {
+            background: rgba(5, 5, 5, 0.9);
+            border-bottom: 1px solid #1A1A1A;
+        }
+
+        /* Subtle Grid */
+        .bg-grid {
+            background-image: linear-gradient(to right, #111 1px, transparent 1px),
+                              linear-gradient(to bottom, #111 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        .split-line { overflow: hidden; }
+        .split-line span { display: inline-block; transform: translateY(100%); opacity: 0; }
+        
+        /* Typography overrides */
+        h1, h2, h3, h4, h5, h6 { color: #FAFAFA; }
+        
+        /* Selection */
+        ::selection { background: #FAFAFA; color: #050505; }
+    </style>
+</head>
+<body class="antialiased relative selection:bg-white selection:text-black">
+
+    <div class="noise-overlay"></div>
+
+    <!-- Refined Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="solid-nav fixed top-0 w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 hover-target">
+                <i class="ph-fill ph-fingerprint text-white text-2xl"></i>
+                <span class="text-xl font-display font-bold tracking-tight text-white">CORVUS</span>
+            </div>
+            
+            <div class="hidden md:flex gap-8 items-center font-mono text-xs uppercase tracking-wider">
+                <a href="#soluciones" class="hover-target text-zinc-500 hover:text-white transition-colors">Tecnología</a>
+                <a href="#metodologia" class="hover-target text-zinc-500 hover:text-white transition-colors">Metodología</a>
+                <a href="#proyectos" class="hover-target text-zinc-500 hover:text-white transition-colors">Plataforma</a>
+                <a href="#planes" class="hover-target text-zinc-500 hover:text-white transition-colors">Planes</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="#" class="bg-white text-black font-medium px-5 py-2 text-sm hover:bg-zinc-200 transition-colors hover-target magnetic-target">
+                    Acceder
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section class="relative min-h-[90vh] flex items-center pt-16 pb-24 overflow-hidden">
+            <div class="absolute inset-0 bg-grid z-0"></div>
+            
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10 relative">
+                
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="gsap-hero-item inline-flex items-center gap-2 px-3 py-1 border border-zinc-800 bg-zinc-900/50 text-xs font-mono text-zinc-400 mb-8 opacity-0 translate-y-4 uppercase tracking-wider">
+                        <span class="w-1.5 h-1.5 bg-brand-accent animate-pulse"></span>
+                        Sistema de Auditoría v2.0
+                    </div>
+                    
+                    <h1 class="font-display text-5xl md:text-7xl lg:text-[6rem] font-bold leading-[0.95] tracking-tighter mb-8 text-white">
+                        <div class="split-line"><span>Auditoría de</span></div>
+                        <div class="split-line"><span class="text-zinc-500">Proyectos IA.</span></div>
+                        <div class="split-line"><span>Zero-Storage.</span></div>
+                    </h1>
+                    
+                    <p class="gsap-hero-item text-lg text-zinc-400 leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0 font-light opacity-0 translate-y-4">
+                        Sistema de soporte a la decisión basado en agrupamiento vectorial. Identificamos espacios inexplorados y eliminamos el plagio sin robar espacio en disco.
+                    </p>
+                    
+                    <div class="gsap-hero-item flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start opacity-0 translate-y-4">
+                        <a href="#proyectos" class="bg-white text-black w-full sm:w-auto px-8 py-3.5 font-medium text-sm flex items-center justify-center gap-2 hover:bg-zinc-200 transition-colors hover-target magnetic-target">
+                            Ver plataforma
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                        <a href="#planes" class="w-full sm:w-auto px-8 py-3.5 font-medium text-sm border border-zinc-800 hover:bg-zinc-900 transition-colors text-center hover-target magnetic-target text-white">
+                            Conocer planes
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Hero Visual / App Preview -->
+                <div class="lg:col-span-5 relative flex justify-center lg:justify-end">
+                    <div class="gsap-hero-img hover-target relative w-[320px] h-[640px] border border-zinc-800 bg-dark-900 shadow-2xl overflow-hidden opacity-0 translate-y-12 transition-transform duration-500">
+                        <div class="absolute top-0 w-full h-12 border-b border-zinc-800 bg-dark-900 flex items-center px-4 gap-2 z-20">
+                            <div class="w-2 h-2 rounded-full bg-zinc-700"></div>
+                            <div class="w-2 h-2 rounded-full bg-zinc-700"></div>
+                            <div class="w-2 h-2 rounded-full bg-zinc-700"></div>
+                        </div>
+                        <div class="pt-12 w-full h-full bg-zinc-950">
+                            <img src="img/corvus_hero.png" id="hero-scroll-img" alt="Corvus App" class="w-full h-auto opacity-80 block grayscale hover:grayscale-0 transition-all duration-700">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="py-12 border-y border-zinc-900 bg-dark-800/50">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center blur-reveal font-mono">
+                <div>
+                    <h3 class="text-3xl text-white mb-1"><span class="stat-number" data-target="100">0</span>%</h3>
+                    <p class="text-zinc-500 text-xs uppercase tracking-widest">Zero-Storage</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl text-white mb-1"><span class="stat-number" data-target="1000">0</span>+</h3>
+                    <p class="text-zinc-500 text-xs uppercase tracking-widest">Vectores</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl text-white mb-1"><span class="stat-number" data-target="99">0</span>%</h3>
+                    <p class="text-zinc-500 text-xs uppercase tracking-widest">Precisión</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl text-white mb-1"><span class="stat-number" data-target="8">0</span>GB</h3>
+                    <p class="text-zinc-500 text-xs uppercase tracking-widest">RAM Local</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metodología -->
+        <section id="metodologia" class="py-32 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                    
+                    <div class="order-2 lg:order-1">
+                        <div class="mb-16 blur-reveal">
+                            <h4 class="font-mono text-brand-accent text-xs uppercase tracking-widest mb-4">01 // El Reto</h4>
+                            <h3 class="font-display text-4xl font-bold mb-6 tracking-tight text-white">Fuga sistemática de conocimiento.</h3>
+                            <ul class="space-y-4 text-zinc-400 font-light text-base">
+                                <li class="flex gap-4"><span class="font-mono text-zinc-600">01</span> <span><strong class="text-white font-medium">Proyectos Muertos:</strong> Horas de investigación aisladas en carpetas olvidadas.</span></li>
+                                <li class="flex gap-4"><span class="font-mono text-zinc-600">02</span> <span><strong class="text-white font-medium">Estancamiento:</strong> Alumnos repiten ideas o usan la IA de forma deshonesta.</span></li>
+                                <li class="flex gap-4"><span class="font-mono text-zinc-600">03</span> <span><strong class="text-white font-medium">Carga Burocrática:</strong> Docentes consumen horas detectando colisiones.</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="blur-reveal">
+                            <h4 class="font-mono text-white text-xs uppercase tracking-widest mb-4">02 // La Solución</h4>
+                            <h3 class="font-display text-4xl font-bold mb-6 tracking-tight text-white">Centralización Inteligente.</h3>
+                            <p class="text-zinc-400 text-base font-light leading-relaxed">
+                                Extraemos el historial de la universidad y lo convertimos en información útil procesada de forma local y 100% privada para garantizar la propiedad intelectual.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="order-1 lg:order-2 grid grid-cols-2 gap-4 blur-reveal">
+                        <div class="bento-card p-8 flex flex-col items-start justify-between aspect-square hover-target">
+                            <i class="ph ph-cpu text-3xl text-zinc-400"></i>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Zero-Storage</h4>
+                                <p class="text-xs text-zinc-500 font-mono">RAM streaming</p>
+                            </div>
+                        </div>
+                        <div class="bento-card p-8 flex flex-col items-start justify-between aspect-square hover-target">
+                            <i class="ph ph-graph text-3xl text-zinc-400"></i>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Machine Learning</h4>
+                                <p class="text-xs text-zinc-500 font-mono">Clustering</p>
+                            </div>
+                        </div>
+                        <div class="bento-card p-8 flex flex-col items-start justify-between aspect-square hover-target">
+                            <i class="ph ph-microphone-stage text-3xl text-zinc-400"></i>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Simulador LLM</h4>
+                                <p class="text-xs text-zinc-500 font-mono">Defensa por Voz</p>
+                            </div>
+                        </div>
+                        <div class="bento-card p-8 flex flex-col items-start justify-between aspect-square hover-target">
+                            <i class="ph ph-users-three text-3xl text-zinc-400"></i>
+                            <div>
+                                <h4 class="font-medium text-white mb-1">Matchmaking</h4>
+                                <p class="text-xs text-zinc-500 font-mono">Skills Minados</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosistema -->
+        <section id="comunidad" class="py-32 border-t border-zinc-900 bg-dark-800/30">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-20 blur-reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 tracking-tight">Ecosistema Auditado.</h2>
+                    <p class="text-lg text-zinc-400 font-light">Un entorno donde cada usuario optimiza su tiempo.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="blur-reveal bento-card p-10 hover-target group">
+                        <div class="mb-12">
+                            <i class="ph ph-student text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-6 text-white">Usuario Estudiante</h3>
+                        <ul class="space-y-4 text-zinc-400 text-sm">
+                            <li class="flex items-start gap-3"><i class="ph ph-compass text-lg text-zinc-500"></i> Explorar océanos azules antes de redactar.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check-square text-lg text-zinc-500"></i> Validar propuestas contra el acervo histórico.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-handshake text-lg text-zinc-500"></i> Buscar compañeros mediante habilidades comprobadas.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-robot text-lg text-zinc-500"></i> Entrenar exposición con el simulador IA.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="blur-reveal bento-card p-10 hover-target group">
+                        <div class="mb-12">
+                            <i class="ph ph-chalkboard-teacher text-4xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-6 text-white">Docente / Coordinador</h3>
+                        <ul class="space-y-4 text-zinc-400 text-sm">
+                            <li class="flex items-start gap-3"><i class="ph ph-cloud-arrow-up text-lg text-zinc-500"></i> Conectar Drive institucional mediante OAuth.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-warning-circle text-lg text-zinc-500"></i> Alertas automáticas de plagio o colisión.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-chats text-lg text-zinc-500"></i> Leer chats de apelación y tomar decisiones.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-prohibit text-lg text-zinc-500"></i> Bloquear temas saturados y forzar innovación.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Proyectos / Portfolio -->
+        <section id="proyectos" class="py-32 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 blur-reveal">
+                    <div>
+                        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 tracking-tight">Plataforma Corvus.</h2>
+                        <p class="text-lg text-zinc-400 font-light">Capacidades del sistema.</p>
+                    </div>
+                    <a href="#" class="text-white hover:text-zinc-300 font-mono text-xs uppercase tracking-widest flex items-center gap-2 transition-colors mt-6 md:mt-0 hover-target">
+                        Ver Docs <i class="ph ph-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Item 1 -->
+                    <div class="blur-reveal group hover-project">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-4 border border-zinc-800">
+                            <img src="img/corvus_dashboard.png" alt="Panel Docente" class="scroll-img grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-1">Panel Triage Docente</h3>
+                                <p class="text-zinc-500 text-sm">Alertas de colisión semántica.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="blur-reveal group hover-project lg:mt-12">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-4 border border-zinc-800">
+                            <img src="img/corvus_matchmaking.png" alt="Matchmaking" class="scroll-img grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-1">Matchmaking</h3>
+                                <p class="text-zinc-500 text-sm">Equipos por habilidades.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="blur-reveal group hover-project">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-4 border border-zinc-800">
+                            <img src="img/corvus_upload.png" alt="Chat Apelación" class="scroll-img grayscale group-hover:grayscale-0 transition-all duration-500 opacity-70 group-hover:opacity-100">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-1">Chat de Apelación</h3>
+                                <p class="text-zinc-500 text-sm">Debate con el LLM.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="planes" class="py-32 border-t border-zinc-900 bg-dark-800/30">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-20 blur-reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 tracking-tight">Niveles de Rigor.</h2>
+                    <p class="text-lg text-zinc-400 font-light max-w-2xl mx-auto">
+                        Modelo SaaS diseñado para cubrir el costo de procesamiento de IA.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Plan Base -->
+                    <div class="blur-reveal bento-card p-8 flex flex-col hover-target">
+                        <h3 class="text-lg font-medium text-white mb-1">Plan Base</h3>
+                        <p class="text-zinc-500 text-xs font-mono uppercase tracking-widest mb-6">Gratuito</p>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-4xl font-display font-bold text-white">$0</span>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-1 text-sm text-zinc-400">
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> 1 Validación por cuatrimestre.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Océanos Azules.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Matchmaking básico.</li>
+                            <li class="flex items-start gap-3 opacity-40"><i class="ph ph-x"></i> Simulador de Defensa.</li>
+                        </ul>
+                        <button class="w-full py-3 text-sm font-medium text-white border border-zinc-800 hover:bg-zinc-900 transition-colors hover-target">
+                            Comenzar
+                        </button>
+                    </div>
+
+                    <!-- Plan Pro -->
+                    <div class="blur-reveal bento-card p-8 flex flex-col border-zinc-600 bg-zinc-900 hover-target relative transform md:-translate-y-4">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-white"></div>
+                        <h3 class="text-lg font-medium text-white mb-1">Pro-Tesista</h3>
+                        <p class="text-zinc-400 text-xs font-mono uppercase tracking-widest mb-6">Compute</p>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-4xl font-display font-bold text-white">$49</span>
+                            <span class="text-zinc-500 text-sm">MXN / mes</span>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-1 text-sm text-zinc-300">
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Validaciones ilimitadas.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Simulador de Defensa (Voz).</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Matchmaking Global.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Reporte avanzado.</li>
+                        </ul>
+                        <button class="w-full py-3 text-sm font-medium bg-white text-black hover:bg-zinc-200 transition-colors hover-target magnetic-target">
+                            Mejorar Tesis
+                        </button>
+                    </div>
+
+                    <!-- Plan B2B -->
+                    <div class="blur-reveal bento-card p-8 flex flex-col hover-target">
+                        <h3 class="text-lg font-medium text-white mb-1">Facultad B2B</h3>
+                        <p class="text-zinc-500 text-xs font-mono uppercase tracking-widest mb-6">Licencia Anual</p>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-4xl font-display font-bold text-white">Custom</span>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-1 text-sm text-zinc-400">
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Conexión ETL Drive.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Panel Triage.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Métricas CACEI.</li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check text-white"></i> Control de rigor LLM.</li>
+                        </ul>
+                        <button class="w-full py-3 text-sm font-medium text-white border border-zinc-800 hover:bg-zinc-900 transition-colors hover-target">
+                            Contactar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-zinc-900 bg-dark-900 pt-20 pb-10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-fill ph-fingerprint text-white text-2xl"></i>
+                        <span class="text-xl font-display font-bold tracking-tight text-white">CORVUS</span>
+                    </div>
+                    <div class="flex gap-6 text-sm font-mono text-zinc-500 uppercase tracking-widest">
+                        <a href="#" class="hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="hover:text-white transition-colors">GitHub</a>
+                        <a href="#" class="hover:text-white transition-colors">Docs</a>
+                    </div>
+                </div>
+                
+                <div class="border-t border-zinc-900 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-zinc-600 text-xs font-mono">© 2026 CORVUS PROJECT. SYSTEM ONLINE.</p>
+                    <div class="flex gap-2 font-mono">
+                        <span class="px-2 py-1 bg-zinc-900 text-[10px] text-zinc-500 border border-zinc-800">ZERO-STORAGE</span>
+                        <span class="px-2 py-1 bg-zinc-900 text-[10px] text-zinc-500 border border-zinc-800">NLP ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Smooth Scroll Integration
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        // Dynamic Custom Cursor
+        const cursorDot = document.querySelector(".cursor-dot");
+        const cursorOutline = document.querySelector(".cursor-outline");
+        const setDotX = gsap.quickSetter(cursorDot, "x", "px");
+        const setDotY = gsap.quickSetter(cursorDot, "y", "px");
+        const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
+        const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
+
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let outlineX = mouseX, outlineY = mouseY;
+
+        window.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            setDotX(mouseX); setDotY(mouseY);
+        });
+
+        gsap.ticker.add(() => {
+            outlineX += (mouseX - outlineX) * 0.2; 
+            outlineY += (mouseY - outlineY) * 0.2;
+            setOutlineX(outlineX); setOutlineY(outlineY);
+        });
+
+        document.querySelectorAll(".hover-target").forEach(el => {
+            el.addEventListener("mouseenter", () => cursorOutline.classList.add("hover-active"));
+            el.addEventListener("mouseleave", () => cursorOutline.classList.remove("hover-active"));
+        });
+        document.querySelectorAll(".hover-project").forEach(el => {
+            el.addEventListener("mouseenter", () => {
+                cursorOutline.classList.add("project-hover");
+                cursorDot.style.opacity = "0";
+            });
+            el.addEventListener("mouseleave", () => {
+                cursorOutline.classList.remove("project-hover");
+                cursorDot.style.opacity = "1";
+            });
+        });
+
+        // Magnetic Interactive Buttons
+        document.querySelectorAll(".magnetic-target").forEach((elem) => {
+            elem.addEventListener("mousemove", (e) => {
+                const rect = elem.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(elem, { x: x * 0.3, y: y * 0.3, duration: 0.5, ease: "power3.out" });
+            });
+            elem.addEventListener("mouseleave", () => {
+                gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
+            });
+        });
+
+        // Scroll-driven Blur & Translation
+        gsap.utils.toArray(".blur-reveal").forEach((element) => {
+            gsap.to(element, {
+                opacity: 1, filter: "blur(0px)", y: 0, duration: 1, ease: "power3.out",
+                scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
+            });
+        });
+
+        // Long Screenshot Hover Scroll Interaction
+        document.querySelectorAll('.hover-project').forEach(card => {
+            const img = card.querySelector('.scroll-img');
+            if(img) {
+                card.addEventListener('mouseenter', () => {
+                    const maxScroll = img.clientHeight - img.parentElement.clientHeight;
+                    if(maxScroll > 0) {
+                        gsap.to(img, { y: -maxScroll, duration: maxScroll / 300, ease: "power1.inOut", overwrite: true });
+                    }
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(img, { y: 0, duration: 1, ease: "power3.out", overwrite: true });
+                });
+            }
+        });
+
+        // Interactive Stats Counting
+        document.querySelectorAll(".stat-number").forEach((stat) => {
+            const target = +stat.getAttribute("data-target");
+            gsap.to(stat, {
+                innerText: target, duration: 2, snap: { innerText: 1 },
+                scrollTrigger: { trigger: stat, start: "top 90%" }
+            });
+        });
+
+        // Initial Hero Reveal
+        gsap.to('.split-line span', { y: "0%", opacity: 1, duration: 1, stagger: 0.15, ease: "power4.out", delay: 0.2 });
+        gsap.to('.gsap-hero-item', { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out", delay: 0.6 });
+        gsap.to('.gsap-hero-img', { y: 0, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.4 });
+    </script>
+</body>
+</html>

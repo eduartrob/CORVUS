@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Learnex | Intercambio de Conocimiento con IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Animation Libraries -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            400: '#3f75f5', // Adjusted to AMS Blue style
+                            500: '#2b5ce0',
+                            600: '#1e48ba',
+                            900: '#0a1d5c',
+                        },
+                        dark: {
+                            900: '#030712', // Background
+                            800: '#111827', // Surface
+                            700: '#1f2937', // Border
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                          '0%, 100%': { transform: 'translateY(0)' },
+                          '50%': { transform: 'translateY(-15px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #030712; 
+            color: #f9fafb; 
+            overflow-x: hidden; 
+        }
+        
+        /* 1. Exact AMS Custom Cursor CSS */
+        * { cursor: none !important; }
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 10001; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #3f75f5; }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid #3f75f5;
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+            display: flex; justify-content: center; align-items: center; text-align: center; color: transparent;
+        }
+        .cursor-outline.hover-active { width: 60px; height: 60px; background-color: rgba(63, 117, 245, 0.08); }
+        .cursor-outline.project-hover {
+            width: 100px; height: 100px; background-color: #3f75f5; color: #fff; font-size: 0.65rem; letter-spacing: 2px;
+            border-color: transparent;
+        }
+        .cursor-outline.project-hover::after { content: "VER"; }
+        
+        /* 2. Exact AMS Blur Reveal CSS */
+        .blur-reveal { 
+            opacity: 0; 
+            filter: blur(20px); 
+            transform: translateY(30px); 
+            will-change: opacity, filter, transform; 
+        }
+
+        /* Artisanal Touch: Noise & Organic Glows */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9998; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .glow {
+            position: absolute; width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(63, 117, 245, 0.15) 0%, rgba(0,0,0,0) 60%);
+            border-radius: 50%; pointer-events: none; z-index: -1;
+        }
+
+        /* 3. Exact AMS Parallax CSS structure */
+        .project-img-wrap { overflow: hidden; position: relative; border-radius: 1.5rem; }
+        .parallax-img { width: 100%; height: 130%; object-fit: cover; transform: translateY(-15%); }
+
+        /* General UI Styling */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-nav {
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #3f75f5, #818cf8, #e879f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #3f75f5, #6366f1);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            box-shadow: 0 0 25px rgba(63, 117, 245, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .bg-grid {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .split-line { overflow: hidden; }
+        .split-line span { display: inline-block; transform: translateY(100%); opacity: 0; }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <!-- Artisanal Touch: Ambient Noise & Organic Glows -->
+    <div class="noise"></div>
+    <div class="glow top-[-200px] left-[-200px]"></div>
+    <div class="glow top-[40%] right-[-300px] bg-indigo-500/10"></div>
+    <div class="glow bottom-[-100px] left-[10%] bg-purple-500/10"></div>
+
+    <!-- AMS Exact Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 hover-target">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-brand-500 to-indigo-600 shadow-lg shadow-brand-500/20">
+                    <span class="material-symbols-outlined text-white text-xl">school</span>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight text-white">Learnex</span>
+            </div>
+            
+            <div class="hidden md:flex gap-8 items-center font-medium text-sm">
+                <a href="#soluciones" class="hover-target text-gray-400 hover:text-white transition-colors">Tecnología</a>
+                <a href="#metodologia" class="hover-target text-gray-400 hover:text-white transition-colors">Metodología</a>
+                <a href="#proyectos" class="hover-target text-gray-400 hover:text-white transition-colors">Plataforma</a>
+                <a href="#planes" class="hover-target text-gray-400 hover:text-white transition-colors">Suscripciones</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover-target hidden sm:block text-gray-300 hover:text-white font-medium text-sm transition-colors">Iniciar sesión</a>
+                <a href="#" class="btn-gradient text-white font-semibold px-6 py-2.5 rounded-full text-sm hover-target magnetic-target">Registrarse (+18)</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="relative min-h-[95vh] flex items-center bg-grid pt-16 pb-24 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10 relative">
+                
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="gsap-hero-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur text-sm font-medium text-brand-400 mb-8 opacity-0 translate-y-4">
+                        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                        Comunidad exclusiva +18
+                    </div>
+                    
+                    <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight mb-8">
+                        <div class="split-line"><span>Intercambio de</span></div>
+                        <div class="split-line"><span class="text-gradient">Conocimiento</span></div>
+                        <div class="split-line"><span>con IA.</span></div>
+                    </h1>
+                    
+                    <p class="gsap-hero-item text-lg md:text-xl text-gray-400 leading-relaxed mb-10 max-w-2xl mx-auto lg:mx-0 font-light opacity-0 translate-y-4">
+                        Aporta tu talento y accede a un ecosistema educativo sustentable, validado por Inteligencia Artificial y diseñado para el aprendizaje justo.
+                    </p>
+                    
+                    <div class="gsap-hero-item flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start opacity-0 translate-y-4">
+                        <a href="#proyectos" class="btn-gradient w-full sm:w-auto text-white px-8 py-4 rounded-full font-semibold text-lg flex items-center justify-center gap-2 hover-target magnetic-target">
+                            Ver plataforma
+                            <span class="material-symbols-outlined text-sm">arrow_downward</span>
+                        </a>
+                        <a href="#planes" class="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-lg border border-white/10 hover:bg-white/5 transition-colors text-center hover-target magnetic-target">
+                            Conocer planes
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Hero Visual / App Preview -->
+                <div class="lg:col-span-5 relative flex justify-center lg:justify-end">
+                    <div class="gsap-hero-img hover-target relative w-[300px] h-[620px] rounded-[2.5rem] border-[10px] border-dark-800 shadow-[0_0_50px_rgba(63,117,245,0.3)] overflow-hidden bg-dark-900 opacity-0 translate-y-12 rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-dark-800 rounded-b-2xl z-20"></div>
+                        <img src="img/img1.jpeg" alt="Learnex App" class="w-full h-full object-cover opacity-90">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section (Extracted from AMS Counting Animations) -->
+        <section class="py-16 border-t border-b border-white/5 bg-dark-800/20">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center blur-reveal">
+                <div>
+                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="1500">0</span>+</h3>
+                    <p class="text-gray-400 text-sm">Cursos Validados</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="48">0</span>hs</h3>
+                    <p class="text-gray-400 text-sm">Ahorro Promedio NLP</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="99">0</span>%</h3>
+                    <p class="text-gray-400 text-sm">Precisión ML</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl font-display font-bold text-white mb-2"><span class="stat-number" data-target="10000">0</span></h3>
+                    <p class="text-gray-400 text-sm">Usuarios Activos</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metodología / Diagnóstico, Desarrollo (El Reto vs Solución) -->
+        <section id="metodologia" class="py-32 bg-dark-800/30 border-t border-white/5 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                    
+                    <div class="order-2 lg:order-1">
+                        <!-- Estilo Diagnóstico AMS -->
+                        <div class="mb-16 blur-reveal">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="w-12 h-[2px] bg-brand-500"></span>
+                                <h4 class="text-brand-400 font-bold uppercase tracking-wider text-sm">El Problema</h4>
+                            </div>
+                            <h3 class="font-display text-4xl font-bold mb-6">La doble brecha educativa.</h3>
+                            <p class="text-gray-400 text-lg font-light leading-relaxed">
+                                Plataformas de calidad como Udemy o Coursera requieren pagos que no todos pueden costear. Al mismo tiempo, miles de personas poseen habilidades valiosas pero no tienen un espacio que incentive el compartirlas.
+                            </p>
+                        </div>
+                        
+                        <!-- Estilo Desarrollo AMS -->
+                        <div class="blur-reveal">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="w-12 h-[2px] bg-indigo-500"></span>
+                                <h4 class="text-indigo-400 font-bold uppercase tracking-wider text-sm">La Solución</h4>
+                            </div>
+                            <h3 class="font-display text-4xl font-bold mb-6">Reciprocidad inteligente.</h3>
+                            <p class="text-gray-400 text-lg font-light leading-relaxed">
+                                Learnex plantea que aprender y enseñar son dependientes. Si quieres aprender, debes enseñar. Así construimos una red sustentable donde la moneda de cambio es tu propio talento.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="order-1 lg:order-2 grid grid-cols-2 gap-6 blur-reveal">
+                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 hover-target hover:bg-white/5 transition-colors">
+                            <span class="material-symbols-outlined text-4xl text-white mb-4">smartphone</span>
+                            <h4 class="font-bold text-white">Desarrollo Móvil</h4>
+                            <p class="text-sm text-gray-500 mt-2">Nativo Android</p>
+                        </div>
+                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
+                            <span class="material-symbols-outlined text-4xl text-white mb-4">security</span>
+                            <h4 class="font-bold text-white">Seguridad JWT</h4>
+                            <p class="text-sm text-gray-500 mt-2">Cifrado B-Crypt</p>
+                        </div>
+                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square transform translate-y-12 bg-gradient-to-br from-white/5 to-white/0 hover-target hover:bg-white/10 transition-colors">
+                            <span class="material-symbols-outlined text-4xl text-white mb-4">verified_user</span>
+                            <h4 class="font-bold text-white">Registro +18</h4>
+                            <p class="text-sm text-gray-500 mt-2">Comunidad sana</p>
+                        </div>
+                        <div class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center aspect-square hover-target hover:bg-white/5 transition-colors">
+                            <span class="material-symbols-outlined text-4xl text-white mb-4">database</span>
+                            <h4 class="font-bold text-white">Minería</h4>
+                            <p class="text-sm text-gray-500 mt-2">Datos para ML</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Comunidad / Usuarios -->
+        <section id="comunidad" class="py-32 bg-dark-800/10 border-t border-white/5 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-20 blur-reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">La Comunidad Learnex</h2>
+                    <p class="text-xl text-gray-400 font-light max-w-3xl mx-auto">Un ecosistema equilibrado donde cada miembro tiene un rol clave.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <!-- Creador-Consumidor -->
+                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-brand-500/50 transition-colors hover-target group">
+                        <div class="w-16 h-16 bg-brand-500/10 rounded-full flex items-center justify-center mb-8 text-brand-400 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">school</span>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-6 text-white">Creador - Consumidor</h3>
+                        <div class="inline-flex items-center gap-1 bg-green-500/20 text-green-400 text-xs font-bold px-3 py-1 rounded-full mb-8">
+                            <span class="material-symbols-outlined text-sm">verified</span> +18 Años
+                        </div>
+                        <ul class="space-y-4 text-gray-400">
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">done</span> Registrarse y verificar identidad.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">done</span> Crear, editar, eliminar y guardar cursos.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">done</span> <strong class="text-white">Acceder al catálogo (solo si publica un curso).</strong></li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">done</span> Buscar por categoría o intención semántica.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-brand-400 text-sm mt-1">done</span> Interacción social: seguir perfiles y mensajes.</li>
+                        </ul>
+                    </div>
+                    <!-- Administrador -->
+                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-indigo-500/50 transition-colors hover-target group">
+                        <div class="w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center mb-8 text-indigo-400 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-6 text-white">Administrador</h3>
+                        <ul class="space-y-4 text-gray-400 mt-[4.5rem]">
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">done</span> Gestionar usuarios, suspensiones y eliminaciones.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">done</span> Eliminar cursos que violen políticas de la comunidad.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">done</span> Resolver cursos marcados como dudosos por la IA.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">done</span> Atender apelaciones de usuarios.</li>
+                            <li class="flex items-start gap-3"><span class="material-symbols-outlined text-indigo-400 text-sm mt-1">done</span> Ver estadísticas y enviar notificaciones globales.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solutions / Services Section (AMS Blur Reveal Style) -->
+        <section id="soluciones" class="py-32 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-20 max-w-3xl blur-reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Tecnología al servicio de la educación.</h2>
+                    <p class="text-xl text-gray-400 font-light">
+                        Integramos Inteligencia Artificial no como un adorno, sino como el núcleo operativo para asegurar fluidez, calidad y justicia en el intercambio.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-brand-500/50 transition-colors group hover-target">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-8">
+                            <span class="material-symbols-outlined text-3xl">neurology</span>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Validación NLP</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Procesamiento de lenguaje natural para la clasificación y validación automática de cursos antes de su publicación.
+                        </p>
+                    </div>
+                    
+                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-indigo-500/50 transition-colors group hover-target">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-8">
+                            <span class="material-symbols-outlined text-3xl">recommend</span>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-4 text-white group-hover:text-indigo-400 transition-colors">Machine Learning</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Motor de recomendación personalizado que conecta tu perfil con el contenido más relevante y detecta el abuso.
+                        </p>
+                    </div>
+                    
+                    <div class="blur-reveal glass-card p-10 rounded-3xl hover:border-purple-500/50 transition-colors group hover-target">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-8">
+                            <span class="material-symbols-outlined text-3xl">smart_toy</span>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-4 text-white group-hover:text-purple-400 transition-colors">Asistente LLM Local</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Búsqueda por intención y redacción asistida de descripciones. Operamos modelos locales para reducir dependencias.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Proyectos / Portfolio (AMS Parallax Effect) -->
+        <section id="proyectos" class="py-32 relative border-t border-white/5 bg-dark-800/10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 blur-reveal">
+                    <div class="max-w-2xl">
+                        <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Plataforma en producción.</h2>
+                        <p class="text-xl text-gray-400 font-light">
+                            Conoce el estado actual de la aplicación y el diseño de la interfaz optimizada para el ecosistema colaborativo.
+                        </p>
+                    </div>
+                    <a href="#" class="text-brand-400 hover:text-white font-medium flex items-center gap-2 transition-colors mt-6 md:mt-0 hover-target underline-offset-8 hover:underline">
+                        Ver roadmap técnico <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20 blur-reveal">
+                    <div class="glass-card p-8 rounded-3xl">
+                        <h4 class="font-display font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="material-symbols-outlined text-brand-400">done_all</span> Funciones V1.0</h4>
+                        <ul class="space-y-4 text-gray-400 text-sm">
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> App móvil funcional exclusiva para Android.</li>
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Gestión de cursos y validación automática NLP.</li>
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Sistema de recomendación personalizado (ML).</li>
+                            <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-400 text-sm">check_circle</span> Módulo social: chat, seguidores y notificaciones.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-8 rounded-3xl border-indigo-500/20 bg-indigo-500/5">
+                        <h4 class="font-display font-bold text-xl mb-6 text-indigo-300 flex items-center gap-2"><span class="material-symbols-outlined">update</span> Próximos Pasos (Roadmap)</h4>
+                        <ul class="space-y-4 text-indigo-200/70 text-sm">
+                            <li class="flex items-start gap-2"><span>•</span> Lanzamiento inicial enfocado en la comunidad hispanohablante.</li>
+                            <li class="flex items-start gap-2"><span>•</span> Optimización continua del LLM según los recursos de servidor.</li>
+                            <li class="flex items-start gap-2"><span>•</span> El motor de recomendaciones crecerá junto con la comunidad.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Item 1 -->
+                    <div class="blur-reveal group hover-project">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img src="img/img2.jpeg" alt="Catálogo" class="parallax-img">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Catálogo Inteligente</h3>
+                                <p class="text-gray-400">Búsqueda semántica e intencional.</p>
+                            </div>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">App Móvil</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="blur-reveal group hover-project lg:mt-16">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img src="img/img3.jpeg" alt="Lección" class="parallax-img">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Visualizador de Clases</h3>
+                                <p class="text-gray-400">Reproducción sin interrupciones.</p>
+                            </div>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">UX/UI</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="blur-reveal group hover-project">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img src="img/img4.jpeg" alt="Perfil" class="parallax-img">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Perfil de Creador</h3>
+                                <p class="text-gray-400">Gestión de cursos y comunidad.</p>
+                            </div>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">Social</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="blur-reveal group hover-project lg:mt-16">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img src="img/img5.jpeg" alt="Creación" class="parallax-img">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Creación de Contenido</h3>
+                                <p class="text-gray-400">Herramientas nativas para educadores.</p>
+                            </div>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">App Móvil</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="blur-reveal group hover-project">
+                        <div class="project-img-wrap w-full aspect-[4/5] bg-dark-800 mb-6 border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img src="img/img6.jpeg" alt="Validación IA" class="parallax-img">
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-display font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">Validación AI</h3>
+                                <p class="text-gray-400">Procesamiento NLP en tiempo real.</p>
+                            </div>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 font-medium border border-white/10">Backend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Final -->
+        <section class="py-40 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-900/20 pointer-events-none"></div>
+            
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10 blur-reveal">
+                <span class="text-brand-400 font-bold tracking-widest uppercase text-sm mb-4 block">Tu turno</span>
+                <h2 class="font-display text-5xl md:text-7xl font-bold mb-8 text-white">El conocimiento es el siguiente paso.</h2>
+                <a href="#planes" class="btn-gradient inline-flex items-center gap-2 text-white px-10 py-5 rounded-full font-bold text-xl hover-target magnetic-target">
+                    Unirse a la red <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Exact AMS Animation Code Extracted via Subagent -->
+    <script>
+        // A. Smooth Scroll Integration (Lenis + GSAP)
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        window.lenis = lenis;
+
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on("scroll", ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        ScrollTrigger.scrollerProxy(document.documentElement, {
+            scrollTop(value) {
+                if (arguments.length) {
+                    lenis.scrollTo(value, { immediate: true });
+                }
+                return lenis.scroll;
+            },
+            getBoundingClientRect() {
+                return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+            }
+        });
+
+        // B. Dynamic Custom Cursor (GSAP quickSetter)
+        const cursorDot = document.querySelector(".cursor-dot");
+        const cursorOutline = document.querySelector(".cursor-outline");
+        const setDotX = gsap.quickSetter(cursorDot, "x", "px");
+        const setDotY = gsap.quickSetter(cursorDot, "y", "px");
+        const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
+        const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
+
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let outlineX = mouseX, outlineY = mouseY;
+
+        window.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            setDotX(mouseX); setDotY(mouseY);
+        });
+
+        gsap.ticker.add(() => {
+            outlineX += (mouseX - outlineX) * 0.15; // Interpolation speed multiplier
+            outlineY += (mouseY - outlineY) * 0.15;
+            setOutlineX(outlineX); setOutlineY(outlineY);
+        });
+
+        // Cursor States
+        document.querySelectorAll(".hover-target").forEach(el => {
+            el.addEventListener("mouseenter", () => cursorOutline.classList.add("hover-active"));
+            el.addEventListener("mouseleave", () => cursorOutline.classList.remove("hover-active"));
+        });
+        document.querySelectorAll(".hover-project").forEach(el => {
+            el.addEventListener("mouseenter", () => {
+                cursorOutline.classList.add("project-hover");
+                cursorDot.style.opacity = "0";
+            });
+            el.addEventListener("mouseleave", () => {
+                cursorOutline.classList.remove("project-hover");
+                cursorDot.style.opacity = "1";
+            });
+        });
+
+        // C. Magnetic Interactive Buttons
+        document.querySelectorAll(".magnetic-target").forEach((elem) => {
+            elem.addEventListener("mousemove", (e) => {
+                const rect = elem.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(elem, { x: x * 0.4, y: y * 0.4, duration: 0.5, ease: "power3.out" });
+            });
+            elem.addEventListener("mouseleave", () => {
+                gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
+            });
+        });
+
+        // D. Scroll-driven Blur & Translation (AOS Replacement)
+        gsap.utils.toArray(".blur-reveal").forEach((element) => {
+            gsap.to(element, {
+                opacity: 1, filter: "blur(0px)", y: 0, duration: 1.2, ease: "power3.out",
+                scrollTrigger: { trigger: element, start: "top 85%", toggleActions: "play none none reverse" }
+            });
+        });
+
+        // E. Parallax Images
+        gsap.utils.toArray(".parallax-img").forEach((img) => {
+            gsap.to(img, {
+                yPercent: 30, ease: "none",
+                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        // F. Interactive Stats Counting
+        document.querySelectorAll(".stat-number").forEach((stat) => {
+            const target = +stat.getAttribute("data-target");
+            gsap.to(stat, {
+                innerText: target, duration: 2, snap: { innerText: 1 },
+                scrollTrigger: { trigger: stat, start: "top 90%" }
+            });
+        });
+
+        // Initial Hero Reveal
+        gsap.to('.split-line span', { y: "0%", opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out", delay: 0.2 });
+        gsap.to('.gsap-hero-item', { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out", delay: 0.8 });
+        gsap.to('.gsap-hero-img', { y: 0, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.5 });
+    </script>
+</body>
+</html>

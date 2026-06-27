@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Liquid Glass Patterns */
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-sm transition-all duration-300;
+  }
+  
+  .glass-panel:hover {
+    @apply shadow-md bg-white/80;
+  }
+
+  /* Liquid Glass Dark Mode support */
+  .dark .glass-panel {
+    @apply bg-[#131B2E]/70 border-[#1e293b]/40;
+  }
+  
+  .dark .glass-panel:hover {
+    @apply bg-[#131B2E]/80;
+  }
+
+  .interactive-element {
+    @apply cursor-pointer transition-transform duration-200 active:scale-95;
+  }
+
+  /* Status Chips */
+  .chip-alta {
+    @apply bg-error-container text-on-error-container text-[12px] font-medium px-3 py-1 rounded-full;
+  }
+  
+  .chip-media {
+    @apply bg-secondary-container text-on-secondary-container text-[12px] font-medium px-3 py-1 rounded-full;
+  }
+  
+  .chip-baja {
+    @apply bg-primary-container/20 text-primary text-[12px] font-medium px-3 py-1 rounded-full;
+  }
+}

@@ -46,8 +46,8 @@ const CustomScatterShape = (props: any) => {
 export default function Clustering() {
   const [viewMode, setViewMode] = useState<'2d' | '3d'>('2d');
   const [projectCount, setProjectCount] = useState<number>(0);
-  const [dynamicBarData, setDynamicBarData] = useState<any[]>([]); // Vacío sin mocks
-  const [scatterData] = useState<any[]>([]); 
+  const [dynamicBarData, setDynamicBarData] = useState<any[]>([]);
+  const [scatterData, setScatterData] = useState<any[]>([]); 
   const [recentProjects, setRecentProjects] = useState<any[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
   const [executeMsg, setExecuteMsg] = useState('');
@@ -100,6 +100,16 @@ export default function Clustering() {
         }
       } catch (error) {
         console.error('Error fetching cluster stats:', error);
+      }
+
+      // 5. Fetch 2D Scatter Data
+      try {
+        const scatterRes = await axios.get(`${API_CONFIG.BASE_URL}/clustering/integrator/admin/clusters-2d`);
+        if (Array.isArray(scatterRes.data)) {
+          setScatterData(scatterRes.data);
+        }
+      } catch (error) {
+        console.error('Error fetching scatter data:', error);
       }
     };
 
@@ -263,7 +273,7 @@ export default function Clustering() {
               </>
             ) : (
               <iframe 
-                src={`${API_CONFIG.BASE_URL}/admin/clusters-3d`} 
+                src={`${API_CONFIG.BASE_URL}/clustering/integrator/admin/clusters-3d`} 
                 className="w-full h-full border-0"
                 title="3D Cluster Map"
                 sandbox="allow-scripts allow-same-origin"
