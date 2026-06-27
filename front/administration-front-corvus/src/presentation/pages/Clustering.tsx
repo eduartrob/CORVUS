@@ -51,6 +51,7 @@ export default function Clustering() {
   const [recentProjects, setRecentProjects] = useState<any[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
   const [executeMsg, setExecuteMsg] = useState('');
+  const [html3d, setHtml3d] = useState<string>('');
 
   useEffect(() => {
     const fetchClusteringData = async () => {
@@ -110,6 +111,16 @@ export default function Clustering() {
         }
       } catch (error) {
         console.error('Error fetching scatter data:', error);
+      }
+
+      // 6. Fetch 3D HTML
+      try {
+        const htmlRes = await axios.get(`${API_CONFIG.BASE_URL}/clustering/integrator/admin/clusters-3d`);
+        if (typeof htmlRes.data === 'string') {
+          setHtml3d(htmlRes.data);
+        }
+      } catch (error) {
+        console.error('Error fetching 3D html:', error);
       }
     };
 
@@ -273,7 +284,7 @@ export default function Clustering() {
               </>
             ) : (
               <iframe 
-                src={`${API_CONFIG.BASE_URL}/clustering/integrator/admin/clusters-3d`} 
+                srcDoc={html3d || "<html><body><div style='display:flex;justify-content:center;align-items:center;height:100%;font-family:sans-serif;color:gray'>Cargando Mapa 3D interactivo...</div></body></html>"} 
                 className="w-full h-full border-0"
                 title="3D Cluster Map"
                 sandbox="allow-scripts allow-same-origin"
