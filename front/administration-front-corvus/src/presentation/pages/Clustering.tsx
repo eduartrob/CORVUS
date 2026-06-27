@@ -52,6 +52,7 @@ export default function Clustering() {
   const [isExecuting, setIsExecuting] = useState(false);
   const [executeMsg, setExecuteMsg] = useState('');
   const [html3d, setHtml3d] = useState<string>('');
+  const [blueOceansCount, setBlueOceansCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchClusteringData = async () => {
@@ -87,6 +88,9 @@ export default function Clustering() {
             value: c.project_count
           }));
           setDynamicBarData(formattedData);
+        }
+        if (statsRes.data && statsRes.data.blue_oceans !== undefined) {
+          setBlueOceansCount(statsRes.data.blue_oceans);
         } else if (statsRes.data && statsRes.data.labels && statsRes.data.data) {
           const formattedData = statsRes.data.labels.map((label: string, index: number) => ({
             name: label,
@@ -148,7 +152,7 @@ export default function Clustering() {
     }
   };
 
-  const clusteredCount = dynamicBarData.reduce((acc, curr) => acc + (curr.value || 0), 0);
+  const clusteredCount = dynamicBarData.reduce((acc, curr) => acc + (curr.value || 0), 0) + blueOceansCount;
   const pendingClustering = Math.max(0, projectCount - clusteredCount);
   const pendingPercentage = projectCount > 0 ? (pendingClustering / projectCount) * 100 : 0;
 
