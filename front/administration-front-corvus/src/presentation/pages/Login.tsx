@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../application/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { CorvusLogo } from '../components/atoms/CorvusLogo';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -46,7 +47,7 @@ export default function Login() {
           className="z-10 text-white max-w-lg"
         >
           <div className="bg-white/10 p-4 rounded-2xl inline-flex mb-8 backdrop-blur-sm border border-white/20">
-            <img src="/corvus-logo.svg" alt="Corvus Logo" className="w-12 h-12 text-white" />
+            <CorvusLogo className="w-12 h-12 text-white" />
           </div>
           <h1 className="text-display-lg font-bold mb-6">Innovación Académica</h1>
           <p className="text-body-lg text-primary-fixed-dim">
@@ -69,7 +70,7 @@ export default function Login() {
         >
           <div className="flex justify-center mb-6">
             <div className="bg-surface-container p-3 rounded-xl">
-              <img src="/corvus-logo.svg" alt="Corvus Logo" className="w-8 h-8 text-primary" />
+              <CorvusLogo className="w-8 h-8 text-primary" />
             </div>
           </div>
           

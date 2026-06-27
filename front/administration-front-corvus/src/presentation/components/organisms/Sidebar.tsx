@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { LayoutDashboard, Network, BookOpen, CheckSquare, LogOut, Sun, Moon, Settings } from 'lucide-react';
 import { useAuth } from '../../../application/contexts/AuthContext';
 import { useTheme } from '../../../application/contexts/ThemeContext';
+import { CorvusLogo } from '../atoms/CorvusLogo';
 
 const menuItems = [
   { path: '/', label: 'Dashboard Principal', icon: LayoutDashboard },
@@ -24,8 +25,8 @@ export function Sidebar({ onOpenSettings }: SidebarProps) {
     <aside className="w-64 bg-surface border-r border-outline-variant flex flex-col h-screen sticky top-0">
       <div className="h-20 flex items-center px-6 border-b border-outline-variant/50">
         <div className="flex items-center gap-3">
-          <div className="bg-primary text-white p-2 rounded-lg">
-            <img src="/corvus-logo.svg" alt="Corvus Logo" className="w-6 h-6" />
+          <div className="bg-primary text-white p-2 rounded-lg flex items-center justify-center">
+            <CorvusLogo className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="font-title-lg text-[18px] text-primary leading-tight">Corvus</h1>

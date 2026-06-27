@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Play, Database, FileClock } from 'lucide-react';
+import { Play, Database, FileClock, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ScatterChart, Scatter, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, BarChart, Bar, CartesianGrid } from 'recharts';
 import { API_CONFIG } from '../../application/config/api_config';
@@ -222,6 +222,25 @@ export default function Clustering() {
             </div>
             <p className="text-[12px] font-medium text-on-surface-variant text-right">{pendingPercentage.toFixed(1)}% del lote actual</p>
           </div>
+
+          {/* Tarjeta de Océanos Azules */}
+          <div className="glass-panel p-6 rounded-2xl flex flex-col justify-between border border-error-container/30 bg-error-container/5 hover:bg-error-container/10 transition-colors">
+            <div className="flex justify-between items-start mb-4">
+              <div className="p-3 bg-error-container text-error rounded-xl shadow-sm">
+                <Compass className="w-6 h-6" />
+              </div>
+              <span className="px-3 py-1 bg-surface-container-low text-error text-label-sm font-semibold rounded-full border border-error/30 animate-pulse">
+                Inexplorados
+              </span>
+            </div>
+            <div>
+              <p className="text-body-md text-on-surface-variant mb-1">Océanos Azules</p>
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-display-lg font-bold text-on-surface leading-none">{blueOceansCount}</h2>
+                <span className="text-error font-medium text-label-sm">hallazgos</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Column - Chart Area */}
@@ -236,25 +255,25 @@ export default function Clustering() {
             <div className="flex bg-surface-container-low p-1 rounded-xl border border-outline-variant/50">
               <button 
                 onClick={() => setViewMode('2d')}
-                className={`px-4 py-1.5 rounded-lg font-label-md transition-colors ${viewMode === '2d' ? 'bg-white shadow-sm text-primary' : 'text-on-surface-variant'}`}
+                className={`px-4 py-1.5 rounded-lg font-label-md transition-colors ${viewMode === '2d' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}
               >
                 2D
               </button>
               <button 
                 onClick={() => setViewMode('3d')}
-                className={`px-4 py-1.5 rounded-lg font-label-md transition-colors ${viewMode === '3d' ? 'bg-white shadow-sm text-primary' : 'text-on-surface-variant'}`}
+                className={`px-4 py-1.5 rounded-lg font-label-md transition-colors ${viewMode === '3d' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}
               >
                 3D (Plotly)
               </button>
             </div>
           </div>
 
-          <div className="flex-1 min-h-[300px] bg-white rounded-xl border border-outline-variant/30 p-2 overflow-hidden relative">
+          <div className="flex-1 min-h-[300px] bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-2 overflow-hidden relative">
             {viewMode === '2d' ? (
               <>
                 {scatterData.length > 0 ? (
                   <>
-                    <div className="absolute top-4 right-4 flex gap-3 z-10 bg-white/80 p-2 rounded-lg backdrop-blur-sm border border-outline-variant/30">
+                    <div className="absolute top-4 right-4 flex gap-3 z-10 bg-surface-container-lowest/80 p-2 rounded-lg backdrop-blur-sm border border-outline-variant/30">
                       <div className="flex items-center gap-1.5">
                         <span className="w-3 h-3 rounded-full bg-primary"></span>
                         <span className="text-[10px] font-semibold text-on-surface-variant uppercase">Clusters Densos</span>
