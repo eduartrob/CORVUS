@@ -110,24 +110,7 @@
             color: #f9fafb; 
         }
         
-        /* 1. Exact AMS Custom Cursor CSS */
-        * { cursor: none !important; }
-        .cursor-dot, .cursor-outline {
-            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
-            border-radius: 50%; z-index: 10001; pointer-events: none;
-        }
-        .cursor-dot { width: 8px; height: 8px; background-color: #3f75f5; }
-        .cursor-outline {
-            width: 40px; height: 40px; border: 1px solid #3f75f5;
-            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
-            display: flex; justify-content: center; align-items: center; text-align: center; color: transparent;
-        }
-        .cursor-outline.hover-active { width: 60px; height: 60px; background-color: rgba(63, 117, 245, 0.08); }
-        .cursor-outline.project-hover {
-            width: 100px; height: 100px; background-color: #3f75f5; color: #fff; font-size: 0.65rem; letter-spacing: 2px;
-            border-color: transparent;
-        }
-        .cursor-outline.project-hover::after { content: "VER"; }
+        /* 1. Exact AMS Custom Cursor CSS (Removed per user request) */
         
         /* 2. Exact AMS Blur Reveal CSS */
         .blur-reveal { 
@@ -264,9 +247,7 @@
         <span style="color:rgba(255,255,255,0.3);font-size:11px;font-family:system-ui;letter-spacing:2px;text-transform:uppercase;">Corvus</span>
     </div>
 
-    <!-- AMS Exact Cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <!-- AMS Exact Cursor removed -->
 
     <!-- Top Navigation Bar -->
     <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300" id="navbar">
@@ -1126,43 +1107,7 @@
             }
         });
 
-        // B. Dynamic Custom Cursor (GSAP quickSetter)
-        const cursorDot = document.querySelector(".cursor-dot");
-        const cursorOutline = document.querySelector(".cursor-outline");
-        const setDotX = gsap.quickSetter(cursorDot, "x", "px");
-        const setDotY = gsap.quickSetter(cursorDot, "y", "px");
-        const setOutlineX = gsap.quickSetter(cursorOutline, "x", "px");
-        const setOutlineY = gsap.quickSetter(cursorOutline, "y", "px");
-
-        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-        let outlineX = mouseX, outlineY = mouseY;
-
-        window.addEventListener("mousemove", (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            setDotX(mouseX); setDotY(mouseY);
-        });
-
-        gsap.ticker.add(() => {
-            outlineX += (mouseX - outlineX) * 0.15; // Interpolation speed multiplier
-            outlineY += (mouseY - outlineY) * 0.15;
-            setOutlineX(outlineX); setOutlineY(outlineY);
-        });
-
-        // Cursor States
-        document.querySelectorAll(".hover-target").forEach(el => {
-            el.addEventListener("mouseenter", () => cursorOutline.classList.add("hover-active"));
-            el.addEventListener("mouseleave", () => cursorOutline.classList.remove("hover-active"));
-        });
-        document.querySelectorAll(".hover-project").forEach(el => {
-            el.addEventListener("mouseenter", () => {
-                cursorOutline.classList.add("project-hover");
-                cursorDot.style.opacity = "0";
-            });
-            el.addEventListener("mouseleave", () => {
-                cursorOutline.classList.remove("project-hover");
-                cursorDot.style.opacity = "1";
-            });
-        });
+        // B. Dynamic Custom Cursor (Removed per user request)
 
         // C. Magnetic Interactive Buttons
         document.querySelectorAll(".magnetic-target").forEach((elem) => {
