@@ -1,0 +1,54 @@
+[submodule "back/apiGateway-back-corvus"]
+	path = back/apiGateway-back-corvus
+	url = https://github.com/eduartrob/apiGateway-back-corvus.git
+[submodule "back/authentication-back-corvus"]
+	path = back/authentication-back-corvus
+	url = https://github.com/eduartrob/authentication-back-corvus.git
+[submodule "back/integratorProjectClustering-back-corvus"]
+	path = back/integratorProjectClustering-back-corvus
+	url = https://github.com/eduartrob/integratorProjectClustering-back-corvus.git
+[submodule "back/llm-back-corvus"]
+	path = back/llm-back-corvus
+	url = https://github.com/eduartrob/llm-back-corvus.git
+[submodule "back/notifications-back-corvus"]
+	path = back/notifications-back-corvus
+	url = https://github.com/eduartrob/notifications-back-corvus.git
+[submodule "back/orchestration-back-corvus"]
+	path = back/orchestration-back-corvus
+	url = https://github.com/eduartrob/orchestration-back-corvus.git
+[submodule "back/rabbitmq-config-corvus"]
+	path = back/rabbitmq-config-corvus
+	url = https://github.com/eduartrob/rabbitmq-config-corvus.git
+[submodule "back/studentsGroupsClustering-corvus"]
+	path = back/studentsGroupsClustering-corvus
+	url = https://github.com/eduartrob/studentsGroupsClustering-corvus.git
+[submodule "back/studentsInformationClustering-back-corvus"]
+	path = back/studentsInformationClustering-back-corvus
+	url = https://github.com/eduartrob/studentsInformationClustering-back-corvus.git
+[submodule "back/subjectMatterClustering-back-corvus"]
+	path = back/subjectMatterClustering-back-corvus
+	url = https://github.com/eduartrob/subjectMatterClustering-back-corvus.git
+[submodule "examples/AURA"]
+	path = examples/AURA
+	url = https://github.com/eduartrob/AURA.git
+[submodule "examples/auth-service-aura"]
+	path = examples/auth-service-aura
+	url = https://github.com/eduartrob/auth-service-aura.git
+[submodule "examples/clustering-service-aura"]
+	path = examples/clustering-service-aura
+	url = https://github.com/eduartrob/clustering-service-aura.git
+[submodule "examples/gateway-service-aura"]
+	path = examples/gateway-service-aura
+	url = https://github.com/eduartrob/gateway-service-aura.git
+[submodule "examples/orchestration-service-aura"]
+	path = examples/orchestration-service-aura
+	url = https://github.com/eduartrob/orchestration-service-aura.git
+[submodule "front/mobile-front-corvus"]
+	path = front/mobile-front-corvus
+	url = https://github.com/eduartrob/mobile-front-corvus.git
+[submodule "pruebas/administration-front-corvus-test"]
+	path = pruebas/administration-front-corvus-test
+	url = https://github.com/eduartrob/administration-front-corvus.git
+[submodule "pruebas/corvus-backend-local"]
+	path = pruebas/corvus-backend-local
+	url = https://github.com/eduartrob/integratorProjectClustering-back-corvus.git
