@@ -1,0 +1,14 @@
+# Archivos grandes — modelos de mockup interactivo
+models_mobile_light/
+models_mobile_dark/
+
+# Submódulos de referencia AURA (gestionados por .gitmodules del monorepo)
+examples/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.pyc
