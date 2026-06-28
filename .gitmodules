@@ -28,9 +28,7 @@
 [submodule "back/subjectMatterClustering-back-corvus"]
 	path = back/subjectMatterClustering-back-corvus
 	url = https://github.com/eduartrob/subjectMatterClustering-back-corvus.git
-[submodule "examples/AURA"]
-	path = examples/AURA
-	url = https://github.com/eduartrob/AURA.git
+
 [submodule "examples/auth-service-aura"]
 	path = examples/auth-service-aura
 	url = https://github.com/eduartrob/auth-service-aura.git
@@ -46,9 +44,7 @@
 [submodule "front/mobile-front-corvus"]
 	path = front/mobile-front-corvus
 	url = https://github.com/eduartrob/mobile-front-corvus.git
-[submodule "pruebas/administration-front-corvus-test"]
-	path = pruebas/administration-front-corvus-test
-	url = https://github.com/eduartrob/administration-front-corvus.git
+
 [submodule "pruebas/corvus-backend-local"]
 	path = pruebas/corvus-backend-local
 	url = https://github.com/eduartrob/integratorProjectClustering-back-corvus.git
