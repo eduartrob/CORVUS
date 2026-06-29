@@ -1,0 +1,37 @@
+\seccionreporte{Descripción del problema}{sec:problema}
+
+\propositoseccion{%
+  Relaciona la problemática de negocio de la app móvil con la necesidad de un modelo \textbf{no supervisado}.%
+}
+
+\subsection{Contexto del proyecto móvil}
+
+La bronca principal que tenemos ahorita en la universidad es que cuando los alumnos proponen su proyecto integrador, los profesores tardan muchísimo en revisar los documentos uno por uno para ver si la idea ya se hizo antes o si alguien se copió. Entonces, la aplicación móvil que estamos armando trata de resolver esto. Le damos a los alumnos y profes una plataforma donde suben sus propuestas y el sistema hace todo el primer filtro de manera automática para decirles si el proyecto pasa o si hay riesgo de que sea repetido.
+
+\subsection{Necesidad analítica}
+
+Y bueno, aquí es donde entra la necesidad de usar machine learning. Decidimos meter un algoritmo \textbf{no supervisado} porque la verdad no tenemos los datos etiquetados de antemano. No podemos tener a alguien clasificando a mano miles de proyectos de semestres pasados. 
+
+Entonces, lo que hacemos es usar clustering. Primero volvemos los textos unos vectores gigantes (embeddings), y luego dejamos que el algoritmo agrupe por sí solo los proyectos que hablan de las mismas tecnologías o temas. Así logramos hacer un \textbf{descubrimiento de patrones} operativos sin etiquetas previas, y de paso nos sirve para la \textbf{detección de anomalías} cuando vemos que un proyecto se sale de todos los clusters normales (lo que nosotros llamamos un Océano Azul).
+
+\subsection{Pregunta analítica}
+
+Básicamente, la pregunta que nuestro microservicio trata de responder es:
+
+\begin{quote}
+  ¿Cómo podemos agrupar de manera automática los proyectos integradores basándonos puramente en lo que dicen sus textos, para así poder detectar si una propuesta nueva es algo súper original o si de plano choca con algo que ya se hizo antes?
+\end{quote}
+
+\subsection{Vínculo con la app móvil (integración futura)}
+
+\begin{tabular}{@{}p{3.5cm}p{9cm}@{}}
+  \toprule
+  Elemento & Integración posterior \\
+  \midrule
+  Entrada desde la app & Un archivo de texto (PDF o Markdown) con la propuesta del alumno. \\
+  Salida hacia la app & El porcentaje de similitud, el nivel de riesgo (Bajo/Medio/Alto) y el feedback del LLM. \\
+  Frecuencia & Bajo demanda, es decir, cada vez que un alumno le da al botón de enviar propuesta. \\
+  \bottomrule
+\end{tabular}
+
+Algoritmo seleccionado: \textbf{HDBSCAN + UMAP}.

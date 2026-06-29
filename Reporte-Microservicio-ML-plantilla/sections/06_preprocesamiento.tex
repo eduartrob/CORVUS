@@ -1,0 +1,38 @@
+\seccionreporte{Preprocesamiento y validación de entrada}{sec:preprocesamiento}
+
+\propositoseccion{%
+  El mismo pipeline debe ejecutarse en entrenamiento e inferencia. Documente reglas, escalado y rechazo de datos inválidos.%
+}
+
+\subsection{Esquema de entrada}
+
+En lugar de mandarle un JSON aburrido, nosotros armamos el endpoint para que reciba directamente un \texttt{multipart/form-data}. Así, la app móvil puede mandar el archivo (sea PDF, Word o Markdown) y el microservicio se encarga de leerlo y extraer el texto. Aparte del archivo, también le mandamos el \texttt{user\_id} para poder rastrear quién subió qué en la base de datos de auditoría.
+
+\subsection{Validaciones implementadas}
+
+Nos dimos cuenta que si le metíamos basura al modelo, nos regresaba basura. Entonces metimos unas validaciones bien estrictas en FastAPI:
+
+\begin{tabular}{@{}p{4.2cm}p{8.5cm}@{}}
+  \toprule
+  Regla & Comportamiento \\
+  \midrule
+  Archivo faltante & FastAPI tira un HTTP 422 automático si no viene el \texttt{file}. \\
+  Secciones obligatorias & Si el texto no trae literal las palabras "Objetivo General", "Justificación" y "Alcance", lanzamos un HTTP 400 y rebotamos la petición. \\
+  Extracción fallida & Si el PDF viene como imagen (escaneado) y no saca texto, tiramos un HTTP 400 avisando que el archivo no sirve. \\
+  \bottomrule
+\end{tabular}
+
+\subsection{Transformaciones}
+
+Una vez que el documento pasa el filtro, le hacemos una limpieza profunda antes de vectorizarlo:
+
+\begin{enumerate}
+  \item \textbf{Limpieza de formato:} Quitamos saltos de línea raros, dobles espacios y caracteres extraños que rompen el tokenizer.
+  \item \textbf{Anonimización con NLP:} Metemos el texto a SpaCy (\texttt{es\_core\_news\_sm}) y le aplicamos un filtro para borrar todos los nombres propios (PER) y ubicaciones (LOC). Así evitamos meter datos personales (como el nombre del alumno) al LLM.
+  \item \textbf{Chunking semántico:} Como los proyectos son largos y los modelos de embeddings tienen límite de tokens, partimos el documento en pedazos lógicos ("chunks") usando \texttt{RecursiveCharacterTextSplitter} de LangChain.
+  \item \textbf{Vectorización:} Al final, pasamos los chunks limpios por el modelo SentenceTransformers para volverlos vectores matemáticos.
+\end{enumerate}
+
+\subsection{Consistencia entrenamiento vs.\ producción}
+
+Para asegurarnos de que el modelo en producción se trague los datos exactamente igual que como lo entrenamos en el notebook, usamos las mismas dependencias fijas en el \texttt{requirements.txt} del contenedor Docker. Además, el script de limpieza (\texttt{nlp\_service.py}) es el mismo código que corrimos para preprocesar el corpus de 50 proyectos, así que no hay forma de que haya discrepancias.

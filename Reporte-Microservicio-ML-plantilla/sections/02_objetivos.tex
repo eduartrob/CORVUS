@@ -1,0 +1,38 @@
+\seccionreporte{Objetivos}{sec:objetivos}
+
+\propositoseccion{%
+  Enuncia qué debe demostrar el microservicio y cómo se vincula con la problemática de la app móvil.%
+}
+
+\subsection{Objetivo general}
+
+Lo que nos propusimos hacer en esta fase fue armar desde cero un microservicio REST que se encargara de correr un algoritmo de \textbf{aprendizaje no supervisado}. La idea era que este backend pudiera recibir los textos, encontrar patrones raros o colisiones entre proyectos, guardar todo para el historial y que estuviera listo para conectarse con nuestra app móvil sin tirar errores.
+
+\subsection{Objetivos específicos}
+
+Para lograr eso, dividimos el trabajo en esto:
+
+\begin{enumerate}
+  \item Armar un preprocesamiento sólido con NLP (SpaCy) para limpiar y anonimizar los PDFs antes de que lleguen al modelo.
+  \item Entrenar nuestro pipeline de \textbf{HDBSCAN + UMAP} con un corpus sintético y dejar toda la evidencia documentada en un Jupyter Notebook.
+  \item Levantar los endpoints con FastAPI para que regresen siempre un JSON bien estructurado, nada de respuestas a medias.
+  \item Conectar SQLite para guardar un log de cada vez que alguien manda un archivo, guardando su score de colisión y el riesgo.
+  \item Dejar el Swagger automático listo y probar que todo no se rompa usando Postman.
+  \item Explicar en un video cómo vamos a hacer que la app móvil en Flutter consuma esta API.
+\end{enumerate}
+
+\subsection{Criterios de aceptación mínimos}
+
+Y bueno, para saber que terminamos, estos son los checks que teníamos que pasar:
+
+\begin{tabular}{@{}p{5.5cm}p{7.8cm}@{}}
+  \toprule
+  Requisito & Evidencia esperada \\
+  \midrule
+  Inferencia & Endpoint POST jalando al 100 y regresando el JSON con el porcentaje de colisión. \\
+  Historial & Endpoint GET con la paginación activada para no saturar al admin. \\
+  Validación & FastAPI regresando errores HTTP 422 o 400 si el usuario trata de pasarse de listo con archivos vacíos. \\
+  Persistencia & Los logs guardándose en \texttt{inference\_log.db} sin fallas. \\
+  Documentación & El \texttt{/docs} de Swagger cargando perfectamente en el servidor. \\
+  \bottomrule
+\end{tabular}

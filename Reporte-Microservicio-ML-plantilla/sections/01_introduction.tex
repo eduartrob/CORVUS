@@ -1,0 +1,33 @@
+\seccionreporte{Introducción}{sec:introduccion}
+
+\propositoseccion{%
+  Contextualiza el hito del proyecto final: un microservicio de \textbf{aprendizaje no supervisado} que funcionará de forma \textbf{independiente} antes de integrarse a la aplicación móvil.%
+}
+
+Entonces, este reporte trata sobre el primer microservicio de machine learning que armamos para el proyecto de Minería de Datos. Ahorita todavía no nos estamos enfocando en cómo se conecta esto con la app móvil, sino que lo que queremos es demostrar que el backend funciona bien por su cuenta, ejecutando el algoritmo no supervisado que dijimos que íbamos a usar.
+
+Básicamente, lo que hace el microservicio es levantar una API REST que está esperando que el cliente le mande la información. Entonces, en cuanto llegan los datos, primero hacemos una validación fuerte para ver que el documento traiga lo necesario, luego lo preprocesamos, y después de eso ya lo metemos al modelo para que nos regrese todo el análisis en un JSON~\cite{han2011data,scikit-learn}. Aparte de eso, estamos guardando cada una de estas inferencias en una base de datos local para que los profes puedan consultar el historial después, y toda la documentación de los endpoints la dejamos lista con Swagger~\cite{openapi} para que no haya pierde.
+
+\subsection{Alcance de este entregable}
+
+\begin{itemize}
+  \item Código fuente del microservicio (\ReporteRepositorio).
+  \item Este documento en PDF (compilado desde \LaTeX{}).
+  \item Notebook con evidencia de entrenamiento y pruebas.
+  \item Diagrama de arquitectura (PDF, PNG y SVG).
+  \item Documentación de la API (PDF exportado de Swagger y archivo Markdown).
+  \item Colección de pruebas (Postman, Bruno o equivalente).
+  \item Video demostrativo de 5--10 minutos (\ReporteVideo).
+\end{itemize}
+
+\subsection{Modalidades de implementación}
+
+Para esta parte, nosotros decidimos irnos por una implementación mixta porque nos pareció lo más lógico para lo que queríamos lograr. 
+
+Primero, para el clustering duro usamos un \textbf{Modelo local}. Entrenamos HDBSCAN junto con UMAP y los guardamos como archivos \texttt{.joblib}. Entonces el backend los carga directamente a memoria y hace la inferencia súper rápido sin depender de nadie. 
+
+Pero luego, para sacarle más provecho al análisis, lo conectamos con un \textbf{Modelo mediante API} local. Lo que hacemos es que le mandamos los resultados de los clusters a un modelo de lenguaje (el de Ollama) que tenemos corriendo en el mismo servidor. Así logramos que el LLM nos dé recomendaciones mucho más precisas basándose en la matemática del modelo local, lo cual está bastante cool y evita crashes por saturar la RAM con modelos gigantes.
+
+\begin{tcolorbox}[checklist,title={Reutilización en el proyecto final}]
+  La tirada es que todo este bloque de código se va a \textbf{conectar directo} con la aplicación móvil en la siguiente fase. Por eso armamos bien los contratos de la API y dejamos la base de datos de auditoría lista, para que la integración sea transparente.
+\end{tcolorbox}

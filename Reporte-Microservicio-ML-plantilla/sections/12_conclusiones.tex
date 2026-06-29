@@ -1,0 +1,44 @@
+\seccionreporte{Conclusiones y trabajo futuro}{sec:conclusiones}
+
+\propositoseccion{%
+  Cierra el hito: qué funciona hoy, qué falta para integrar con la app móvil y qué mejoras planean.%
+}
+
+\subsection{Conclusiones}
+
+\begin{enumerate}
+  \item \textbf{Logro principal:} Cumplimos el objetivo de automatizar el primer filtro de los proyectos. Ahora el sistema puede leer un documento y decirte matemáticamente si se parece a algo que ya existe, quitándole horas de trabajo a los profes.
+  \item \textbf{Validación y persistencia:} El microservicio quedó súper sólido. Logramos meter las validaciones estrictas para rebotar archivos malos y todo queda guardado en la base de datos de SQLite para que haya trazabilidad de quién subió qué.
+  \item \textbf{Lección aprendida:} Nos dimos cuenta de que no le puedes dar el control de las matemáticas a un LLM porque inventa números. Es mil veces mejor hacer el clustering duro con algoritmos como HDBSCAN y ya nada más usar el LLM para que redacte el reporte basándose en esos datos reales.
+\end{enumerate}
+
+\subsection{Integración con la aplicación móvil}
+
+Para la siguiente fase, el flujo va a ser así: El alumno abre la app en Flutter y sube su PDF. La app hace una llamada HTTP POST a nuestro microservicio mandando el archivo. Cuando el backend regresa el JSON con el veredicto, la app lee el nivel de riesgo y pinta un semáforo en pantalla (Verde, Amarillo o Rojo) para avisarle al alumno si su proyecto está bien o si tiene que cambiarlo.
+
+\subsection{Trabajo futuro}
+
+Ahorita el MVP ya está funcional en Contabo, pero para dejarlo nivel empresarial nos falta:
+
+\begin{itemize}
+  \item Meterle balanceo de carga para que Ollama no truene si se conectan muchos al mismo tiempo.
+  \item Migrar la base de datos de auditoría de SQLite a PostgreSQL cuando tengamos miles de registros.
+  \item Ponerle HTTPS al servidor porque ahorita estamos pegándole por HTTP directo a la IP.
+  \item Conectar todo esto finalmente con el frontend móvil en Flutter.
+\end{itemize}
+
+\subsection{Entregables finales del hito}
+
+\begin{tabular}{@{}lp{8.5cm}@{}}
+  \toprule
+  Entregable & Estado \\
+  \midrule
+  Repositorio & \url{https://github.com/eduartrob/integratorProjectClustering-back-corvus} \\
+  PDF (\LaTeX) & Este documento. \\
+  Script Entrenamiento & \texttt{notebooks/run\_training.py} (en el repo). \\
+  Diagrama arquitectura & PDF y PNG generados, en la carpeta correspondiente. \\
+  API docs & Swagger interactivo en \texttt{/docs}. \\
+  Colección pruebas & \texttt{collections/corvus\_clustering.postman\_collection.json}. \\
+  Video 5--10 min & \ReporteVideo \\
+  \bottomrule
+\end{tabular}

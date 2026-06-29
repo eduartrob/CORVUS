@@ -1,0 +1,80 @@
+\seccionreporte{Documentación de la API REST}{sec:api}
+
+\propositoseccion{%
+  Enumera endpoints, contratos JSON y referencia a Swagger/OpenAPI. Exporte \texttt{/docs} a PDF y mantenga \texttt{openapi.yaml} en el repositorio.%
+}
+
+\subsection{Base URL y versionado}
+
+\begin{itemize}
+  \item Base URL de producción: \texttt{http://207.180.215.71:3000} (Servidor Contabo)
+  \item Prefijo de API: \texttt{/api/v1/clustering}
+  \item OpenAPI: Toda la UI generada solita por FastAPI está en \texttt{/api/v1/clustering/docs}.
+\end{itemize}
+
+\subsection{Ejemplo de inferencia}
+
+Como usamos archivos, los requests no son JSON puro, sino \texttt{multipart/form-data}. Aquí un ejemplo de cómo le pega la app móvil:
+
+\textbf{Request}
+
+\begin{lstlisting}[style=jsonstyle]
+POST /api/v1/clustering/pre-validate-proposal
+Content-Type: multipart/form-data
+
+user_id="eduart_001"
+file=@"mi_propuesta.pdf"
+\end{lstlisting}
+
+\textbf{Response 200 (Análisis Rápido)}
+
+\begin{lstlisting}[style=jsonstyle]
+{
+  "status": "success",
+  "academic_alignment": 80,
+  "collision_risk_pct": 12.5,
+  "collision_risk_level": "Bajo",
+  "positive_feedback": [
+    "Originalidad alta. No se encontraron proyectos similares en el histórico."
+  ],
+  "areas_of_improvement": []
+}
+\end{lstlisting}
+
+\subsection{Consulta de historial}
+
+Este es el que consume el dashboard de React:
+
+\begin{lstlisting}[style=jsonstyle]
+GET /api/v1/clustering/inference-history?limit=10&offset=0
+
+{
+  "total": 42,
+  "limit": 10,
+  "offset": 0,
+  "items": [
+    {
+      "id": 1,
+      "user_id": "test_alumno_001",
+      "timestamp": 1751234567.89,
+      "filename": "mi_propuesta.pdf",
+      "score_colision": 12.5,
+      "nivel_riesgo": "Bajo",
+      "academic_alignment": 80
+    }
+  ]
+}
+\end{lstlisting}
+
+\subsection{Documentación Swagger}
+
+FastAPI nos regala el Swagger, así que está siempre actualizado con el código:
+
+\begin{itemize}
+  \item Interfaz interactiva: \texttt{/api/v1/clustering/docs}.
+  \item JSON crudo: \texttt{/api/v1/clustering/openapi.json}.
+\end{itemize}
+
+\figuraopcional{figures/api/swagger_ui.png}{0.88\textwidth}{%
+  \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering\small Pendiente: Captura de Swagger UI}}%
+}{Interfaz Swagger del microservicio}

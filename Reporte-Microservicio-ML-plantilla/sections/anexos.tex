@@ -1,0 +1,52 @@
+\appendix
+\section{Anexos}
+\label{sec:anexos}
+
+\subsection{Anexo A — Especificación OpenAPI}
+
+Incluya o referencie el archivo \texttt{openapi\_swagger/openapi.yaml}. En el repositorio mantenga también \texttt{openapi\_swagger/API.md}. Exporte la UI de Swagger (\texttt{/docs}) a PDF para el entregable gráfico.
+
+\begin{lstlisting}[style=bashstyle]
+openapi: 3.0.3
+info:
+  title: Microservicio ML no supervisado
+  version: 1.0.0
+paths:
+  /api/v1/infer:
+    post:
+      summary: Ejecutar inferencia no supervisada
+  /api/v1/inferences:
+    get:
+      summary: Consultar historial de inferencias
+\end{lstlisting}
+
+Sustituya el fragmento anterior por la especificación completa generada desde su framework (FastAPI exporta OpenAPI automáticamente).
+
+\subsection{Anexo B — Enlaces de entrega}
+
+\begin{tabular}{@{}lp{9cm}@{}}
+  \toprule
+  Recurso & Enlace / ruta \\
+  \midrule
+  Repositorio Git & \ReporteRepositorio \\
+  Video demostrativo & \ReporteVideo \\
+  Notebook & \pendiente{ruta en repo} \\
+  Colección Postman/Bruno & \pendiente{ruta en repo} \\
+  API.md & \pendiente{ruta en repo} \\
+  \bottomrule
+\end{tabular}
+
+\subsection{Anexo C — Guion sugerido del video (5--10 min)}
+
+\begin{enumerate}
+  \item Contexto del proyecto móvil y problemática (1 min).
+  \item Arquitectura del microservicio (1--2 min).
+  \item Entrenamiento del modelo no supervisado en notebook (2 min).
+  \item Demo en vivo: inferencia + consulta de historial (2--3 min).
+  \item Swagger y colección de pruebas (1 min).
+  \item Cómo se integrará con la app móvil al final del curso (1 min).
+\end{enumerate}
+
+\subsection{Anexo D — Registro de decisiones técnicas (opcional)}
+
+\pendiente{Tabla breve: fecha, decisión, alternativa descartada, motivo.}

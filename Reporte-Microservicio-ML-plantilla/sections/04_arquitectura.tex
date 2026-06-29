@@ -1,0 +1,44 @@
+\seccionreporte{Arquitectura del componente}{sec:arquitectura}
+
+\propositoseccion{%
+  Muestra cómo fluyen datos, modelo y persistencia. Adjunte la misma figura en \texttt{figures/arquitectura/} como PNG y SVG para los entregables gráficos.%
+}
+
+\subsection{Vista lógica}
+
+La figura siguiente resume cómo estructuramos los componentes por dentro. Ya incluí la imagen final de la arquitectura en \texttt{figures/arquitectura\_clustering.png}.
+
+\figuraopcional{figures/arquitectura_clustering.png}{0.92\textwidth}{%
+  Diagrama de la arquitectura del microservicio mostrando cómo los PDFs pasan por SpaCy, se vectorizan y entran a UMAP+HDBSCAN.
+}{Diagrama lógico del microservicio de ML no supervisado}
+
+\subsection{Stack tecnológico}
+
+\begin{tabular}{@{}llp{6.5cm}@{}}
+  \toprule
+  Capa & Tecnología & Justificación \\
+  \midrule
+  API & FastAPI & Elegimos FastAPI porque es súper rápido y maneja asincronismo nativo, ideal para no bloquear el hilo mientras Ollama procesa. \\
+  NLP & SpaCy (\texttt{es\_core\_news\_sm}) & Necesitábamos algo robusto pero ligero en español para encontrar los nombres propios y borrarlos. \\
+  ML & SentenceTransformers, UMAP, HDBSCAN & Pipeline híbrido. Transformamos el texto, reducimos dimensiones y agrupamos sin supervisión. \\
+  Base de datos & SQLite (auditoría) + ChromaDB & ChromaDB nos sirve para encontrar proyectos parecidos rápido (vector search) y SQLite guarda el log de quién consultó. \\
+  Contenedor & Docker & Todo está metido en una imagen de Docker para que en Contabo nomás le demos \texttt{docker-compose up} y jale sin pelear con dependencias. \\
+  \bottomrule
+\end{tabular}
+
+\subsection{Flujo de una inferencia}
+
+Paso por paso, cuando le pegan al endpoint pasa esto:
+\begin{enumerate}
+  \item El cliente manda un \texttt{POST} subiendo su archivo Markdown o PDF.
+  \item FastAPI cacha el archivo y primero revisa que traiga "Objetivo General", "Alcance", etc. Si no, lo bota (400).
+  \item Le pasamos el texto limpio a SpaCy para borrar nombres de personas y empresas (anonimización).
+  \item Lo partimos en pedacitos (chunks) y usamos el modelo MiniLM para volverlos vectores matemáticos.
+  \item Comparamos los vectores en ChromaDB y cruzamos los datos con los clústeres de HDBSCAN para ver dónde cae.
+  \item Guardamos el resultado en SQLite (con el \texttt{user\_id} y el \texttt{timestamp}).
+  \item Le regresamos el JSON al cliente con el porcentaje de riesgo y el veredicto.
+\end{enumerate}
+
+\subsection{Integración futura con la app móvil}
+
+La idea a futuro es que la app de Flutter guarde la URL de nuestro servidor Contabo, y cuando el alumno se loguee, Flutter agarre el token JWT y lo mande en la cabecera. Si por alguna razón el servidor está caído o no hay internet, la app móvil va a cachear la petición de subir proyecto y la va a intentar re-enviar cuando recupere la conexión.

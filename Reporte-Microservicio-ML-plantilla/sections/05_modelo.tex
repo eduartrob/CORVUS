@@ -1,0 +1,40 @@
+\seccionreporte{Modelo de aprendizaje no supervisado}{sec:modelo}
+
+\propositoseccion{%
+  Documenta el algoritmo, su fundamentación breve y la evidencia de entrenamiento (notebook + métricas).%
+}
+
+\subsection{Selección del algoritmo}
+
+Algoritmo implementado: \textbf{HDBSCAN + UMAP}.
+
+Nos fuimos por HDBSCAN porque los proyectos no forman grupitos perfectos redondos como los que busca K-Means. Aquí tenemos densidades raras y proyectos que de plano no encajan con nada (outliers o Océanos Azules). HDBSCAN es buenísimo encontrando clústeres basados en la densidad de los datos sin que le tengamos que decir cuántos clústeres queremos desde antes.
+
+\subsection{Fundamento breve}
+
+Básicamente, lo que hace el pipeline completo es: primero, agarramos los textos y usamos un modelo de embeddings de lenguaje (SentenceTransformers) para convertirlos en vectores matemáticos de 384 dimensiones. Luego, metemos esos vectores gigantescos a UMAP para aplastarlos a solo 15 dimensiones, porque si le damos las 384 dimensiones directas a HDBSCAN, se pierde por la maldición de la dimensionalidad.
+
+Una vez que UMAP reduce el espacio cuidando la topología, HDBSCAN busca dónde se agrupan los puntos. Los puntos que quedan volando solos, HDBSCAN los marca como ruido (con un -1), lo cual para nosotros significa que ese proyecto es súper original y no se parece a nada anterior.
+
+\subsection{Entrenamiento y artefacto}
+
+\begin{itemize}
+  \item Notebook de evidencia: \texttt{notebooks/entrenamiento\_hdbscan.ipynb} (o el script equivalente \texttt{run\_training.py} en el repositorio).
+  \item Semilla aleatoria: \texttt{42}, para que siempre nos dé los mismos resultados si corremos el script.
+  \item Corpus: Usamos un conjunto sintético balanceado de 50 propuestas distribuidas en 10 dominios.
+  \item Artefactos generados: \texttt{app/models/umap\_50d\_model.joblib} (88.4 KB) y \texttt{app/models/hdbscan\_model.joblib} (27.1 KB).
+\end{itemize}
+
+\subsection{Métricas de evaluación (no supervisado)}
+
+Al correr el notebook, las métricas del modelo salieron bastante sólidas:
+
+\begin{itemize}
+  \item \textbf{Silhouette Score:} \textbf{0.6962}. Un score mayor a 0.5 ya es bueno, así que casi 0.7 significa que los clústeres quedaron súper bien separados unos de otros.
+  \item \textbf{Davies-Bouldin:} \textbf{0.3411}. Como esta métrica penaliza la dispersión, entre más baja mejor. Un 0.34 indica clústeres muy compactitos.
+  \item \textbf{Clústeres detectados:} \textbf{6} agrupaciones naturales (más los candidatos a ruido).
+\end{itemize}
+
+\figuraopcional{figures/mapa_semantico_2d.png}{1\textwidth}{%
+  El mapa semántico generado en 2D por UMAP muestra claramente cómo se agrupan los dominios del corpus.%
+}{Métricas o gráficos del entrenamiento}
