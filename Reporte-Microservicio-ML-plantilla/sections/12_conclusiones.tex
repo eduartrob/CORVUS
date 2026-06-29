@@ -14,17 +14,17 @@
 
 \subsection{Integración con la aplicación móvil}
 
-Para la siguiente fase del proyecto, el flujo de integración se estructurará de la siguiente manera: El usuario (alumno) seleccionará su documento en la aplicación móvil desarrollada en Flutter. La aplicación enviará una solicitud HTTP POST al microservicio adjuntando el archivo. Una vez que el backend procese la información y retorne el JSON con el veredicto, la aplicación interpretará el nivel de riesgo y mostrará un indicador visual (semáforo verde, amarillo o rojo) para orientar al alumno sobre la viabilidad de su propuesta.
+Esta fase consolidó la conexión total de la arquitectura. Actualmente, el usuario (alumno) selecciona su documento desde la aplicación móvil desarrollada en Flutter, la cual envía una solicitud HTTP POST al microservicio adjuntando el archivo. Una vez que el backend procesa la información y retorna el JSON con el veredicto, la aplicación interpreta el nivel de riesgo y muestra un indicador visual (semáforo verde, amarillo o rojo) orientando al alumno sobre la viabilidad de su propuesta de manera instantánea.
 
 \subsection{Trabajo futuro}
 
-Aunque el MVP actual se encuentra funcional y desplegado en el servidor Contabo, identificamos los siguientes puntos de mejora para alcanzar un estándar empresarial:
+Aunque el MVP actual se encuentra completamente funcional, integrado y desplegado en el servidor Contabo, identificamos los siguientes puntos de mejora para alcanzar un estándar empresarial en futuras iteraciones:
 
 \begin{itemize}
-  \item Implementar un balanceador de carga para gestionar la concurrencia y evitar la saturación de memoria durante las inferencias de Ollama.
-  \item Migrar la base de datos de auditoría de SQLite a PostgreSQL una vez que el volumen de registros históricos escale.
-  \item Configurar certificados SSL (HTTPS) en el servidor para asegurar el tráfico de red, el cual actualmente opera sobre HTTP directo.
-  \item Finalizar la conexión completa de estos endpoints con la interfaz móvil en Flutter.
+  \item Implementar un balanceador de carga para gestionar la concurrencia y evitar la saturación de memoria durante las inferencias pesadas de Ollama.
+  \item Migrar la base de datos de auditoría de SQLite a PostgreSQL una vez que el volumen de registros históricos escale a nivel institucional.
+  \item Configurar certificados SSL (HTTPS) en el servidor para asegurar el tráfico de red, el cual actualmente opera sobre HTTP directo entre la app y el backend.
+  \item Refinar las animaciones y micro-interacciones dentro de la interfaz móvil en Flutter para mejorar la experiencia de usuario durante los tiempos de espera del modelo de lenguaje.
 \end{itemize}
 
 \subsection{Entregables finales del hito}

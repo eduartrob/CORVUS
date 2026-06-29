@@ -4,9 +4,9 @@
   Contextualiza el hito del proyecto final: un microservicio de \textbf{aprendizaje no supervisado} que funcionará de forma \textbf{independiente} antes de integrarse a la aplicación móvil.%
 }
 
-Entonces, este reporte documenta el primer microservicio de machine learning que desarrollamos para el proyecto de Minería de Datos. En esta etapa todavía no abordamos la integración con la aplicación móvil, sino que nuestro objetivo es demostrar que el backend funciona correctamente de forma independiente al ejecutar el algoritmo no supervisado seleccionado.
+Entonces, este reporte documenta el primer microservicio de machine learning que desarrollamos para el proyecto de Minería de Datos. A diferencia de un backend aislado, en esta etapa ya logramos la integración completa con la aplicación móvil, demostrando que el flujo funciona de extremo a extremo: desde que el alumno envía el PDF en Flutter hasta que el algoritmo no supervisado lo procesa en el servidor.
 
-Básicamente, el microservicio expone una API REST que espera la información del cliente. En cuanto llegan los datos, primero realizamos una validación estricta para asegurar que el documento contenga lo necesario, luego aplicamos el preprocesamiento, y después de eso procesamos la información con el modelo para retornar el análisis en formato JSON~\cite{han2011data,scikit-learn}. Adicionalmente, guardamos cada una de estas inferencias en una base de datos local para mantener un historial de consulta, y toda la documentación de los endpoints queda expuesta automáticamente mediante Swagger~\cite{openapi}.
+Básicamente, el microservicio expone una API REST que espera la información del cliente. En cuanto llegan los datos desde la app móvil, primero realizamos una validación estricta para asegurar que el documento contenga lo necesario, luego aplicamos el preprocesamiento, y después de eso procesamos la información con el modelo para retornar el análisis en formato JSON~\cite{han2011data,scikit-learn}. Adicionalmente, guardamos cada una de estas inferencias en una base de datos local para mantener un historial de consulta, y toda la documentación de los endpoints queda expuesta automáticamente mediante Swagger~\cite{openapi}.
 
 \subsection{Alcance de este entregable}
 
@@ -28,6 +28,6 @@ Primero, para el clustering principal utilizamos un \textbf{Modelo local}. Entre
 
 Posteriormente, para obtener un análisis más profundo, conectamos los resultados con un \textbf{Modelo mediante API} local. Lo que hacemos es enviar los resultados de los clusters a un modelo de lenguaje (Ollama) que se ejecuta en el mismo servidor. Así logramos que el LLM genere recomendaciones precisas basándose en la matemática del modelo local, lo cual optimiza el proceso y evita saturar la RAM con modelos demasiado pesados.
 
-\begin{tcolorbox}[checklist,title={Reutilización en el proyecto final}]
-  Nuestro plan es que todo este componente se va a \textbf{conectar directo} con la aplicación móvil en la siguiente fase. Por eso definimos claramente los contratos de la API y preparamos la base de datos de auditoría, asegurando que la integración sea transparente.
+\begin{tcolorbox}[checklist,title={Reutilización y conexión}]
+  A diferencia del hito anterior, todo este componente \textbf{ya se encuentra conectado directamente} con la aplicación móvil. Definimos claramente los contratos de la API y preparamos la base de datos de auditoría, logrando que la integración en Flutter sea totalmente funcional y transparente para el usuario final.
 \end{tcolorbox}
