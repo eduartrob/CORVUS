@@ -6,32 +6,30 @@
 
 \subsection{Esquema de entrada}
 
-En lugar de mandarle un JSON aburrido, nosotros armamos el endpoint para que reciba directamente un \texttt{multipart/form-data}. Así, la app móvil puede mandar el archivo (sea PDF, Word o Markdown) y el microservicio se encarga de leerlo y extraer el texto. Aparte del archivo, también le mandamos el \texttt{user\_id} para poder rastrear quién subió qué en la base de datos de auditoría.
+El endpoint está diseñado para recibir solicitudes de tipo \texttt{multipart/form-data}, lo que permite gestionar el envío de archivos (PDF, Word o Markdown) de forma eficiente junto con el \texttt{user\_id} del remitente, facilitando así la trazabilidad en la base de datos de auditoría.
 
-\subsection{Validaciones implementadas}
+\subsection{Validación de entrada estricta}
 
-Nos dimos cuenta que si le metíamos basura al modelo, nos regresaba basura. Entonces metimos unas validaciones bien estrictas en FastAPI:
+En el microservicio, decidimos implementar una validación fuerte desde el inicio. El endpoint está configurado para recibir solicitudes de tipo \texttt{multipart/form-data}, esperando un \texttt{user\_id} y un archivo PDF o Markdown. 
 
-\begin{tabular}{@{}p{4.2cm}p{8.5cm}@{}}
-  \toprule
-  Regla & Comportamiento \\
-  \midrule
-  Archivo faltante & FastAPI tira un HTTP 422 automático si no viene el \texttt{file}. \\
-  Secciones obligatorias & Si el texto no trae literal las palabras "Objetivo General", "Justificación" y "Alcance", lanzamos un HTTP 400 y rebotamos la petición. \\
-  Extracción fallida & Si el PDF viene como imagen (escaneado) y no saca texto, tiramos un HTTP 400 avisando que el archivo no sirve. \\
-  \bottomrule
-\end{tabular}
+Tan pronto como se recibe el archivo, el backend extrae el texto y ejecuta una verificación obligatoria. Buscamos específicamente que el documento contenga secciones fundamentales como "Objetivo General", "Justificación" y "Alcance". Si el texto carece de alguna de estas secciones, la API rechaza inmediatamente la petición con un error \texttt{400 Bad Request}, informando al usuario cuál fue la sección omitida. Esto garantiza que el modelo no procese documentos incompletos ni consuma recursos innecesariamente.
 
-\subsection{Transformaciones}
+\subsection{Limpieza y anonimización}
 
-Una vez que el documento pasa el filtro, le hacemos una limpieza profunda antes de vectorizarlo:
+Una vez que el documento supera la validación inicial, procedemos a la limpieza del texto. El objetivo en esta etapa es estandarizar la información y, lo más importante, anonimizarla para evitar fugas de privacidad. Para ello, implementamos el siguiente flujo:
 
 \begin{enumerate}
-  \item \textbf{Limpieza de formato:} Quitamos saltos de línea raros, dobles espacios y caracteres extraños que rompen el tokenizer.
-  \item \textbf{Anonimización con NLP:} Metemos el texto a SpaCy (\texttt{es\_core\_news\_sm}) y le aplicamos un filtro para borrar todos los nombres propios (PER) y ubicaciones (LOC). Así evitamos meter datos personales (como el nombre del alumno) al LLM.
-  \item \textbf{Chunking semántico:} Como los proyectos son largos y los modelos de embeddings tienen límite de tokens, partimos el documento en pedazos lógicos ("chunks") usando \texttt{RecursiveCharacterTextSplitter} de LangChain.
-  \item \textbf{Vectorización:} Al final, pasamos los chunks limpios por el modelo SentenceTransformers para volverlos vectores matemáticos.
+  \item \textbf{Normalización:} Convertimos todo el texto a minúsculas y eliminamos caracteres especiales, saltos de línea innecesarios y puntuación sobrante.
+  \item \textbf{Procesamiento NER con SpaCy:} Cargamos el modelo \texttt{es\_core\_news\_sm} de SpaCy para identificar entidades nombradas (Named Entity Recognition).
+  \item \textbf{Anonimización:} El sistema recorre el texto y, cada vez que SpaCy detecta una entidad de tipo persona (\texttt{PER}) o ubicación (\texttt{LOC}), la sustituye por un token genérico como \texttt{[PERSONA]} o \texttt{[UBICACION]}.
+  \item \textbf{Stopwords:} Finalmente, filtramos las palabras vacías (\textit{stopwords}) comunes en español para reducir el ruido en los datos.
 \end{enumerate}
+
+\subsection{Vectorización (Embeddings)}
+
+El paso final del preprocesamiento consiste en transformar el texto limpio en un formato matemático que el algoritmo de clustering pueda interpretar. Para esto, dividimos el texto en fragmentos (chunks) manejables y los procesamos utilizando \texttt{sentence-transformers} con el modelo \texttt{all-MiniLM-L6-v2}. 
+
+Este modelo nos permite generar un vector numérico de 384 dimensiones que captura el significado semántico del texto. De esta manera, el documento completo queda representado en el espacio vectorial y está listo para ser proyectado por UMAP y analizado por HDBSCAN o almacenado en la base de datos ChromaDB.
 
 \subsection{Consistencia entrenamiento vs.\ producción}
 

@@ -9,12 +9,12 @@
 \begin{itemize}
   \item Base URL de producción: \texttt{http://207.180.215.71:3000} (Servidor Contabo)
   \item Prefijo de API: \texttt{/api/v1/clustering}
-  \item OpenAPI: Toda la UI generada solita por FastAPI está en \texttt{/api/v1/clustering/docs}.
+  \item OpenAPI: La documentación interactiva generada automáticamente por FastAPI se encuentra disponible en \texttt{/api/v1/clustering/docs}.
 \end{itemize}
 
 \subsection{Ejemplo de inferencia}
 
-Como usamos archivos, los requests no son JSON puro, sino \texttt{multipart/form-data}. Aquí un ejemplo de cómo le pega la app móvil:
+Dado que procesamos archivos físicos, las peticiones no utilizan JSON plano, sino el estándar \texttt{multipart/form-data}. A continuación, presento un ejemplo de cómo la aplicación móvil interactúa con el endpoint de validación:
 
 \textbf{Request}
 
@@ -43,7 +43,7 @@ file=@"mi_propuesta.pdf"
 
 \subsection{Consulta de historial}
 
-Este es el que consume el dashboard de React:
+Este endpoint es consumido directamente por el dashboard administrativo en React para listar las inferencias de manera eficiente:
 
 \begin{lstlisting}[style=jsonstyle]
 GET /api/v1/clustering/inference-history?limit=10&offset=0
@@ -68,7 +68,7 @@ GET /api/v1/clustering/inference-history?limit=10&offset=0
 
 \subsection{Documentación Swagger}
 
-FastAPI nos regala el Swagger, así que está siempre actualizado con el código:
+Gracias a FastAPI, el contrato de la API se mantiene siempre actualizado y sincronizado con el código de producción:
 
 \begin{itemize}
   \item Interfaz interactiva: \texttt{/api/v1/clustering/docs}.

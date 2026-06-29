@@ -6,33 +6,33 @@
 
 \subsection{Objetivo general}
 
-Lo que nos propusimos hacer en esta fase fue armar desde cero un microservicio REST que se encargara de correr un algoritmo de \textbf{aprendizaje no supervisado}. La idea era que este backend pudiera recibir los textos, encontrar patrones raros o colisiones entre proyectos, guardar todo para el historial y que estuviera listo para conectarse con nuestra app móvil sin tirar errores.
+Nuestro objetivo en esta fase fue desarrollar un microservicio REST desde cero que se encargara de ejecutar un algoritmo de \textbf{aprendizaje no supervisado}. La meta principal era que este backend pudiera recibir los textos, identificar patrones inusuales o posibles colisiones entre proyectos, persistir los datos para el historial, y quedar completamente preparado para integrarse con nuestra aplicación móvil sin generar conflictos.
 
 \subsection{Objetivos específicos}
 
-Para lograr eso, dividimos el trabajo en esto:
+Para lograr esto, estructuramos el trabajo de la siguiente manera:
 
 \begin{enumerate}
-  \item Armar un preprocesamiento sólido con NLP (SpaCy) para limpiar y anonimizar los PDFs antes de que lleguen al modelo.
-  \item Entrenar nuestro pipeline de \textbf{HDBSCAN + UMAP} con un corpus sintético y dejar toda la evidencia documentada en un Jupyter Notebook.
-  \item Levantar los endpoints con FastAPI para que regresen siempre un JSON bien estructurado, nada de respuestas a medias.
-  \item Conectar SQLite para guardar un log de cada vez que alguien manda un archivo, guardando su score de colisión y el riesgo.
-  \item Dejar el Swagger automático listo y probar que todo no se rompa usando Postman.
-  \item Explicar en un video cómo vamos a hacer que la app móvil en Flutter consuma esta API.
+  \item Construir un pipeline de preprocesamiento robusto utilizando NLP (SpaCy) para limpiar y anonimizar los PDFs antes de enviarlos al modelo.
+  \item Entrenar nuestro pipeline de \textbf{HDBSCAN + UMAP} utilizando un corpus sintético, documentando toda la evidencia y métricas en un Jupyter Notebook.
+  \item Exponer los endpoints mediante FastAPI garantizando que siempre retornen un JSON bien estructurado, asegurando consistencia en las respuestas.
+  \item Integrar SQLite para almacenar un registro detallado de cada archivo procesado, incluyendo su porcentaje de colisión y nivel de riesgo.
+  \item Generar la documentación interactiva con Swagger de forma automática y validar la estabilidad de la API mediante una colección de pruebas en Postman.
+  \item Explicar mediante un video demostrativo cómo la aplicación móvil en Flutter consumirá esta API en la etapa final.
 \end{enumerate}
 
 \subsection{Criterios de aceptación mínimos}
 
-Y bueno, para saber que terminamos, estos son los checks que teníamos que pasar:
+Para validar que cumplimos con los requerimientos, definimos los siguientes puntos de control:
 
 \begin{tabular}{@{}p{5.5cm}p{7.8cm}@{}}
   \toprule
   Requisito & Evidencia esperada \\
   \midrule
-  Inferencia & Endpoint POST jalando al 100 y regresando el JSON con el porcentaje de colisión. \\
-  Historial & Endpoint GET con la paginación activada para no saturar al admin. \\
-  Validación & FastAPI regresando errores HTTP 422 o 400 si el usuario trata de pasarse de listo con archivos vacíos. \\
-  Persistencia & Los logs guardándose en \texttt{inference\_log.db} sin fallas. \\
-  Documentación & El \texttt{/docs} de Swagger cargando perfectamente en el servidor. \\
+  Inferencia & Endpoint POST completamente operativo que retorne el JSON con el porcentaje de colisión. \\
+  Historial & Endpoint GET con paginación implementada para no saturar la vista del administrador. \\
+  Validación & FastAPI retornando errores HTTP 422 o 400 cuando se envían documentos inválidos o incompletos. \\
+  Persistencia & Los registros almacenados correctamente en \texttt{inference\_log.db} sin excepciones. \\
+  Documentación & La interfaz de Swagger (\texttt{/docs}) accesible y funcional en el servidor de producción. \\
   \bottomrule
 \end{tabular}

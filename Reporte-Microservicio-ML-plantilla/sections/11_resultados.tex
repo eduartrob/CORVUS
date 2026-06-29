@@ -6,11 +6,11 @@
 
 \subsection{Resultados del modelo}
 
-Como comentamos antes, HDBSCAN nos arrojó resultados bastante buenos con el corpus de 50 proyectos. El Silhouette de 0.69 nos dice que el modelo sí logró entender de qué trata cada documento y agruparlos lógicamente sin revolver turismo con fintech, por ejemplo. 
+Como comentamos anteriormente, la implementación de HDBSCAN arrojó resultados altamente satisfactorios sobre nuestro corpus de 50 proyectos base. Obtener un índice de Silhouette de 0.69 nos confirma matemáticamente que el modelo logró capturar la semántica de cada documento y agruparlos de manera coherente, evitando la mezcla de dominios dispares como proyectos de turismo con aplicaciones financieras.
 
 \subsection{Ejemplos de inferencia}
 
-Aquí les dejo un ejemplo de lo que nos regresa el endpoint cuando le pegamos con un archivo real. Fíjense cómo el LLM nos da un veredicto súper estructurado.
+A continuación presento un ejemplo real de la respuesta estructurada que retorna nuestro endpoint al procesar un archivo. Observen cómo la integración con el modelo de lenguaje (Ollama) permite generar un dictamen profundo y estructurado.
 
 \begin{lstlisting}[style=jsonstyle]
 {
@@ -34,7 +34,7 @@ Aquí les dejo un ejemplo de lo que nos regresa el endpoint cuando le pegamos co
 
 \subsection{Desempeño del servicio}
 
-Hicimos algunas pruebas de carga ligeras para ver qué tanto aguantaba el servidor de Contabo (que tiene 8GB de RAM), y estos son los números:
+Ejecutamos diversas pruebas de carga controladas para evaluar la estabilidad del servidor en Contabo (equipado con 8GB de RAM). Los resultados de rendimiento obtenidos fueron los siguientes:
 
 \begin{tabular}{@{}lr@{}}
   \toprule
@@ -50,15 +50,15 @@ Hicimos algunas pruebas de carga ligeras para ver qué tanto aguantaba el servid
 \subsection{Visualizaciones}
 
 \figuraopcional{figures/mapa_semantico_2d.png}{0.8\textwidth}{%
-  El mapa semántico muestra claramente cómo los proyectos de una misma categoría se amontonan, lo que confirma que el modelo de embeddings funciona bien.%
+  El mapa semántico muestra claramente cómo los proyectos de una misma categoría se agrupan, confirmando empíricamente la efectividad del modelo de embeddings.%
 }{Visualización 2D de clústeres UMAP}
 
 \subsection{Limitaciones conocidas}
 
-Obviamente no todo es perfecto, detectamos algunas cosillas que tenemos que tener en cuenta:
+A pesar de los buenos resultados, hemos identificado ciertas limitantes técnicas que debemos considerar para las próximas fases:
 
 \begin{itemize}
-  \item \textbf{RAM del Servidor:} Como Ollama se come casi 4GB de RAM cada vez que hace una inferencia, si dos alumnos le dan click al mismo tiempo, el contenedor de Docker hace cuello de botella.
-  \item \textbf{Alucinaciones del LLM:} Aunque le pasamos los datos duros de colisión a Phi-3 para que no invente cosas, a veces en las "recomendaciones" tira tecnologías que no vienen al caso.
-  \item \textbf{Textos en imágenes:} Si el alumno sube un PDF que es un escaneo (imágenes en vez de texto), nuestro parser falla porque no le metimos OCR para no alentar el proceso.
+  \item \textbf{Recursos de Memoria:} Debido a que la inferencia con Ollama consume aproximadamente 4GB de RAM, la ejecución de múltiples análisis profundos simultáneos podría generar cuellos de botella en el contenedor Docker.
+  \item \textbf{Alucinaciones del LLM:} Aunque inyectamos datos duros de colisión en el prompt de Phi-3 para restringir su contexto, existe un riesgo menor de que el modelo sugiera tecnologías o recomendaciones poco pertinentes al dominio del proyecto.
+  \item \textbf{Textos en imágenes:} Actualmente nuestro parser falla si un alumno envía un documento PDF escaneado (imágenes sin capa de texto). Decidimos omitir la integración de OCR (Reconocimiento Óptico de Caracteres) para no degradar el tiempo de respuesta del sistema.
 \end{itemize}

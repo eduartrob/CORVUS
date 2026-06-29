@@ -6,34 +6,34 @@
 
 \subsection{Estrategia de pruebas}
 
-La verdad queríamos asegurarnos de que el servidor no se cayera en cuanto le mandaran cosas raras, así que la estrategia de pruebas la enfocamos totalmente en la API y el manejo de errores. 
+Nuestro principal objetivo de calidad fue garantizar que el servidor mantuviera su estabilidad incluso ante peticiones malformadas o inesperadas. Por ello, la estrategia de pruebas se centró fuertemente en la robustez de la API y el manejo de excepciones.
 
 \begin{tabular}{@{}lp{9.5cm}@{}}
   \toprule
   Tipo & Qué valida \\
   \midrule
-  Validadores & Que rechace archivos sin Objetivos o Alcance (400). \\
-  Integración & Que el modelo procese el documento y Ollama devuelva el JSON. \\
-  Contrato & Que siempre recibamos los campos que espera el front (200). \\
-  Carga ligera & Pruebas manuales concurrentes para ver si Ollama no truena la RAM. \\
+  Validadores & Confirma que el sistema rechace archivos sin "Objetivos" o "Alcance" (400). \\
+  Integración & Asegura que el modelo procese el documento y Ollama retorne el JSON esperado. \\
+  Contrato & Valida que el frontend siempre reciba los campos estructurados (200). \\
+  Carga ligera & Pruebas manuales concurrentes para monitorear el consumo de memoria de Ollama. \\
   \bottomrule
 \end{tabular}
 
 \subsection{Colección Postman}
 
-Armamos una colección completa en Postman para que el profe o cualquiera pueda darle "Run" y ver que todo jala a la primera.
+Para facilitar la verificación del sistema, estructuramos una colección completa en Postman. De esta manera, cualquier desarrollador o evaluador puede ejecutar las pruebas automatizadas y confirmar el correcto funcionamiento de los flujos.
 
 \begin{itemize}
-  \item Archivo en el repo: \texttt{collections/corvus\_clustering.postman\_collection.json}.
-  \item Ambiente configurado directo al servidor de producción: \texttt{http://207.180.215.71:3000}.
-  \item Casos que probamos sí o sí:
+  \item Archivo en el repositorio: \texttt{collections/corvus\_clustering.postman\_collection.json}.
+  \item Entorno configurado contra el servidor de producción: \texttt{http://207.180.215.71:3000}.
+  \item Casos de uso validados:
     \begin{enumerate}
-      \item \textbf{Pre-validación exitosa (200):} Manda un MD bien hecho y regresa el porcentaje de colisión.
-      \item \textbf{Análisis profundo (200):} El endpoint de Ollama con un proyecto real.
-      \item \textbf{Historial paginado (200):} Que la ruta \texttt{/inference-history} traiga todo bien paginado.
-      \item \textbf{Payload incompleto (422):} Mandar el request sin adjuntar el archivo.
-      \item \textbf{Falta sección obligatoria (400):} Mandar un texto que no trae la palabra "Alcance".
-      \item \textbf{Draft (200):} Recuperar el último análisis rápido sin volver a procesar nada.
+      \item \textbf{Pre-validación exitosa (200):} Envío de un documento estructurado, retornando el porcentaje de colisión.
+      \item \textbf{Análisis profundo (200):} Consumo del endpoint de Ollama utilizando un proyecto real.
+      \item \textbf{Historial paginado (200):} Verificación de que la ruta \texttt{/inference-history} retorne los datos correctamente paginados.
+      \item \textbf{Payload incompleto (422):} Petición enviada sin el archivo adjunto requerido.
+      \item \textbf{Falta sección obligatoria (400):} Envío de un texto válido pero omitiendo deliberadamente la sección "Alcance".
+      \item \textbf{Recuperación de Draft (200):} Solicitud del último análisis rápido almacenado, evitando el reprocesamiento.
     \end{enumerate}
 \end{itemize}
 
@@ -41,10 +41,10 @@ Armamos una colección completa en Postman para que el profe o cualquiera pueda 
 
 \begin{tcolorbox}[checklist,title={Verificación final}]
   \begin{itemize}
-    \item[$\square$] Inferencia POST validada con Postman (todos los endpoints regresan lo esperado).
-    \item[$\square$] Historial GET devuelve todos los logs de SQLite súper rápido.
-    \item[$\square$] Swagger de FastAPI desplegado y público.
-    \item[$\square$] El script de entrenamiento generó los .joblib sin crashes.
-    \item[$\square$] Video de demostración grabado mostrando todo esto.
+    \item[$\square$] Inferencia POST validada exitosamente mediante la colección de Postman.
+    \item[$\square$] Endpoint GET del historial responde eficientemente extrayendo los logs de SQLite.
+    \item[$\square$] Interfaz Swagger de FastAPI desplegada y accesible públicamente.
+    \item[$\square$] Script de entrenamiento ejecutado, generando los artefactos \texttt{.joblib} sin excepciones.
+    \item[$\square$] Video de demostración elaborado, detallando el flujo completo de la arquitectura.
   \end{itemize}
 \end{tcolorbox}

@@ -4,36 +4,47 @@
   Documenta el algoritmo, su fundamentación breve y la evidencia de entrenamiento (notebook + métricas).%
 }
 
-\subsection{Selección del algoritmo}
+\subsection{Algoritmo seleccionado}
 
-Algoritmo implementado: \textbf{HDBSCAN + UMAP}.
+Para el motor de clustering seleccionamos \textbf{HDBSCAN} (Hierarchical Density-Based Spatial Clustering of Applications with Noise). Decidimos utilizar este algoritmo porque, a diferencia de K-Means, no necesitamos especificar la cantidad de grupos previamente, y a diferencia de DBSCAN tradicional, maneja de manera excelente las densidades variables en los datos. Además, la capacidad de HDBSCAN para clasificar elementos como ruido nos permite detectar de forma automática proyectos que son únicos, lo cual llamamos "Océanos Azules".
 
-Nos fuimos por HDBSCAN porque los proyectos no forman grupitos perfectos redondos como los que busca K-Means. Aquí tenemos densidades raras y proyectos que de plano no encajan con nada (outliers o Océanos Azules). HDBSCAN es buenísimo encontrando clústeres basados en la densidad de los datos sin que le tengamos que decir cuántos clústeres queremos desde antes.
+Previamente en el pipeline, aplicamos \textbf{UMAP} (Uniform Manifold Approximation and Projection) para reducir la dimensionalidad de los vectores generados por \texttt{sentence-transformers}, pasando de 384 a 15 dimensiones. Esto mejora significativamente el rendimiento y la calidad del agrupamiento.
 
-\subsection{Fundamento breve}
+\subsection{Proceso de entrenamiento}
 
-Básicamente, lo que hace el pipeline completo es: primero, agarramos los textos y usamos un modelo de embeddings de lenguaje (SentenceTransformers) para convertirlos en vectores matemáticos de 384 dimensiones. Luego, metemos esos vectores gigantescos a UMAP para aplastarlos a solo 15 dimensiones, porque si le damos las 384 dimensiones directas a HDBSCAN, se pierde por la maldición de la dimensionalidad.
+El entrenamiento lo documentamos completamente en el archivo \texttt{notebooks/run\_training.py}, el cual procesa los 50 proyectos base que preparamos. El flujo es el siguiente:
 
-Una vez que UMAP reduce el espacio cuidando la topología, HDBSCAN busca dónde se agrupan los puntos. Los puntos que quedan volando solos, HDBSCAN los marca como ruido (con un -1), lo cual para nosotros significa que ese proyecto es súper original y no se parece a nada anterior.
+\begin{enumerate}
+  \item Extraemos el texto de los 50 proyectos de prueba.
+  \item Limpiamos los datos eliminando información sensible mediante SpaCy.
+  \item Convertimos los textos en \textit{embeddings} (vectores matemáticos).
+  \item Entrenamos el modelo UMAP y luego el modelo HDBSCAN utilizando esos vectores reducidos.
+  \item Exportamos ambos modelos entrenados como archivos \texttt{.joblib}.
+\end{enumerate}
 
-\subsection{Entrenamiento y artefacto}
+Para los parámetros de HDBSCAN, configuramos \texttt{min\_cluster\_size=3} porque en nuestro corpus tenemos grupos muy específicos (por ejemplo, tres proyectos de fintech), y un tamaño de clúster mayor los clasificaría erróneamente como ruido. Además, establecemos \texttt{metric='euclidean'} ya que trabajamos sobre el espacio reducido por UMAP.
+
+\subsection{Artefacto generado}
+
+El proceso de entrenamiento genera los siguientes archivos que posteriormente son consumidos por el backend mediante la librería \texttt{joblib}:
 
 \begin{itemize}
-  \item Notebook de evidencia: \texttt{notebooks/entrenamiento\_hdbscan.ipynb} (o el script equivalente \texttt{run\_training.py} en el repositorio).
-  \item Semilla aleatoria: \texttt{42}, para que siempre nos dé los mismos resultados si corremos el script.
-  \item Corpus: Usamos un conjunto sintético balanceado de 50 propuestas distribuidas en 10 dominios.
-  \item Artefactos generados: \texttt{app/models/umap\_50d\_model.joblib} (88.4 KB) y \texttt{app/models/hdbscan\_model.joblib} (27.1 KB).
+  \item \textbf{Archivo:} \texttt{app/models/umap\_50d\_model.joblib} y \texttt{hdbscan\_model.joblib}
+  \item \textbf{Tamaño estimado:} Ambos pesan menos de 150 KB, lo que facilita enormemente su carga en la memoria del servidor.
 \end{itemize}
 
-\subsection{Métricas de evaluación (no supervisado)}
+\subsection{Métricas de evaluación}
 
-Al correr el notebook, las métricas del modelo salieron bastante sólidas:
+Como estamos trabajando con un problema de aprendizaje no supervisado, no disponemos de etiquetas exactas para evaluar \textit{accuracy}. En su lugar, utilizamos métricas matemáticas de cohesión para validar que los clústeres tienen sentido:
 
-\begin{itemize}
-  \item \textbf{Silhouette Score:} \textbf{0.6962}. Un score mayor a 0.5 ya es bueno, así que casi 0.7 significa que los clústeres quedaron súper bien separados unos de otros.
-  \item \textbf{Davies-Bouldin:} \textbf{0.3411}. Como esta métrica penaliza la dispersión, entre más baja mejor. Un 0.34 indica clústeres muy compactitos.
-  \item \textbf{Clústeres detectados:} \textbf{6} agrupaciones naturales (más los candidatos a ruido).
-\end{itemize}
+\begin{tabular}{@{}lp{8.5cm}@{}}
+  \toprule
+  Métrica & Valor obtenido y justificación \\
+  \midrule
+  \textbf{Silhouette Score} & Obtuvimos un \textbf{0.6962}. Este valor indica que los clústeres están muy bien definidos y separados entre sí, confirmando que proyectos de distintas disciplinas no se están mezclando. \\
+  \textbf{Davies-Bouldin} & Obtuvimos un \textbf{0.3411}. Al ser cercano a cero, demuestra que la dispersión interna de cada clúster es baja y la distancia entre ellos es alta, lo cual representa un agrupamiento óptimo. \\
+  \bottomrule
+\end{tabular}
 
 \figuraopcional{figures/mapa_semantico_2d.png}{1\textwidth}{%
   El mapa semántico generado en 2D por UMAP muestra claramente cómo se agrupan los dominios del corpus.%

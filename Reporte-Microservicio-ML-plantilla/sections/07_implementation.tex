@@ -6,41 +6,43 @@
 
 \subsection{Repositorio}
 
+El código fuente completo se encuentra documentado y estructurado en el repositorio oficial:
+
 URL: \url{https://github.com/eduartrob/integratorProjectClustering-back-corvus} (rama \texttt{Palomeque}).
 
 \begin{tabular}{@{}lp{9.5cm}@{}}
   \toprule
   Ruta & Contenido esperado \\
   \midrule
-  \texttt{app/} & Código del servicio (rutas, lógica de clustering, NLP, etc.) \\
-  \texttt{app/models/} & Artefactos serializados (.joblib) y la base de datos SQLite \\
-  \texttt{notebooks/} & El script \texttt{run\_training.py} y gráficas EDA \\
-  \texttt{collections/} & Colección Postman para probar los endpoints \\
-  \texttt{Dockerfile} & Ya listo para levantar en Contabo \\
-  \texttt{README.md} & Guía paso a paso de instalación \\
+  \texttt{app/} & Código central del servicio, incluyendo enrutamiento, lógica de clustering y NLP. \\
+  \texttt{app/models/} & Almacena los artefactos serializados (\texttt{.joblib}) y la base de datos SQLite de auditoría. \\
+  \texttt{notebooks/} & Contiene el script \texttt{run\_training.py} y las gráficas exploratorias. \\
+  \texttt{collections/} & Colección de Postman estructurada para validar todos los endpoints. \\
+  \texttt{Dockerfile} & Configurado para el despliegue directo en el servidor de Contabo. \\
+  \texttt{README.md} & Guía detallada de instalación y comandos operativos. \\
   \bottomrule
 \end{tabular}
 
 \subsection{Arranque del servicio}
 
-Para levantar todo esto en el servidor (o en local), los comandos están súper sencillos porque usamos \texttt{venv} y FastAPI:
+Para inicializar el servicio en el servidor de producción o en un entorno local, el proceso se basa en el estándar de entornos virtuales y FastAPI:
 
 \begin{lstlisting}[style=bashstyle]
-# Crear el entorno y activar
+# Creacion y activacion del entorno virtual
 python3 -m venv venv
 source venv/bin/activate
 
-# Instalar dependencias
+# Instalacion de dependencias
 pip install -r requirements.txt
 python -m spacy download es_core_news_sm
 
-# Levantar el server en el puerto 3000
+# Arranque del servidor expuesto en el puerto 3000
 uvicorn app.api.server:app --host 0.0.0.0 --port 3000 --reload
 \end{lstlisting}
 
 \subsection{Fragmento representativo}
 
-Este es un pedazo de cómo hacemos la validación estricta y cómo guardamos el log de inferencia en la ruta principal:
+A continuación, presento un fragmento clave del enrutador principal que ilustra nuestra lógica de validación estricta y el registro de auditoría de inferencias:
 
 \begin{lstlisting}[style=pythonstyle]
 # app/api/routes.py (extracto)
@@ -49,17 +51,17 @@ async def pre_validate_proposal(
     user_id: str = Form(...),
     file: UploadFile = File(...)
 ):
-    # Validamos secciones obligatorias
+    # Validamos las secciones obligatorias del documento
     section_check = _validate_project_sections(full_text)
     if not section_check["is_valid"]:
         raise HTTPException(
             status_code=400,
-            detail=f"Falta sección obligatoria: {section_check['missing_mandatory'][0]}"
+            detail=f"Sección obligatoria ausente: {section_check['missing_mandatory'][0]}"
         )
     
-    # ... aqui sacamos los embeddings y vemos similitudes ...
+    # [Generacion de embeddings y busqueda de similitudes]
     
-    # Auditoría: registrar la inferencia en SQLite
+    # Auditoría: persistencia de la inferencia en SQLite
     log_inference(
         user_id=user_id,
         filename=file.filename,
@@ -73,18 +75,18 @@ async def pre_validate_proposal(
 \subsection{Manejo de errores}
 
 \begin{itemize}
-  \item \texttt{400 Bad Request}: Si el documento viene incompleto (faltan los objetivos o el alcance) o si es un PDF escaneado del que no pudimos sacar texto.
-  \item \texttt{422 Unprocessable Entity}: Si el frontend trata de pegarle al endpoint pero no manda el archivo (FastAPI rebota esto en automático).
-  \item \texttt{500 Internal Server Error}: Si se crashea el LLM o falla Ollama por RAM, lo atajamos y devolvemos un mensaje claro para que la app móvil no se quede pasmada.
+  \item \texttt{400 Bad Request}: Retornado cuando el documento carece de secciones obligatorias (Objetivos, Alcance) o cuando la extracción de texto falla al procesar archivos ilegibles.
+  \item \texttt{422 Unprocessable Entity}: Capturado automáticamente por FastAPI cuando la solicitud no incluye los parámetros o archivos requeridos por el esquema.
+  \item \texttt{500 Internal Server Error}: Implementamos bloques de captura (\texttt{try-except}) para manejar excepciones imprevistas del modelo de lenguaje o saturación de memoria, garantizando que el cliente reciba un mensaje claro sin comprometer la estabilidad del sistema.
 \end{itemize}
 
 \subsection{Dependencias principales}
 
-Tratamos de mantener las librerías al mínimo para no hacer tan pesado el contenedor:
+Para garantizar un rendimiento óptimo y un contenedor ligero, limitamos las dependencias estrictamente a las necesarias:
 \begin{itemize}
-  \item \texttt{fastapi} y \texttt{uvicorn}: Para montar la API rapidísimo.
-  \item \texttt{sentence-transformers}: Para sacar los embeddings de 384 dimensiones.
-  \item \texttt{umap-learn} y \texttt{hdbscan}: Para la reducción dimensional y el clustering no supervisado.
-  \item \texttt{spacy}: Para el filtrado NER y anonimización de datos sensibles.
-  \item \texttt{chromadb}: Como base de datos vectorial in-memory.
+  \item \texttt{fastapi} y \texttt{uvicorn}: Seleccionadas por su alto rendimiento y manejo asíncrono para el desarrollo de la API.
+  \item \texttt{sentence-transformers}: Empleado para la generación de embeddings de 384 dimensiones.
+  \item \texttt{umap-learn} y \texttt{hdbscan}: Esenciales para la reducción de dimensionalidad y el clustering basado en densidades.
+  \item \texttt{spacy}: Implementado para el reconocimiento de entidades nombradas (NER) y la anonimización de los datos procesados.
+  \item \texttt{chromadb}: Utilizado como base de datos vectorial residente en memoria.
 \end{itemize}

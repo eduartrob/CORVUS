@@ -6,36 +6,36 @@
 
 \subsection{Motor y justificación}
 
-Para este MVP, decidimos usar dos cosas distintas. Para la base de datos de los proyectos históricos (los embeddings) usamos \textbf{ChromaDB} porque es una base de datos vectorial que funciona rapidísimo en memoria y nos deja hacer búsquedas de similitud coseno sin configuraciones locas. 
+Para este MVP, implementamos una arquitectura de persistencia dividida en dos componentes. Para la base de datos de los proyectos históricos (los embeddings), utilizamos \textbf{ChromaDB}. Elegimos este motor porque es una base de datos vectorial que funciona de manera muy eficiente en memoria y nos permite ejecutar búsquedas de similitud coseno sin requerir configuraciones complejas en el servidor.
 
-Y para guardar el historial de quién hace qué (la tabla de auditoría de inferencias), nos fuimos por \textbf{SQLite}. ¿Por qué SQLite? Porque literalmente solo necesitamos guardar un log de las inferencias para que el dashboard del admin las lea, y no queríamos levantar todo un PostgreSQL nada más para una tabla plana. Funciona perfecto y los datos se quedan en un archivo local en el servidor (\texttt{inference\_log.db}). Cuando ya tengamos miles de usuarios concurrentes, pues obvio lo migramos a Postgres, pero por ahora vuela.
+Por otro lado, para registrar el historial de auditoría de inferencias, seleccionamos \textbf{SQLite}. La decisión de usar SQLite se basa en que, por el momento, nuestro único requerimiento es almacenar un log plano que el dashboard administrativo pueda consultar. Desplegar un clúster de PostgreSQL únicamente para esta tabla habría generado una sobrecarga innecesaria en el servidor. El sistema funciona perfectamente manteniendo los datos en un archivo local (\texttt{inference\_log.db}), con la proyección de migrar a PostgreSQL cuando la concurrencia de usuarios lo exija.
 
 \subsection{Modelo de datos}
 
-Esta es la estructura exacta de nuestra tabla en SQLite:
+Esta es la estructura de la tabla principal que implementamos en SQLite:
 
 \begin{tabular}{@{}llp{5.5cm}@{}}
   \toprule
   Campo & Tipo & Descripción \\
   \midrule
   \texttt{id} & INTEGER PRIMARY KEY & Identificador único autoincremental. \\
-  \texttt{user\_id} & TEXT & ID del alumno o profesor (viene del JWT de la app). \\
-  \texttt{timestamp} & REAL & Cuándo se hizo la inferencia (timestamp de Unix). \\
-  \texttt{filename} & TEXT & El nombre del PDF o archivo que subieron. \\
-  \texttt{score\_colision} & REAL & Porcentaje de plagio o similitud encontrado. \\
-  \texttt{nivel\_riesgo} & TEXT & Puede ser 'Bajo', 'Medio' o 'Alto'. \\
-  \texttt{academic\_alignment} & INTEGER & Calificación del 0 al 100 de qué tan bien cumple el formato. \\
-  \texttt{veredicto} & TEXT & El dictamen final en texto que arroja el LLM (si aplica). \\
+  \texttt{user\_id} & TEXT & ID del alumno o profesor (extraído del JWT). \\
+  \texttt{timestamp} & REAL & Momento exacto de la inferencia (timestamp de Unix). \\
+  \texttt{filename} & TEXT & Nombre original del PDF o archivo analizado. \\
+  \texttt{score\_colision} & REAL & Porcentaje de plagio o similitud detectado. \\
+  \texttt{nivel\_riesgo} & TEXT & Clasificación del riesgo ('Bajo', 'Medio' o 'Alto'). \\
+  \texttt{academic\_alignment} & INTEGER & Calificación del 0 al 100 evaluando el cumplimiento del formato. \\
+  \texttt{veredicto} & TEXT & Dictamen textual generado por el LLM. \\
   \bottomrule
 \end{tabular}
 
 \subsection{Operaciones}
 
 \begin{itemize}
-  \item \textbf{Insert:} Inyectamos un nuevo registro justo antes de devolverle la respuesta al cliente en el endpoint \texttt{/pre-validate-proposal}.
-  \item \textbf{Select paginado:} Tenemos un \texttt{GET /inference-history?limit=15\&offset=0} que el frontend del dashboard admin usa para llenar la tabla de monitoreo sin trabarse.
+  \item \textbf{Insert:} Inyectamos un nuevo registro en la base de datos justo antes de retornar la respuesta HTTP al cliente en el endpoint \texttt{/pre-validate-proposal}.
+  \item \textbf{Select paginado:} Implementamos la ruta \texttt{GET /inference-history?limit=15\&offset=0}, la cual permite al frontend consumir los registros de monitoreo de manera fluida y sin sobrecargar la red.
 \end{itemize}
 
 \subsection{Privacidad}
 
-Como los proyectos pueden traer nombres de empresas o datos de los alumnos, pasamos todo el texto por el modelo \texttt{es\_core\_news\_sm} de SpaCy. SpaCy nos encuentra todas las entidades nombradas (NER) de tipo persona o ubicación, y las borramos antes de hacer los embeddings o mandarlo al LLM de Ollama. Así nos aseguramos de no fugar información sensible.
+Debido a que las propuestas pueden contener nombres de empresas, asesores o alumnos, procesamos todo el texto utilizando el modelo \texttt{es\_core\_news\_sm} de SpaCy antes de almacenarlo o evaluarlo. SpaCy localiza las entidades nombradas (NER) correspondientes a personas o ubicaciones, y las elimina del texto antes de generar los embeddings o enviar el contexto a Ollama. De esta manera, aseguramos el cumplimiento de las normativas de privacidad y evitamos exponer información sensible.

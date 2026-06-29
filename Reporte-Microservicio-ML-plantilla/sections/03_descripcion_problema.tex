@@ -4,15 +4,31 @@
   Relaciona la problemática de negocio de la app móvil con la necesidad de un modelo \textbf{no supervisado}.%
 }
 
-\subsection{Contexto del proyecto móvil}
+\subsection{El problema a resolver}
 
-La bronca principal que tenemos ahorita en la universidad es que cuando los alumnos proponen su proyecto integrador, los profesores tardan muchísimo en revisar los documentos uno por uno para ver si la idea ya se hizo antes o si alguien se copió. Entonces, la aplicación móvil que estamos armando trata de resolver esto. Le damos a los alumnos y profes una plataforma donde suben sus propuestas y el sistema hace todo el primer filtro de manera automática para decirles si el proyecto pasa o si hay riesgo de que sea repetido.
+El problema principal que identificamos en el flujo actual de los proyectos integradores es el cuello de botella durante la fase de validación de propuestas. Actualmente, los profesores deben revisar manualmente decenas de documentos para verificar si el contenido es original o si colisiona con proyectos de semestres anteriores. Esto resulta en un proceso ineficiente, subjetivo y propenso a errores, especialmente cuando el volumen de proyectos aumenta.
 
-\subsection{Necesidad analítica}
+Por lo tanto, necesitamos automatizar este primer filtro. Queremos que el sistema sea capaz de analizar el documento en cuestión de segundos, compararlo matemáticamente contra todo el repositorio histórico y asignar un nivel de riesgo de colisión.
 
-Y bueno, aquí es donde entra la necesidad de usar machine learning. Decidimos meter un algoritmo \textbf{no supervisado} porque la verdad no tenemos los datos etiquetados de antemano. No podemos tener a alguien clasificando a mano miles de proyectos de semestres pasados. 
+\subsection{Justificación de la IA}
 
-Entonces, lo que hacemos es usar clustering. Primero volvemos los textos unos vectores gigantes (embeddings), y luego dejamos que el algoritmo agrupe por sí solo los proyectos que hablan de las mismas tecnologías o temas. Así logramos hacer un \textbf{descubrimiento de patrones} operativos sin etiquetas previas, y de paso nos sirve para la \textbf{detección de anomalías} cuando vemos que un proyecto se sale de todos los clusters normales (lo que nosotros llamamos un Océano Azul).
+Para resolver esto, descartamos el uso de bases de datos relacionales tradicionales porque las búsquedas por palabras clave (\textit{keywords}) no son suficientes. Si un alumno escribe "aplicación de cobro" y otro escribe "sistema de pagos", una búsqueda SQL simple no detectará la similitud. 
+
+En su lugar, decidimos utilizar Inteligencia Artificial, específicamente modelos de procesamiento de lenguaje natural (NLP) y aprendizaje no supervisado. El enfoque lógico es transformar los textos en representaciones vectoriales (\textit{embeddings}) y luego aplicar un algoritmo que agrupe matemáticamente los proyectos similares. 
+
+\subsection{Selección del algoritmo}
+
+Evaluamos varias opciones para el clustering:
+
+\begin{itemize}
+  \item \textbf{K-Means:} Lo descartamos porque exige definir el número de clústeres (\textit{k}) de antemano. En un entorno académico, la cantidad de temas (fintech, salud, IoT) cambia cada semestre, por lo que forzar un número fijo generaría agrupaciones incorrectas.
+  \item \textbf{DBSCAN:} Aunque identifica densidades, tiene problemas cuando los clústeres tienen diferentes niveles de concentración, lo cual es muy común en textos.
+  \item \textbf{HDBSCAN (Elegido):} Seleccionamos HDBSCAN porque no requiere que le indiquemos cuántos grupos formar y maneja perfectamente densidades variables. Además, tiene la ventaja de clasificar como "ruido" los proyectos que no se parecen a nada, lo cual es exactamente lo que buscamos para identificar propuestas verdaderamente innovadoras ("océanos azules").
+\end{itemize}
+
+\subsection{Reducción de dimensionalidad}
+
+Como los embeddings que generamos con \texttt{sentence-transformers} tienen 384 dimensiones, aplicar HDBSCAN directamente causaría problemas de rendimiento por la "maldición de la dimensionalidad". Para solucionar esto, integramos \textbf{UMAP} antes del clustering. UMAP nos permite reducir esas 384 dimensiones a un espacio de 15 dimensiones, preservando la estructura global y local de los datos. De esta forma, el clustering se ejecuta correctamente y el consumo de recursos se mantiene bajo control.
 
 \subsection{Pregunta analítica}
 

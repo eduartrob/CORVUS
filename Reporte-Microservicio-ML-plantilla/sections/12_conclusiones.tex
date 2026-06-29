@@ -7,24 +7,24 @@
 \subsection{Conclusiones}
 
 \begin{enumerate}
-  \item \textbf{Logro principal:} Cumplimos el objetivo de automatizar el primer filtro de los proyectos. Ahora el sistema puede leer un documento y decirte matemáticamente si se parece a algo que ya existe, quitándole horas de trabajo a los profes.
-  \item \textbf{Validación y persistencia:} El microservicio quedó súper sólido. Logramos meter las validaciones estrictas para rebotar archivos malos y todo queda guardado en la base de datos de SQLite para que haya trazabilidad de quién subió qué.
-  \item \textbf{Lección aprendida:} Nos dimos cuenta de que no le puedes dar el control de las matemáticas a un LLM porque inventa números. Es mil veces mejor hacer el clustering duro con algoritmos como HDBSCAN y ya nada más usar el LLM para que redacte el reporte basándose en esos datos reales.
+  \item \textbf{Logro principal:} Cumplimos el objetivo de automatizar el primer filtro de los proyectos integradores. Actualmente, el sistema es capaz de analizar un documento y calcular matemáticamente su grado de similitud con el repositorio histórico, lo cual optimiza significativamente el tiempo de revisión de los profesores.
+  \item \textbf{Validación y persistencia:} El microservicio demostró ser altamente estable. Implementamos validaciones estrictas para rechazar documentos malformados o incompletos, y aseguramos la trazabilidad de cada inferencia mediante el registro persistente en la base de datos SQLite.
+  \item \textbf{Lección aprendida:} Durante el desarrollo, identificamos que delegar operaciones matemáticas (como el cálculo de similitud o agrupamiento) a un LLM produce resultados poco confiables debido a su tendencia a alucinar métricas. La decisión arquitectónica de utilizar HDBSCAN para el cálculo matemático duro y reservar el LLM exclusivamente para la redacción del dictamen, demostró ser el enfoque más efectivo.
 \end{enumerate}
 
 \subsection{Integración con la aplicación móvil}
 
-Para la siguiente fase, el flujo va a ser así: El alumno abre la app en Flutter y sube su PDF. La app hace una llamada HTTP POST a nuestro microservicio mandando el archivo. Cuando el backend regresa el JSON con el veredicto, la app lee el nivel de riesgo y pinta un semáforo en pantalla (Verde, Amarillo o Rojo) para avisarle al alumno si su proyecto está bien o si tiene que cambiarlo.
+Para la siguiente fase del proyecto, el flujo de integración se estructurará de la siguiente manera: El usuario (alumno) seleccionará su documento en la aplicación móvil desarrollada en Flutter. La aplicación enviará una solicitud HTTP POST al microservicio adjuntando el archivo. Una vez que el backend procese la información y retorne el JSON con el veredicto, la aplicación interpretará el nivel de riesgo y mostrará un indicador visual (semáforo verde, amarillo o rojo) para orientar al alumno sobre la viabilidad de su propuesta.
 
 \subsection{Trabajo futuro}
 
-Ahorita el MVP ya está funcional en Contabo, pero para dejarlo nivel empresarial nos falta:
+Aunque el MVP actual se encuentra funcional y desplegado en el servidor Contabo, identificamos los siguientes puntos de mejora para alcanzar un estándar empresarial:
 
 \begin{itemize}
-  \item Meterle balanceo de carga para que Ollama no truene si se conectan muchos al mismo tiempo.
-  \item Migrar la base de datos de auditoría de SQLite a PostgreSQL cuando tengamos miles de registros.
-  \item Ponerle HTTPS al servidor porque ahorita estamos pegándole por HTTP directo a la IP.
-  \item Conectar todo esto finalmente con el frontend móvil en Flutter.
+  \item Implementar un balanceador de carga para gestionar la concurrencia y evitar la saturación de memoria durante las inferencias de Ollama.
+  \item Migrar la base de datos de auditoría de SQLite a PostgreSQL una vez que el volumen de registros históricos escale.
+  \item Configurar certificados SSL (HTTPS) en el servidor para asegurar el tráfico de red, el cual actualmente opera sobre HTTP directo.
+  \item Finalizar la conexión completa de estos endpoints con la interfaz móvil en Flutter.
 \end{itemize}
 
 \subsection{Entregables finales del hito}
