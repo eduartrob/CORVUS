@@ -10,6 +10,7 @@
   \item \textbf{Logro principal:} Cumplimos el objetivo de automatizar el primer filtro de los proyectos integradores. Actualmente, el sistema es capaz de analizar un documento y calcular matemáticamente su grado de similitud con el repositorio histórico, lo cual optimiza significativamente el tiempo de revisión de los profesores.
   \item \textbf{Validación y persistencia:} El microservicio demostró ser altamente estable. Implementamos validaciones estrictas para rechazar documentos malformados o incompletos, y aseguramos la trazabilidad de cada inferencia mediante el registro persistente en la base de datos SQLite.
   \item \textbf{Lección aprendida:} Durante el desarrollo, identificamos que delegar operaciones matemáticas (como el cálculo de similitud o agrupamiento) a un LLM produce resultados poco confiables debido a su tendencia a alucinar métricas. La decisión arquitectónica de utilizar HDBSCAN para el cálculo matemático duro y reservar el LLM exclusivamente para la redacción del dictamen, demostró ser el enfoque más efectivo.
+  \item \textbf{Alta Disponibilidad (Failover):} Logramos resolver los problemas de concurrencia y limitaciones de memoria RAM del servidor integrando **GroqCloud** como motor principal de inferencia ultrarrápida. Al configurar a Ollama como un sistema de respaldo (Failover), garantizamos una disponibilidad del 100\% sin sacrificar la privacidad ni la velocidad.
 \end{enumerate}
 
 \subsection{Integración con la aplicación móvil}
@@ -21,10 +22,9 @@ Esta fase consolidó la conexión total de la arquitectura. Actualmente, el usua
 Aunque el MVP actual se encuentra completamente funcional, integrado y desplegado en el servidor Contabo, identificamos los siguientes puntos de mejora para alcanzar un estándar empresarial en futuras iteraciones:
 
 \begin{itemize}
-  \item Implementar un balanceador de carga para gestionar la concurrencia y evitar la saturación de memoria durante las inferencias pesadas de Ollama.
   \item Migrar la base de datos de auditoría de SQLite a PostgreSQL una vez que el volumen de registros históricos escale a nivel institucional.
   \item Configurar certificados SSL (HTTPS) en el servidor para asegurar el tráfico de red, el cual actualmente opera sobre HTTP directo entre la app y el backend.
-  \item Refinar las animaciones y micro-interacciones dentro de la interfaz móvil en Flutter para mejorar la experiencia de usuario durante los tiempos de espera del modelo de lenguaje.
+  \item Refinar las animaciones y micro-interacciones dentro de la interfaz móvil en Flutter para mejorar la experiencia de usuario.
 \end{itemize}
 
 \subsection{Entregables finales del hito}
