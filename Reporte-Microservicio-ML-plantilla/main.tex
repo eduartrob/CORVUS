@@ -1,0 +1,43 @@
+% Reporte — Microservicio ML no supervisado · Minería de datos
+% Compilar en Overleaf o localmente (desde esta carpeta):
+%   pdflatex main
+%   bibtex main
+%   pdflatex main
+%   pdflatex main
+
+\documentclass[11pt,letterpaper]{article}
+
+\input{config/packages}
+\input{config/commands}
+\input{config/listings}
+\input{config/metadata}
+\input{config/glossary}
+
+\title{\ReporteTitulo}
+\author{\ReporteIntegrantes}
+\date{\today}
+
+\begin{document}
+
+\input{config/portada}
+\tableofcontents
+\newpage
+
+\input{sections/01_introduction}
+\input{sections/02_objetivos}
+\input{sections/03_descripcion_problema}
+\input{sections/04_arquitectura}
+\input{sections/05_modelo}
+\input{sections/06_preprocesamiento}
+\input{sections/07_implementation}
+\input{sections/08_api}
+\input{sections/09_base_de_datos}
+\input{sections/10_pruebas}
+\input{sections/11_resultados}
+\input{sections/12_conclusiones}
+\input{sections/anexos}
+
+\bibliographystyle{ieeetr}
+\bibliography{referencias}
+
+\end{document}

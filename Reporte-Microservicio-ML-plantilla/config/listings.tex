@@ -1,0 +1,50 @@
+% Listings — fragmentos de código
+
+\usepackage{listings}
+
+\definecolor{codebg}{RGB}{245,248,246}
+\definecolor{codeframe}{RGB}{0,90,65}
+
+\lstset{
+  inputencoding=utf8,
+  extendedchars=true,
+  literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+}
+
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  breaklines=true,
+  tabsize=2,
+  showstringspaces=false,
+  keywordstyle=\color{mdmVerde}\bfseries,
+  commentstyle=\color{mdmGris!70},
+  stringstyle=\color{mdmAcento!80!black},
+  numbers=left,
+  numberstyle=\tiny\color{mdmGris!60},
+  numbersep=6pt
+}
+
+\lstdefinestyle{jsonstyle}{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  breaklines=true,
+  showstringspaces=false
+}
+
+\lstdefinestyle{bashstyle}{
+  language=bash,
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  breaklines=true
+}

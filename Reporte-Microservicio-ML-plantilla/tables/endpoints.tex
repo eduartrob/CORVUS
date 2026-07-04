@@ -1,0 +1,18 @@
+\begin{table}[H]
+  \centering
+  \caption{Endpoints REST del microservicio}
+  \label{tab:endpoints}
+  \small
+  \begin{tabularx}{\textwidth}{@{}llX@{}}
+    \toprule
+    Método & Ruta & Descripción \\
+    \midrule
+    POST & \texttt{/api/v1/infer} & Recibe datos, ejecuta modelo, persiste y devuelve JSON \\
+    GET & \texttt{/api/v1/inferences} & Lista historial (paginación \texttt{limit}/\texttt{offset}) \\
+    GET & \texttt{/api/v1/inferences/\{id\}} & Detalle de una inferencia \\
+    GET & \texttt{/health} & Estado del servicio y carga del modelo \\
+    GET & \texttt{/docs} & Documentación Swagger UI \\
+    \pendiente{otro} & \pendiente{/ruta} & \pendiente{si el equipo agrega endpoints} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}

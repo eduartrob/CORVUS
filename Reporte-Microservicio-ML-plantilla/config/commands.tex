@@ -1,0 +1,48 @@
+% Comandos compartidos — Reporte Microservicio ML
+
+\usepackage[most]{tcolorbox}
+\tcbset{
+  proposito/.style={
+    colback=mdmAcento!6,
+    colframe=mdmVerde!70!black,
+    fonttitle=\bfseries\small,
+    coltitle=black,
+    boxrule=0.6pt,
+    left=4pt, right=4pt, top=3pt, bottom=3pt,
+    before skip=0.8em, after skip=0.8em
+  },
+  checklist/.style={
+    colback=mdmVerde!4,
+    colframe=mdmVerde,
+    fonttitle=\bfseries\small,
+    boxrule=0.6pt,
+    left=4pt, right=4pt, top=3pt, bottom=3pt
+  }
+}
+
+\newcommand{\propositoseccion}[1]{%
+  \begin{tcolorbox}[proposito,title={Para qué sirve esta sección}]
+    #1
+  \end{tcolorbox}%
+}
+
+\newcommand{\pendiente}[1]{%
+  \textcolor{mdmPendiente}{\textit{[Completar: #1]}}%
+}
+
+\newcommand{\seccionreporte}[2]{%
+  \section{#1}%
+  \label{#2}%
+}
+
+\newcommand{\figuraopcional}[4]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{#1}{%
+      \includegraphics[width=#2]{#1}%
+    }{%
+      \fbox{\parbox[c][4cm][c]{0.85\textwidth}{\centering\small #3}}%
+    }
+    \caption{#4}
+  \end{figure}%
+}

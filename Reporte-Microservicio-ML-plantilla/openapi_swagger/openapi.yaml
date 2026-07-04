@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Microservicio ML no supervisado
+  description: |
+    API REST para inferencia con aprendizaje no supervisado.
+    Sustituir por la especificación generada desde FastAPI o el código del equipo.
+  version: 1.0.0
+  contact:
+    name: Equipo Minería de datos
+    email: correo@upchiapas.edu.mx
+
+servers:
+  - url: http://localhost:8000
+    description: Desarrollo local
+
+paths:
+  /health:
+    get:
+      summary: Estado del servicio
+      responses:
+        "200":
+          description: Servicio operativo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  model_loaded:
+                    type: boolean
+                    example: true
+
+  /api/v1/infer:
+    post:
+      summary: Ejecutar inferencia no supervisada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InferenceRequest"
+      responses:
+        "200":
+          description: Inferencia exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InferenceResponse"
+        "422":
+          description: Datos de entrada inválidos
+
+  /api/v1/inferences:
+    get:
+      summary: Consultar historial de inferencias
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InferenceList"
+
+components:
+  schemas:
+    InferenceRequest:
+      type: object
+      required:
+        - records
+      properties:
+        records:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+          example:
+            - feature_a: 12.5
+              feature_b: 0.03
+    InferenceResponse:
+      type: object
+      properties:
+        inference_id:
+          type: string
+          example: inf_20260326_001
+        created_at:
+          type: string
+          format: date-time
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              cluster:
+                type: integer
+              anomaly_score:
+                type: number
+    InferenceList:
+      type: object
+      properties:
+        total:
+          type: integer
+        items:
+          type: array
+          items:
+            type: object
