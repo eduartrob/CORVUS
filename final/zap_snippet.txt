@@ -1,0 +1,18 @@
+[INFO] OWASP ZAP Baseline Scan
+docker.io/zaproxy/zap-stable:latest
+Using the Automation Framework
+Total of 11 URLs
+...
+WARN-NEW: Missing Anti-clickjacking Header [10020] x 4
+        https://corvus.eduartrob.site/ (200 OK)
+        https://corvus.eduartrob.site/api (200 OK)
+WARN-NEW: Content Security Policy (CSP) Header Not Set [10038] x 4
+        https://corvus.eduartrob.site/ (200 OK)
+        https://corvus.eduartrob.site/api (200 OK)
+WARN-NEW: Permissions Policy Header Not Set [10063] x 5
+        https://corvus.eduartrob.site/ (200 OK)
+        https://corvus.eduartrob.site/api (200 OK)
+WARN-NEW: Cross-Origin-Embedder-Policy Header Missing or Invalid [90004] x 13
+        https://corvus.eduartrob.site/ (200 OK)
+        https://corvus.eduartrob.site/api (200 OK)
+FAIL-NEW: 0     FAIL-INPROG: 0  WARN-NEW: 12    WARN-INPROG: 0  INFO: 0 IGNORE: 0       PASS: 55

@@ -1,0 +1,16 @@
+[INF] nuclei-templates are not installed, installing...
+[INF] Successfully installed nuclei-templates at /root/nuclei-templates
+[INF] Current nuclei version: v3.11.0 (latest)
+[INF] Current nuclei-templates version: v10.4.5 (latest)
+[INF] New templates added in latest release: 86
+[INF] Templates loaded for current scan: 10447
+[INF] Executing 10430 signed templates from projectdiscovery/nuclei-templates
+[INF] Targets loaded for current scan: 1
+[INF] Templates clustered: 2389 (Reduced 2256 Requests)
+[INF] Using Interactsh Server: oast.live
+[http-missing-security-headers:permissions-policy] [http] [info] https://corvus.eduartrob.site/api/v1/
+[http-missing-security-headers:cross-origin-embedder-policy] [http] [info] https://corvus.eduartrob.site/api/v1/
+[ssl-issuer] [ssl] [info] corvus.eduartrob.site:443 ["Let's Encrypt"]
+[ssl-dns-names] [ssl] [info] corvus.eduartrob.site:443 ["corvus.eduartrob.site"]
+[INF] Scan completed in 1m. 4 matches found.
+[INF] HTTP connections: 8037 total, 128 new, 7909 reused (98.4%)

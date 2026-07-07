@@ -1,0 +1,872 @@
+{
+  "errors": [],
+  "mobsfscan_version": "0.4.5",
+  "results": {
+    "android_manifest_debugging_enabled": {
+      "files": [
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/outputDebugAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:debuggable=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:debuggable=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:debuggable=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:debuggable=true"
+        }
+      ],
+      "metadata": {
+        "cwe": "cwe-489",
+        "description": "Debugging was enabled on the app which makes it easier for reverse engineers to hook a debugger to it. This allows dumping a stack trace and accessing debugging helper classes.",
+        "masvs": "code-2",
+        "owasp-mobile": "m10",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05i-Testing-Code-Quality-and-Build-Settings.md#testing-whether-the-app-is-debuggable-mstg-code-2",
+        "severity": "ERROR"
+      }
+    },
+    "android_manifest_insecure_minsdk_error": {
+      "files": [
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/outputDebugAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/release/outputReleaseAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/release/processReleaseMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/release/processReleaseManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:minSdkVersion<29"
+        }
+      ],
+      "metadata": {
+        "cwe": "cwe-1104",
+        "description": "App supports Android version 7.0, API Level: 24. This application can be installed on an older version of android that has multiple unfixed vulnerabilities. These devices won't receive reasonable security updates from Google. Support an Android version >= 10, API 29 to receive reasonable security updates.",
+        "masvs": "platform-1",
+        "owasp-mobile": "m1",
+        "reference": "https://github.com/OWASP/owasp-mastg/blob/master/Document/0x05a-Platform-Overview.md",
+        "severity": "ERROR"
+      }
+    },
+    "android_manifest_missing_explicit_allow_backup": {
+      "files": [
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/android/app/src/main/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/outputDebugAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/release/outputReleaseAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/release/processReleaseMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/release/processReleaseManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_core/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/firebase_messaging/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/image_picker_android/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/aapt_friendly_merged_manifests/release/processReleaseManifest/aapt/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/url_launcher_android/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:allowBackup not set"
+        }
+      ],
+      "metadata": {
+        "cwe": "cwe-921",
+        "description": "The flag [android:allowBackup] should be set to false. By default it is set to true and allows anyone to backup your application data via adb. It allows users who have enabled USB debugging to copy application data off of the device.",
+        "masvs": "storage-8",
+        "owasp-mobile": "m1",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#static-analysis-7",
+        "severity": "WARNING"
+      }
+    },
+    "android_manifest_usescleartext": {
+      "files": [
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/android/app/src/main/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/outputDebugAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/release/outputReleaseAppLinkSettings/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifest/release/processReleaseMainManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        },
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/build/app/intermediates/packaged_manifests/release/processReleaseManifestForPackage/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "android:usesCleartextTraffic=true"
+        }
+      ],
+      "metadata": {
+        "cwe": "cwe-319",
+        "description": "The app intends to use cleartext network traffic, such as cleartext HTTP, FTP stacks, DownloadManager, and MediaPlayer. The default value for apps that target API level 27 or lower is \"true\". Apps that target API level 28 or higher default to \"false\". The key reason for avoiding cleartext traffic is the lack of confidentiality, authenticity, and protections against tampering; a network attacker can eavesdrop on transmitted data and also modify it without being detected.",
+        "masvs": "network-1",
+        "owasp-mobile": "m3",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05g-Testing-Network-Communication.md#testing-for-cleartext-traffic",
+        "severity": "ERROR"
+      }
+    },
+    "android_task_hijacking2": {
+      "files": [
+        {
+          "file_path": "/workspace/front/mobile-front-corvus/android/app/src/main/AndroidManifest.xml",
+          "match_lines": [
+            1,
+            1
+          ],
+          "match_position": [
+            1,
+            1
+          ],
+          "match_string": "Activity exported, targetSdk<29 and launchMode != singleInstance or taskAffinity is not empty"
+        }
+      ],
+      "metadata": {
+        "cwe": "cwe-1021",
+        "description": "Activity is found to be vulnerable to StrandHogg 2.0 task hijacking vulnerability. When vulnerable, it is possible for other applications to place a malicious activity on top of the activity stack of the vulnerable application. This makes the application an easy target for phishing attacks. The vulnerability can be remediated by setting the launch mode attribute to \"singleInstance\" and by setting an empty taskAffinity (taskAffinity=\"\"). You can also update the target SDK version (26) of the app to 29 or higher to fix this issue at platform level.",
+        "masvs": "platform-1",
+        "owasp-mobile": "m1",
+        "reference": "https://github.com/OWASP/owasp-mastg/blob/master/Document/0x05a-Platform-Overview.md",
+        "severity": "ERROR"
+      }
+    },
+    "ios_cert_pinning": {
+      "metadata": {
+        "cwe": "CWE-295: Improper Certificate Validation",
+        "description": "This app does not have Certificate Pinning implemented in code.",
+        "masvs": "MSTG-NETWORK-4",
+        "owasp-mobile": "M3: Insecure Communication",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05g-Testing-Network-Communication.md#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4",
+        "severity": "INFO"
+      }
+    },
+    "ios_custom_keyboard_disabled": {
+      "metadata": {
+        "cwe": "CWE-919: Weaknesses in Mobile Applications",
+        "description": "This app does not have custom keyboards disabled.",
+        "masvs": "MSTG-PLATFORM-11",
+        "owasp-mobile": "M1: Improper Platform Usage",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x06h-Testing-Platform-Interaction.md#app-extensions",
+        "severity": "INFO"
+      }
+    },
+    "ios_detect_reversing": {
+      "metadata": {
+        "cwe": "CWE-919: Weaknesses in Mobile Applications",
+        "description": "This app does not have Reverse engineering detection capabilities.",
+        "masvs": "MSTG-RESILIENCE-4",
+        "owasp-mobile": "M9: Reverse Engineering",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x06j-Testing-Resiliency-Against-Reverse-Engineering.md#ios-anti-reversing-defenses",
+        "severity": "INFO"
+      }
+    },
+    "ios_jailbreak_detect": {
+      "metadata": {
+        "cwe": "CWE-919: Weaknesses in Mobile Applications",
+        "description": "This app does not have Jailbreak detection capabilities.",
+        "masvs": "MSTG-RESILIENCE-1",
+        "owasp-mobile": "M8: Code Tampering",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x06j-Testing-Resiliency-Against-Reverse-Engineering.md#jailbreak-detection-mstg-resilience-1",
+        "severity": "INFO"
+      }
+    },
+    "ios_keyboard_cache": {
+      "metadata": {
+        "cwe": "CWE-919: Weaknesses in Mobile Applications",
+        "description": "This app does not disable Keyboard cache. It must be disabled for all sensitive data inputs.",
+        "masvs": "MSTG-STORAGE-5",
+        "owasp-mobile": "M2: Insecure Data Storage",
+        "reference": "https://github.com/MobSF/owasp-mstg/blob/master/Document/0x06d-Testing-Data-Storage.md#finding-sensitive-data-in-the-keyboard-cache-mstg-storage-5",
+        "severity": "INFO"
+      }
+    }
+  }
+}

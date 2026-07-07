@@ -1,0 +1,8 @@
+[INFO] MobSFScan v0.4.5
+[INFO] Scanning target /workspace/front/mobile-front-corvus
+[INFO] Parsed AndroidManifest.xml successfully
+[WARN] Found 'android:debuggable=true' in 4 manifest(s).
+[WARN] Found 'android:usesCleartextTraffic=true' in 9 manifest(s).
+[WARN] Found 'android:allowBackup not set' in 25 manifest(s).
+[ERROR] MinSDKVersion < 29 found in 25 manifest(s).
+[INFO] Saved results to /workspace/final/mobsf-report.json
