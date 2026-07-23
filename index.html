@@ -277,7 +277,7 @@
             
             <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10 relative">
                 
-                <div class="hero-content text-center lg:text-left">
+                <div class="hero-content text-center lg:text-left relative z-20">
                     <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1.1] tracking-tight mb-8">
                         <div class="mask-wrap"><span class="mask-text text-light-onSurface dark:text-light-onSurface dark:text-light-onSurface dark:text-white">Auditoría de</span></div>
                         <div class="mask-wrap"><span class="mask-text text-light-onSurface dark:text-light-onSurface dark:text-light-onSurface dark:text-white"><em class="serif-accent">Proyectos</em> Académicos.</span></div>
@@ -308,16 +308,17 @@
                 <!-- Hero Visual / App Preview -->
                 <div class="relative flex justify-center lg:justify-end hero-img-wrap w-full mt-12 lg:mt-0">
                     <div class="relative w-full max-w-[320px] md:max-w-[360px] hero-phone opacity-0 transform translate-y-12">
-                        <!-- Marco de Teléfono Interactivo -->
-                        <div class="relative z-10 w-full aspect-[9/19] rounded-[3rem] border-[8px] border-light-outlineVariant dark:border-light-outlineVariant dark:border-light-outlineVariant dark:border-dark-800 bg-light-surface dark:bg-light-surface dark:bg-light-surface dark:bg-dark-900 shadow-2xl shadow-black overflow-hidden">
-                            <!-- Muesca del Teléfono (Notch) -->
-                            <div class="absolute top-0 inset-x-0 h-7 flex justify-center z-50">
-                                <div class="w-32 h-6 bg-light-surfaceHigh dark:bg-light-surfaceHigh dark:bg-light-surfaceHigh dark:bg-dark-800 rounded-b-3xl"></div>
-                            </div>
-                            <!-- Video de demostración para el Hero -->
-                            <div id="hero-phone-video" class="w-full h-full bg-light-surface dark:bg-dark-900 overflow-hidden rounded-b-3xl">
-                                <video src="video/video.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
-                            </div>
+                        <!-- Frameless Video Container with Intense Ambilight Effect -->
+                        <div class="relative z-10 w-full aspect-[9/19] flex items-center justify-center">
+                            <!-- Ultra-Massive LED Glow Layers (Bright) -->
+                            <!-- Capa 1: Resplandor intenso cerca del video -->
+                            <video src="video/video.mp4" autoplay loop muted playsinline class="absolute top-1/2 left-1/2 -z-10 object-cover mix-blend-normal pointer-events-none" style="width: 300%; height: 150%; max-width: none; max-height: none; transform: translate(-50%, -50%); filter: blur(50px) saturate(4) brightness(1.5); opacity: 0.9;"></video>
+                            
+                            <!-- Capa 2: Baño de luz gigante que cubre toda la sección -->
+                            <video src="video/video.mp4" autoplay loop muted playsinline class="absolute top-1/2 left-1/2 -z-20 object-cover mix-blend-normal pointer-events-none" style="width: 800%; height: 400%; max-width: none; max-height: none; transform: translate(-50%, -50%); filter: blur(120px) saturate(5) brightness(1.2); opacity: 0.8;"></video>
+                            
+                            <!-- Main Video with Feathered Edges -->
+                            <video src="video/video.mp4" autoplay loop muted playsinline class="relative w-full h-full object-cover z-10 rounded-[2rem]" style="-webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 65%, transparent 100%); mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 65%, transparent 100%);"></video>
                         </div>
                         
                         <!-- Glow effect behind hero phone -->
