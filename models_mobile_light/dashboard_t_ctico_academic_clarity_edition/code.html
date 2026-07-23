@@ -1,0 +1,243 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Dashboard Táctico - Profesor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#323537",
+                        "error": "#ba1a1a",
+                        "on-background": "#0d1c2e",
+                        "on-primary-fixed-variant": "#173bab",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "primary-container": "#1e40af",
+                        "on-secondary-container": "#6f5100",
+                        "outline": "#757684",
+                        "on-secondary-fixed": "#261a00",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#795900",
+                        "outline-variant": "#c4c5d5",
+                        "secondary-container": "#ffc329",
+                        "surface-dim": "#ccdbf3",
+                        "surface-container-highest": "#d5e3fc",
+                        "secondary-fixed-dim": "#f9bd22",
+                        "secondary-fixed": "#ffdf9f",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#dde1ff",
+                        "tertiary-container": "#484c4e",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#001453",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-surface": "#0d1c2e",
+                        "surface-tint": "#3755c3",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-secondary-fixed-variant": "#5c4300",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#b8c4ff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-container": "#b9bcbe",
+                        "tertiary-fixed": "#e0e3e5",
+                        "primary": "#00288e",
+                        "on-primary-container": "#a8b8ff",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "on-error-container": "#93000a",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#233144",
+                        "surface-variant": "#d5e3fc",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container": "#e6eeff",
+                        "on-surface-variant": "#444653"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col antialiased">
+<!-- NavigationDrawer (Desktop) -->
+<div class="hidden md:flex flex-col h-full py-[8px] bg-surface-container-low dark:bg-surface-container-lowest text-secondary dark:text-secondary-fixed-dim font-display font-black text-on-surface docked left-0 h-full w-80 shadow-xl fixed z-40">
+<div class="px-gutter mb-[32px] mt-[16px]">
+<div class="flex items-center gap-[16px]">
+<img alt="Professor Profile" class="w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARMyMhq8NOPh6rTumnqREjrrFIS0tRVzyP6Lxo9XJTN7zeq4ZjuxYjPbw4l-y3Us6C-3JZDAL6WyEWBboCkxs9PNVjsX10CZxno5ZivCO5Xw8-Bjw0FMTXgRMkdcDj7BRoGTEXE1KVdSHFO78Z2uU3tL792lEG8DuiD47DOoy3LI_trIER31iuWjpoOCozct4LlYWBpfSRGBq0OqZKTNsszhCrBxNjnvCqt01AtDL99YwzQateTft9HePsI1u7w2c32-zBe7MgMXI">
+<div>
+<h2 class="font-headline-md text-headline-md">Professor Access</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Faculty Portal</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70">AcadeRAG Admin</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out hover:bg-surface-variant/40" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out hover:bg-surface-variant/40" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Reviews</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out hover:bg-surface-variant/40" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-label-md text-label-md">Rules</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out hover:bg-surface-variant/40" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+</nav>
+</div>
+<div class="flex-1 md:ml-80 flex flex-col relative pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-[8px] py-[8px] w-full sticky top-0 z-50 bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl text-primary dark:text-primary-fixed-dim border-b border-outline-variant/30 shadow-sm docked full-width top-0">
+<div class="flex items-center gap-4 ml-2">
+<img alt="User profile photo" class="w-8 h-8 rounded-full md:hidden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT8GNjXFX2ohSsJfdRDuLlEIZCN54ZRfPPB_KXxY14OA_q-yKb-JQBoyN9fKNmhaA6CZgs5a9MJeAxgFwEii4JXfIVAAzrUuK0vZH11dIxeEksTlZ3S2SkTDRkZtCEUBYYUTxnpi1VzuiO48CEt6SrPuexj6O08H28J1WUxeNpmKfN1hNwPezIwJ6rzVC08ctYW2JGhcTSwYBPh6_KAbuWFXv-VISCPQjcNb3refHBHmrAN8JZRiRHXwWP4VRuFWnRxy-mb623OB0">
+<h1 class="font-display text-headline-md font-bold text-on-surface dark:text-on-background">AcadeRAG</h1>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 transition-colors rounded-full active:scale-95 duration-150 mr-2">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full space-y-[32px]">
+<!-- Key Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
+<div class="bg-surface-container-lowest rounded-xl p-[24px] border border-outline-variant/30 shadow-[0px_4px_12px_rgba(0,0,0,0.03)]">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">EQUIPOS FORMADOS</p>
+<p class="font-display-lg text-display-lg text-primary">12</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-[24px] border border-outline-variant/30 shadow-[0px_4px_12px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">PROPUESTAS LISTAS</p>
+<span class="material-symbols-outlined text-outline">description</span>
+</div>
+<p class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">8 de 12 equipos</p>
+</div>
+</div>
+<!-- Avance General -->
+<section class="bg-surface-container-lowest rounded-xl p-[24px] border border-outline-variant/30 shadow-[0px_4px_12px_rgba(0,0,0,0.03)]">
+<div class="flex items-center gap-2 mb-[24px]">
+<span class="material-symbols-outlined text-primary">bar_chart</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Avance General</h2>
+</div>
+<div class="space-y-[16px]">
+<div>
+<div class="flex justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Fase de Investigación</span>
+<span class="font-label-md text-label-md text-on-surface-variant">85%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-2 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Definición del RAG</span>
+<span class="font-label-md text-label-md text-on-surface-variant">60%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-2 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Implementación Técnica</span>
+<span class="font-label-md text-label-md text-on-surface-variant">25%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-2 rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Atención Requerida -->
+<section class="bg-surface-container-lowest rounded-xl p-[24px] border border-outline-variant/30 shadow-[0px_4px_12px_rgba(0,0,0,0.03)]">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-[16px]">Atención Requerida</h2>
+<ul class="space-y-[16px]">
+<li class="flex items-start gap-3 pb-[16px] border-b border-outline-variant/30 last:border-0 last:pb-0">
+<span class="material-symbols-outlined text-error mt-0.5">error</span>
+<p class="font-body-md text-body-md text-on-surface">Equipo Delta - Propuesta rechazada, requiere feedback.</p>
+</li>
+<li class="flex items-start gap-3 pb-[16px] border-b border-outline-variant/30 last:border-0 last:pb-0">
+<span class="material-symbols-outlined text-primary mt-0.5">info</span>
+<p class="font-body-md text-body-md text-on-surface">Revisión de pares - 3 equipos han completado la etapa.</p>
+</li>
+</ul>
+<div class="mt-[24px]">
+<button class="w-full md:w-auto bg-primary text-on-primary font-label-md text-label-md py-[10px] px-[24px] rounded-lg hover:bg-primary/90 transition-colors shadow-[0px_10px_25px_rgba(0,0,0,0.08)]">
+                        Ver todos los reportes
+                    </button>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container/80 dark:bg-surface-container-high/80 backdrop-blur-2xl text-primary dark:text-primary-fixed docked full-width bottom-0 rounded-t-xl border-t border-outline-variant/20 shadow-lg"><a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-sm text-label-sm">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">rate_review</span>
+<span class="font-label-sm text-label-sm">Reviews</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">gavel</span>
+<span class="font-label-sm text-label-sm">Rules</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-label-sm text-label-sm">History</span>
+</a></nav>
+
+
+</body></html>

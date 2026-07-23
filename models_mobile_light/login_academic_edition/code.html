@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AcadeRAG - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#f9bd22",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#444653",
+                    "on-tertiary-container": "#b9bcbe",
+                    "on-tertiary-fixed": "#191c1e",
+                    "inverse-primary": "#b8c4ff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "primary": "#00288e",
+                    "secondary-container": "#ffc329",
+                    "secondary-fixed": "#ffdf9f",
+                    "inverse-on-surface": "#eaf1ff",
+                    "primary-container": "#1e40af",
+                    "on-primary-fixed": "#001453",
+                    "on-secondary-fixed-variant": "#5c4300",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary-container": "#6f5100",
+                    "surface-dim": "#ccdbf3",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#233144",
+                    "surface-variant": "#d5e3fc",
+                    "on-background": "#0d1c2e",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container-highest": "#d5e3fc",
+                    "surface-container": "#e6eeff",
+                    "primary-fixed-dim": "#b8c4ff",
+                    "error": "#ba1a1a",
+                    "secondary": "#795900",
+                    "on-primary-fixed-variant": "#173bab",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary": "#323537",
+                    "surface-tint": "#3755c3",
+                    "on-secondary-fixed": "#261a00",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "outline": "#757684",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#c4c5d5",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#484c4e",
+                    "surface": "#f8f9ff",
+                    "primary-fixed": "#dde1ff",
+                    "on-primary-container": "#a8b8ff",
+                    "on-surface": "#0d1c2e",
+                    "background": "#f8f9ff",
+                    "tertiary-fixed": "#e0e3e5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "unit": "8px",
+                    "margin-desktop": "40px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "title-lg": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center p-4 antialiased">
+<!-- Abstract background elements to reinforce the light/minimalist academic theme -->
+<div class="fixed inset-0 overflow-hidden -z-10 pointer-events-none">
+<div class="absolute -top-40 -right-40 w-96 h-96 bg-primary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+<div class="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-secondary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+</div>
+<div class="w-full max-w-[440px]">
+<!-- Login Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.03)] border border-outline-variant/30 p-8">
+<!-- Header -->
+<div class="text-center mb-8">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-surface-container-low mb-4 border border-outline-variant/50">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-3xl" data-icon="school" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2">Welcome to AcadeRAG</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Sign in to access your research and projects.</p>
+</div>
+<!-- Login Form -->
+<form action="#" class="space-y-6" method="POST">
+<!-- Email Field -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="email">Email address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span aria-hidden="true" class="material-symbols-outlined text-on-surface-variant text-lg" data-icon="mail">mail</span>
+</div>
+<input class="block w-full pl-10 bg-[#f1f5f9] border-transparent rounded-lg focus:bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md text-on-surface py-3 transition-colors duration-200" id="email" name="email" placeholder="researcher@university.edu" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block font-label-md text-label-md text-on-surface" for="password">Password</label>
+<a class="font-label-md text-label-md text-primary hover:text-primary-container transition-colors" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span aria-hidden="true" class="material-symbols-outlined text-on-surface-variant text-lg" data-icon="lock">lock</span>
+</div>
+<input class="block w-full pl-10 pr-10 bg-[#f1f5f9] border-transparent rounded-lg focus:bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md text-on-surface py-3 transition-colors duration-200" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me -->
+<div class="flex items-center">
+<input class="h-4 w-4 text-primary focus:ring-primary border-outline-variant rounded bg-[#f1f5f9]" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block font-body-md text-body-md text-on-surface-variant" for="remember-me">
+                        Remember me for 30 days
+                    </label>
+</div>
+<!-- Submit Button -->
+<div>
+<button class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm font-label-md text-label-md text-on-primary bg-primary hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200" type="submit">
+                        Sign in
+                    </button>
+</div>
+</form>
+<!-- Divider -->
+<div class="mt-6">
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-2 bg-surface-container-lowest font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+                            Or continue with
+                        </span>
+</div>
+</div>
+</div>
+<!-- Social Login -->
+<div class="mt-6 grid grid-cols-2 gap-3">
+<button class="w-full inline-flex justify-center items-center py-2.5 px-4 border border-outline-variant/50 rounded-lg bg-surface-container-lowest font-label-md text-label-md text-on-surface hover:bg-surface-container-low hover:border-outline-variant transition-colors duration-200 shadow-[0px_1px_2px_rgba(0,0,0,0.02)]" type="button">
+<img alt="Google logo" class="h-5 w-5 mr-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkxnylg4-8C_XqKBsBqEOne_226NywnllN0Ok16gNvLtah8oUjpyID4lEXo5yguz3uBdAAW8EvOkUJ67G84dudnPwu8ZrWxj-jxzdpjF9lZApe9YdCKUrQ5ueZRS5CZPLe23WkyZ4KbfE45BSfJf7716naW5sa7dCyyEQ2SZGHhxZz-VrtboPVL6FGRLV52AT_knEvYz1Y1WbbXobsVPQaJuORgYt42dNmrWclYt_xRzRWBdcxdtHnvz_Wb3qBomSAprDC7ZTLd7M"/>
+                    Google
+                </button>
+<button class="w-full inline-flex justify-center items-center py-2.5 px-4 border border-outline-variant/50 rounded-lg bg-surface-container-lowest font-label-md text-label-md text-on-surface hover:bg-surface-container-low hover:border-outline-variant transition-colors duration-200 shadow-[0px_1px_2px_rgba(0,0,0,0.02)]" type="button">
+<img alt="GitHub logo" class="h-5 w-5 mr-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVN_cCcqLRNtUULwrKVp15e1kk7I7wJ4yfvG3R68YYQd6T-Se3gcYR7V5WIsO7c1u82x2ta2l7GqfERGRMYRswAiN5Y3VE9JNXQzWy3ZSb03Nry7GqXPb-rQKHoSlU1sfh2axox8lmWHp1sOaoBnp2NgcOIU6YT293OYRE8x_9Zcaf0AQnpUUHI_yjid5I9dNSLjBoqFX4pXMmmkoqVhWVaj7fk4IuOmYB-Z5QkPeUpTTw8Jho4kIfJrYQGAj2ySpMf-IkxNhQ4tU"/>
+                    GitHub
+                </button>
+</div>
+</div>
+<!-- Footer Links -->
+<p class="mt-8 text-center font-body-md text-body-md text-on-surface-variant">
+            Don't have an account? 
+            <a class="font-label-md text-label-md text-primary hover:text-primary-container hover:underline transition-colors" href="#">Create an account</a>
+</p>
+</div>
+</body></html>
