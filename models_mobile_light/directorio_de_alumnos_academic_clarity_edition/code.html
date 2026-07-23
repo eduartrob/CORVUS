@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AcadeRAG - Student Directory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-tint": "#3755c3",
+                "surface-container-low": "#eff4ff",
+                "primary-container": "#1e40af",
+                "on-secondary-fixed-variant": "#5c4300",
+                "on-secondary-fixed": "#261a00",
+                "tertiary": "#323537",
+                "secondary": "#795900",
+                "on-secondary": "#ffffff",
+                "primary": "#00288e",
+                "on-primary-fixed-variant": "#173bab",
+                "background": "#f8f9ff",
+                "on-tertiary-fixed": "#191c1e",
+                "on-primary-fixed": "#001453",
+                "outline": "#757684",
+                "primary-fixed": "#dde1ff",
+                "on-secondary-container": "#6f5100",
+                "secondary-fixed": "#ffdf9f",
+                "surface-dim": "#ccdbf3",
+                "surface-container-lowest": "#ffffff",
+                "on-error-container": "#93000a",
+                "tertiary-container": "#484c4e",
+                "on-error": "#ffffff",
+                "surface-container-high": "#dce9ff",
+                "on-tertiary-container": "#b9bcbe",
+                "on-surface-variant": "#444653",
+                "secondary-fixed-dim": "#f9bd22",
+                "on-primary-container": "#ffffff",
+                "primary-fixed-dim": "#b8c4ff",
+                "error": "#ba1a1a",
+                "inverse-primary": "#b8c4ff",
+                "tertiary-fixed-dim": "#c4c7c9",
+                "secondary-container": "#ffc329",
+                "outline-variant": "#c4c5d5",
+                "surface-bright": "#f8f9ff",
+                "on-primary": "#ffffff",
+                "surface-variant": "#d5e3fc",
+                "tertiary-fixed": "#e0e3e5",
+                "inverse-surface": "#233144",
+                "on-surface": "#0d1c2e",
+                "on-background": "#0d1c2e",
+                "surface-container": "#e6eeff",
+                "surface-container-highest": "#d5e3fc",
+                "inverse-on-surface": "#eaf1ff",
+                "error-container": "#ffdad6",
+                "surface": "#f8f9ff",
+                "on-tertiary-fixed-variant": "#444749",
+                "on-tertiary": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "margin-desktop": "40px",
+                "gutter": "24px",
+                "margin-mobile": "16px",
+                "unit": "8px",
+                "container-max": "1280px",
+                "margin": "2rem",
+                "xl": "3rem",
+                "xs": "0.5rem",
+                "lg": "2rem",
+                "sm": "1rem",
+                "md": "1.5rem"
+        },
+        "fontFamily": {
+                "headline-lg-mobile": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-lg": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-md": ["Inter"],
+                "display-lg": ["Inter"],
+                "label-sm": ["Inter"],
+                "title-lg": ["Inter"],
+                "body-md": ["Inter"]
+        },
+        "fontSize": {
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+    body {
+        min-height: max(884px, 100dvh);
+        display: flex;
+        flex-direction: column;
+    }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 1rem); }
+    .pt-safe { padding-top: env(safe-area-inset-top, 0); }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+</head>
+<body class="font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container bg-background text-on-background">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm flex items-center justify-between px-md py-xs pt-safe">
+<div class="flex items-center gap-sm">
+<img alt="User profile photo" class="w-10 h-10 rounded-full border border-outline-variant/50" data-alt="A close-up portrait of a young professional in a sleek, dimly lit environment. High-contrast lighting highlights their features against a dark, tech-inspired background with subtle purple and indigo glows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjhHtugJUkbNrYd3411aFemZeXPdtNXK23s64LVnwrMcFZilfncFiitHrwxRm5urYhDDiozAwjpwYsUJFyeBHH4VICl6y1i7KM36eFxPkjqbh_DMWuzQl8tgk_FUd90f-ETCSIFh7KBWEyopXh1st1DFLvZIqi4HXT9ki4bZFupu5s3JygSP_7M6Whpk4THi0JYrgshm1uU6aw4dqr-AN3m08gzNTDgCdi96g6VCPEuHldn7QP9lj2xXH4ktliCwDTpAjAiombMc8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">AcadeRAG</h1>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-surface-variant/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[80px] pb-[90px] md:pb-xl px-sm md:px-margin max-w-container-max mx-auto w-full">
+<!-- Page Header -->
+<div class="mb-lg mt-md">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-xs">Student Directory</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Find and invite classmates to collaborate on your next AI project.</p>
+</div>
+<!-- Search & Filter Bar -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 shadow-sm rounded-2xl p-sm md:p-md mb-xl flex flex-col md:flex-row gap-md items-center">
+<div class="relative w-full md:flex-1">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface border border-outline-variant/50 rounded-xl py-sm pl-[44px] pr-sm text-on-surface font-body-md placeholder-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm" placeholder="Search by name, username, or skills..." type="text">
+</div>
+<div class="flex gap-xs w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+<button class="whitespace-nowrap px-sm py-xs rounded-lg font-label-md text-label-md bg-primary-container text-on-primary-container border border-primary-container transition-colors shadow-sm">All Skills</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-lg font-label-md text-label-md bg-transparent text-on-surface-variant border border-outline-variant hover:bg-surface-variant hover:text-on-surface transition-colors">React</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-lg font-label-md text-label-md bg-transparent text-on-surface-variant border border-outline-variant hover:bg-surface-variant hover:text-on-surface transition-colors">Python</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-lg font-label-md text-label-md bg-transparent text-on-surface-variant border border-outline-variant hover:bg-surface-variant hover:text-on-surface transition-colors">AI/ML</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-lg font-label-md text-label-md bg-transparent text-on-surface-variant border border-outline-variant hover:bg-surface-variant hover:text-on-surface transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">tune</span> Filters
+                </button>
+</div>
+</div>
+<!-- Bento Grid / Student Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 shadow-sm rounded-2xl p-md flex flex-col justify-between group hover:border-primary/50 transition-colors duration-300">
+<div>
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<img alt="Avatar" class="w-12 h-12 rounded-full border border-outline-variant/30 object-cover" data-alt="A portrait of an engineering student in a high-tech lab setting. The lighting is cinematic dark-mode style, with crisp neon blue and violet edge lighting defining their silhouette against a deep charcoal background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJpXkZBnra4lrwllg1tykiGDj_kEicxca1I0YF09Oipldb5mhkbkjMd_BC5X2RKcf-kNm1bhYCh1mzt-EjnCfKif52ZUhstemG6oAKY1L01T9iYA0YxUApIGjWTTeQZEAVsM-lfZOL9wCZDuoxz7T8MQXAPCRYoOqOekJS-7VXzMCJISmw-latJ5PL6NECNUMXOtdzJvIsiOtyMoA7Ew3eyfCfUMIAK0KhryjRc0YXv0FZncSXTf99ipplmipsWPTH1j4XLaR1tH4">
+<div>
+<h3 class="font-headline-md text-[18px] text-on-surface">Elena Rodriguez</h3>
+<p class="font-body-md text-[14px] text-on-surface-variant">@elena_dev</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]" title="Available for team">verified</span>
+</div>
+<p class="font-body-md text-[14px] text-on-surface-variant mb-md line-clamp-2">Full-stack developer passionate about building scalable RAG applications and UI/UX design.</p>
+<div class="flex flex-wrap gap-2 mb-lg">
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">React</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">TypeScript</span>
+<span class="px-2 py-1 rounded-md bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm border border-primary-fixed-dim/50">UI/UX</span>
+</div>
+</div>
+<button class="w-full py-sm rounded-xl font-label-md text-label-md bg-primary-container text-on-primary-container font-semibold hover:opacity-90 active:scale-[0.98] transition-all shadow-sm">
+                    Invitar
+                </button>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 shadow-sm rounded-2xl p-md flex flex-col justify-between group hover:border-primary/50 transition-colors duration-300">
+<div>
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<img alt="Avatar" class="w-12 h-12 rounded-full border border-outline-variant/30 object-cover" data-alt="A moody, atmospheric portrait of a data scientist. Soft, diffused lighting creates a minimalist aesthetic, emphasizing focus and concentration. The background is a seamless, dark slate-blue gradient." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZOQPXaScKIX8qEXa6JEPw6O_Eafs0Zn4tUelrAaGYM2xvtrbU7WAo1a26GMJ-y9x-COQB6dBGpkaYCF81o2yhwESbfWsRTTc8M5kQftUJLtAKMCpI1Azt30lbhRNbWngFtOzMvJGA2xfm_314qveqY4cD3jU_r2LhXIzXi_C1FEX5O3jr6TDxfyShthOHJi3A8jW_OJOgK_xp8bRG-7Xo1A6Za6_gkru5I5R5vqflwyDmMqxLjQPELsyiwveSpQOKXcI59-Owdhs">
+<div>
+<h3 class="font-headline-md text-[18px] text-on-surface">Marcus Chen</h3>
+<p class="font-body-md text-[14px] text-on-surface-variant">@mchen_data</p>
+</div>
+</div>
+</div>
+<p class="font-body-md text-[14px] text-on-surface-variant mb-md line-clamp-2">Data science major focusing on NLP and building efficient vector databases for contextual retrieval.</p>
+<div class="flex flex-wrap gap-2 mb-lg">
+<span class="px-2 py-1 rounded-md bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm border border-primary-fixed-dim/50">Python</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">AI/ML</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">Pinecone</span>
+</div>
+</div>
+<button class="w-full py-sm rounded-xl font-label-md text-label-md bg-primary-container text-on-primary-container font-semibold hover:opacity-90 active:scale-[0.98] transition-all shadow-sm">
+                    Invitar
+                </button>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 shadow-sm rounded-2xl p-md flex flex-col justify-between group hover:border-primary/50 transition-colors duration-300">
+<div>
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<img alt="Avatar" class="w-12 h-12 rounded-full border border-outline-variant/30 object-cover" data-alt="A portrait of a creative technologist. The lighting features a subtle split-tone effect with cool indigo on one side and warm magenta on the other, set against a premium dark UI background to convey innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMeYsW-w1-gFl1g3IytH9nToSumzPtTIQKq1FVJIs82oIWfY0ZMbOzprS4cdXR_kzAmSdvW9CHZTfJEO7lEyAnzxKAFRKLYIDsjpEzK7JfWa0nfmA6tu8wZGoK90Yvgph1hcrf9d1kNe7RK8vRMS2zfPSwjZAaXys6J0r1K_y22zSBpmojNoTF7A-diFbMyvwz1OvEtqa2R7TwEb4YABvJ2RavuCoAajylmAaYG_SSBxWDEs38qi0aSZf7hSubuzUX4-fW49gpWMs">
+<div>
+<h3 class="font-headline-md text-[18px] text-on-surface">Sarah Jenkins</h3>
+<p class="font-body-md text-[14px] text-on-surface-variant">@sarah_codes</p>
+</div>
+</div>
+</div>
+<p class="font-body-md text-[14px] text-on-surface-variant mb-md line-clamp-2">Backend specialist. Love working with Fast API, LangChain, and optimizing inference times.</p>
+<div class="flex flex-wrap gap-2 mb-lg">
+<span class="px-2 py-1 rounded-md bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm border border-primary-fixed-dim/50">Python</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">FastAPI</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">LangChain</span>
+</div>
+</div>
+<button class="w-full py-sm rounded-xl font-label-md text-label-md bg-primary-container text-on-primary-container font-semibold hover:opacity-90 active:scale-[0.98] transition-all shadow-sm">
+                    Invitar
+                </button>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 shadow-sm rounded-2xl p-md flex flex-col justify-between group hover:border-primary/50 transition-colors duration-300">
+<div>
+<div class="flex items-start justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 rounded-full bg-surface border border-outline-variant/30 flex items-center justify-center font-headline-md text-on-surface">DK</div>
+<div>
+<h3 class="font-headline-md text-[18px] text-on-surface">David Kim</h3>
+<p class="font-body-md text-[14px] text-on-surface-variant">@dk_sys</p>
+</div>
+</div>
+</div>
+<p class="font-body-md text-[14px] text-on-surface-variant mb-md line-clamp-2">Systems engineering and DevOps. I make sure our models deploy smoothly and scale effectively.</p>
+<div class="flex flex-wrap gap-2 mb-lg">
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">Docker</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">AWS</span>
+<span class="px-2 py-1 rounded-md bg-surface text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">CI/CD</span>
+</div>
+</div>
+<button class="w-full py-sm rounded-xl font-label-md text-label-md bg-transparent border border-outline-variant text-on-surface-variant font-semibold hover:bg-surface-variant transition-all">
+                    Pending...
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex justify-around items-center h-16 px-sm pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">lightbulb</span>
+<span class="font-label-sm text-label-sm text-[10px]">Inspiration</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">folder_open</span>
+<span class="font-label-sm text-label-sm text-[10px]">My Project</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-sm py-1 shadow-sm active:scale-90 duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-label-sm text-label-sm text-[10px]">Teams</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm text-[10px]">Profile</span>
+</a>
+</nav>
+</body></html>
