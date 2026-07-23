@@ -1,6 +1,6 @@
 import re
 
-file_path = '/home/eduartrob/Documentos/project9no/front/landing-front-corvus/index.html'
+file_path = 'index.html'
 
 with open(file_path, 'r', encoding='utf-8') as file:
     content = file.read()
